@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "lattice.h"
 #include "prob.h"
+#include "error.h"
 
 int main()
 {   //　lattice size: l1 times l2
@@ -61,9 +62,9 @@ int main()
     }
     
     // input erasure probability
-    float prob;
-    std::cout << "\nprob:";
-    std::cin >> prob;
+    float prob_e;
+    std::cout << "\nerasure probability:";
+    std::cin >> prob_e;
 
     // make erasure vector for photons
     std::vector<bool> erased_photons;
@@ -74,7 +75,7 @@ int main()
 
     for (int phys_ph = 0; phys_ph < num_photons; phys_ph++){
         bool is_erased = false;
-        is_erased = probabilistic(prob, engine, dist);
+        is_erased = probabilistic(prob_e, engine, dist);
         erased_photons.push_back(is_erased);
     }
 
@@ -107,47 +108,29 @@ int main()
     for (bool c : erased_qubits) {
         std::cout << c << ",";
     }
-
     // make X error vector
-    std::vector<char> xerrors(num_qubits);
-    int qubit_index_x = 0; 
-    for (bool qubit : erased_qubits){
-        if (qubit == true){
-            bool is_xerror = false;
-            is_xerror = probabilistic(0.5, engine, dist);
-            xerrors[qubit_index_x]  = is_xerror;
-        }else if (qubit == false){
-            bool is_xerror = false;
-            xerrors[qubit_index_x]  = is_xerror;
-        }
-        qubit_index_x = qubit_index_x + 1;
-    }
+    std::vector<char> xerrors;
+    xerrors = make_xerrors(erased_qubits, num_qubits, engine, dist);
     // print xerrors
     std::cout << "\nX errors on qubits        :";
     for (bool c : xerrors) {
         std::cout << c << ",";
     }
+
     // make Z error vector
-    std::vector<char> zerrors(num_qubits);
-    int qubit_index_z = 0; 
-    for (bool qubit : erased_qubits){
-        if (qubit == true){
-            bool is_zerror = false;
-            is_zerror = probabilistic(0.5, engine, dist);
-            zerrors[qubit_index_z]  = is_zerror;
-        }else if (qubit == false){
-            bool is_zerror = false;
-            zerrors[qubit_index_z]  = is_zerror;
-        }
-        qubit_index_z = qubit_index_z + 1;
-    }
+    std::vector<char> zerrors;
+    zerrors = make_zerrors(erased_qubits, num_qubits, engine, dist);
     // print zerrors
     std::cout << "\nZ errors on qubits        :";
     for (bool c : zerrors) {
         std::cout << c << ",";
     }
 
-    // input the measurement error
+    // input measurement error probability
+    // float prob_m;
+    // std::cout << "\nmeasurement probability:";
+    // std::cin >> prob_m;
+
     // decoding
     // show the result of decoding 
     // destructive measurement

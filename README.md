@@ -1,2 +1,2 @@
-# multiplexed_toric
+# multiplexed toric codes on erasure channels
 

@@ -72,21 +72,38 @@ int main()
     std::mt19937 engine;
     std::uniform_real_distribution<double> dist(0,1);
 
-
     for (int phys_ph = 0; phys_ph < num_photons; phys_ph++){
         bool is_erased = false;
         is_erased = probabilistic(prob, engine, dist);
         erased_photons.push_back(is_erased);
-        // std::cout << "\nis_erased:";
-        // std::cout << is_erased << "\n";
     }
 
     // print erased_photons
-    std::cout << "\nerased photons:";
+    std::cout << "\nerasure vector for photons:";
     for (bool c : erased_photons) {
-        std::cout << c << "\n";
+        std::cout << c << ",";
     }
+
     // make erasure vector for qubits
+    std::vector<bool> erased_qubits(num_qubits);
+
+    for (int ph = 0; ph < num_photons; ph++){
+        if (erased_photons[ph] == true){
+            for (int qu = 0 ; qu < num_qubits; qu++){
+                erased_qubits[photons[ph][qu]] = 1;
+            }
+        }else if (erased_photons[ph] == false){
+            for (int qu = 0 ; qu < num_qubits; qu++){
+                erased_qubits[photons[ph][qu]] = 0;
+            }
+        }
+    } 
+    // print erased_qubits
+    std::cout << "\nerasure vector for photons:";
+    for (bool c : erased_qubits) {
+        std::cout << c << ",";
+    }
+    
     // make pauli error vector for X and Z
     // input the measurement error 
     // decoding

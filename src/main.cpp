@@ -7,14 +7,14 @@
 #include "prob.h"
 
 int main()
-{   //　Lattice size l1 times l2
+{   //　lattice size: l1 times l2
     int l1,l2;
     std::cout << "l1:";
     std::cin >> l1;
     std::cout << "\nl2:";
     std::cin >> l2;
 
-    // Number of qubits per photon
+    // number of qubits per photon
     int multiplexing; 
     std::cout  << "\nmultiplexing:";
     std::cin >> multiplexing;
@@ -59,12 +59,6 @@ int main()
         }
         photons.push_back(photon);
     }
-    // photonsに入ってる全ての量子ビット
-    // for (std::vector<int> a : photons) {
-    //     for (int b : a) {
-    //         std::cout << b << "\n";
-    //     }
-    // }
     
     // input erasure probability
     float prob;
@@ -73,7 +67,7 @@ int main()
 
     // make erasure vector for photons
     std::vector<bool> erased_photons;
-
+    // make random distribution
     std::random_device rd;
     std::mt19937 engine;
     std::uniform_real_distribution<double> dist(0,1);

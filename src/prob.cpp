@@ -8,8 +8,7 @@ bool probabilistic(float prob, std::mt19937& engine, std::uniform_real_distribut
     if (val < prob){
         result = true;
     }
-    else
-    {
+    else {
         result = false;
     }
     return result;

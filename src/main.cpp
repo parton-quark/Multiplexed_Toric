@@ -90,20 +90,24 @@ int main()
     for (int ph = 0; ph < num_photons; ph++){
         if (erased_photons[ph] == true){
             for (int qu = 0 ; qu < num_qubits; qu++){
-                erased_qubits[photons[ph][qu]] = 1;
+                int qubitlabel;
+                qubitlabel = photons[ph][qu];
+                erased_qubits[qubitlabel] = 1;
             }
         }else if (erased_photons[ph] == false){
             for (int qu = 0 ; qu < num_qubits; qu++){
-                erased_qubits[photons[ph][qu]] = 0;
+                int qubitlabel;
+                qubitlabel = photons[ph][qu];
+                erased_qubits[qubitlabel] = 0;
             }
         }
     } 
     // print erased_qubits
-    std::cout << "\nerasure vector for photons:";
+    std::cout << "\nerasure vector for qubits:";
     for (bool c : erased_qubits) {
         std::cout << c << ",";
     }
-    
+
     // make pauli error vector for X and Z
     // input the measurement error 
     // decoding

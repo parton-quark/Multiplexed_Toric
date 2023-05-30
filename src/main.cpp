@@ -19,19 +19,19 @@ int main()
     std::cout  << "\nmultiplexing:";
     std::cin >> multiplexing;
 
-    // randomly assign qubits to the photons
-    int num_photons;
-    num_photons = (l1*l2) / multiplexing;
-    if ((l1*l2) % multiplexing > 0){
-        num_photons  = num_photons  + 1;
-    }
-    std::cout  << "\nnum_photons:";
-    std::cout  << num_photons;
-
     // photons: vector of photon(vector of qubits) 
     int num_qubits = l1*l2;
     std::cout << "\nnum_qubits:";
     std::cout << num_qubits;
+
+    // randomly assign qubits to the photons
+    int num_photons;
+    num_photons = num_qubits / multiplexing;
+    if (num_qubits % multiplexing > 0){
+        num_photons  = num_photons  + 1;
+    }
+    std::cout  << "\nnum_photons:";
+    std::cout  << num_photons;
  
     std::vector<int> left_qubits;
     for (int q = 0; q < num_qubits; q++){
@@ -103,16 +103,53 @@ int main()
         }
     } 
     // print erased_qubits
-    std::cout << "\nerasure vector for qubits:";
+    std::cout << "\nerasure vector for qubits :";
     for (bool c : erased_qubits) {
         std::cout << c << ",";
     }
 
-    // make pauli error vector for X and Z
-    // input the measurement error 
+    // make X error vector
+    std::vector<char> xerrors(num_qubits);
+    int qubit_index_x = 0; 
+    for (bool qubit : erased_qubits){
+        if (qubit == true){
+            bool is_xerror = false;
+            is_xerror = probabilistic(0.5, engine, dist);
+            xerrors[qubit_index_x]  = is_xerror;
+        }else if (qubit == false){
+            bool is_xerror = false;
+            xerrors[qubit_index_x]  = is_xerror;
+        }
+        qubit_index_x = qubit_index_x + 1;
+    }
+    // print xerrors
+    std::cout << "\nX errors on qubits        :";
+    for (bool c : xerrors) {
+        std::cout << c << ",";
+    }
+    // make Z error vector
+    std::vector<char> zerrors(num_qubits);
+    int qubit_index_z = 0; 
+    for (bool qubit : erased_qubits){
+        if (qubit == true){
+            bool is_zerror = false;
+            is_zerror = probabilistic(0.5, engine, dist);
+            zerrors[qubit_index_z]  = is_zerror;
+        }else if (qubit == false){
+            bool is_zerror = false;
+            zerrors[qubit_index_z]  = is_zerror;
+        }
+        qubit_index_z = qubit_index_z + 1;
+    }
+    // print zerrors
+    std::cout << "\nZ errors on qubits        :";
+    for (bool c : zerrors) {
+        std::cout << c << ",";
+    }
+
+    // input the measurement error
     // decoding
     // show the result of decoding 
     // destructive measurement
-
     return 0;
 }

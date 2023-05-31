@@ -3,8 +3,8 @@
 #include <vector>
 #include "prob.h"
 
-std::vector<char> make_xerrors(std::vector<bool> erased_qubits, int num_qubits, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
-    std::vector<char> xerrors(num_qubits);
+std::vector<bool> make_xerrors(std::vector<bool> erased_qubits, int num_qubits, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    std::vector<bool> xerrors(num_qubits);
     int qubit_index_x = 0; 
     for (bool qubit : erased_qubits){
         if (qubit == true){
@@ -20,8 +20,8 @@ std::vector<char> make_xerrors(std::vector<bool> erased_qubits, int num_qubits, 
     return xerrors;
 }
 
-std::vector<char> make_zerrors(std::vector<bool> erased_qubits, int num_qubits, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
-    std::vector<char> zerrors(num_qubits);
+std::vector<bool> make_zerrors(std::vector<bool> erased_qubits, int num_qubits, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    std::vector<bool> zerrors(num_qubits);
     int qubit_index_z = 0; 
     for (bool qubit : erased_qubits){
         if (qubit == true){

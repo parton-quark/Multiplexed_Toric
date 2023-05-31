@@ -6,6 +6,7 @@
 #include "lattice.h"
 #include "prob.h"
 #include "error.h"
+#include "stabilizer.h"
 
 int main()
 {   //　lattice size: l1 times l2
@@ -21,7 +22,7 @@ int main()
     std::cin >> multiplexing;
 
     // photons: vector of photon(vector of qubits) 
-    int num_qubits = l1*l2;
+    int num_qubits = (l1*l2) * 2;
     std::cout << "\nnum_qubits:";
     std::cout << num_qubits;
 
@@ -108,8 +109,9 @@ int main()
     for (bool c : erased_qubits) {
         std::cout << c << ",";
     }
+    // replace the erased qubits with mixed state -> random pauli
     // make X error vector
-    std::vector<char> xerrors;
+    std::vector<bool> xerrors;
     xerrors = make_xerrors(erased_qubits, num_qubits, engine, dist);
     // print xerrors
     std::cout << "\nX errors on qubits        :";
@@ -118,7 +120,7 @@ int main()
     }
 
     // make Z error vector
-    std::vector<char> zerrors;
+    std::vector<bool> zerrors;
     zerrors = make_zerrors(erased_qubits, num_qubits, engine, dist);
     // print zerrors
     std::cout << "\nZ errors on qubits        :";
@@ -126,10 +128,35 @@ int main()
         std::cout << c << ",";
     }
 
-    // input measurement error probability
+    std::vector<int> xstabs;
+    xstabs = make_x_stabilzers(l1, l2);
+    // std::cout << "\nxstabs: ";
+    // for (int stab : xstabs) {
+    //     std::cout << stab << ",";
+    // }
+
+    std::vector<int> zstabs;
+    zstabs = make_x_stabilzers(l1, l2);
+    // std::cout << "\nzstabs: ";
+    // for (int stab : zstabs) {
+    //     std::cout << stab << ",";
+    // }
+
+    // option: input measurement error probability
     // float prob_m;
     // std::cout << "\nmeasurement probability:";
     // std::cin >> prob_m;
+
+    // vector of x stabilizers which returns -1
+    std::vector<bool> x_stabs_syndrome;
+    x_stabs_syndrome = x_stab_measurement(l1, l2, xstabs, zerrors);
+
+    std::cout << "\nZ error syndrome (X stabs syndrome): ";
+    for (int synd : x_stabs_syndrome){
+        std::cout << synd << ",";
+    }
+
+    // option: vector of z stabilizers which returns -1
 
     // decoding
     // show the result of decoding 

@@ -78,3 +78,5 @@ std::vector<bool> x_stab_measurement(int l1, int l2, std::vector<int> xstabs, st
     return x_stabs_syndrome;
 }
 
+// std::vector<bool> z_stab_measurement(int l1, int l2, std::vector<int> zstabs, std::vector<bool> xerrors){
+// }

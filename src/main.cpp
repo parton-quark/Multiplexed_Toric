@@ -7,6 +7,7 @@
 #include "prob.h"
 #include "error.h"
 #include "stabilizer.h"
+#include "graph.h"
 
 int main()
 {   //　lattice size: l1 times l2
@@ -66,7 +67,7 @@ int main()
     float prob_e;
     std::cout << "\nerasure probability:";
     std::cin >> prob_e;
-
+    //　この後たまにSegmentation fault: 11 を吐く。なんでだ？
     // make erasure vector for photons
     std::vector<bool> erased_photons;
     // make random distribution
@@ -142,11 +143,6 @@ int main()
     //     std::cout << stab << ",";
     // }
 
-    // option: input measurement error probability
-    // float prob_m;
-    // std::cout << "\nmeasurement probability:";
-    // std::cin >> prob_m;
-
     // vector of x stabilizers which returns -1
     std::vector<bool> x_stabs_syndrome;
     x_stabs_syndrome = x_stab_measurement(l1, l2, xstabs, zerrors);
@@ -158,7 +154,15 @@ int main()
 
     // option: vector of z stabilizers which returns -1
 
+    // option: input measurement error probability
+    // add measurement error to the syndrome
+    // float prob_m;
+    // std::cout << "\nmeasurement probability:";
+    // std::cin >> prob_m;
+
     // decoding
+
+
     // show the result of decoding 
     // destructive measurement
     return 0;

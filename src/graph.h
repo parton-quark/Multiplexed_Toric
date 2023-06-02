@@ -6,6 +6,10 @@ class graph{
         // member functions
         int num_vertices();
         int num_edges();
+        void add_vertex(int vertex);
+        void add_edge(int edge);
+        void remove_vertex(int vertex);
+        void remove_edge(int edge); 
         // constructors
         graph(){
             std::vector<int> vs = {0};

@@ -14,6 +14,22 @@ int graph::num_edges(){
     return num;
 }
 
+void graph::add_vertex(int vertex){
+    vertices.push_back(vertex);
+}
+
+void graph::add_edge(int edge){
+    edges.push_back(edge);
+}
+
+void graph::remove_vertex(int vertex){
+    vertices.erase(remove(vertices.begin(), vertices.end(), vertex), vertices.end());
+}
+
+void graph::remove_edge(int edge){
+    edges.erase(remove(edges.begin(), edges.end(), edge), edges.end());
+}
+
 std::vector<int> extract_group(std::vector<int> group){
     // Sort and remove duplicate elements
     std::vector<int> res;

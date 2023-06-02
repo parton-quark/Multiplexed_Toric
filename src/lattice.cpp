@@ -59,7 +59,6 @@ std::vector<int> edge_to_vertices(int l2, int e){
     return vertices;
 }
 
-
 int coordinates_to_edge(int l2, int x1, int y1, int x2, int y2){
     int edge;
     if (x1 == x2 && y1 - 1 == y2){

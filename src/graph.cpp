@@ -79,7 +79,8 @@ std::vector<int> extract_vertices(std::vector<int> edges, int l2){
     std::vector<int> vertices; /* vector of vertices which spanning forest spans */
     for (int edge: edges){
         // If the vertex in an edge contains is not included in vertices, add it.
-        std::vector<std::vector<int>> v1v2_coordinates, v1_coordinate, v2_coordinate;
+        std::vector<std::vector<int>> v1v2_coordinates;
+        std::vector<int> v1_coordinate, v2_coordinate;
         v1v2_coordinates = edge_to_coordinate(l2, edge); 
         v1_coordinate = v1v2_coordinates[0];
         v2_coordinate = v1v2_coordinates[1];

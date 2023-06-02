@@ -65,18 +65,13 @@ int main()
     std::cout << "\nerasure probability:";
     std::cin >> prob_e;
     //　この後たまにSegmentation fault: 11 を吐く。なんでだ？
-    // make erasure vector for photons
-    std::vector<bool> erased_photons;
-    // make random distribution
+    // make random device and distribution
     std::random_device rd;
     std::mt19937 engine;
     std::uniform_real_distribution<double> dist(0,1);
 
-    for (int phys_ph = 0; phys_ph < num_photons; phys_ph++){
-        bool is_erased = false;
-        is_erased = probabilistic(prob_e, engine, dist);
-        erased_photons.push_back(is_erased);
-    }
+    std::vector<bool> erased_photons;
+    erased_photons = make_erasure_errors(num_photons, prob_e, engine, dist);
 
     // print erased_photons
     std::cout << "\nerasure vector for photons:";

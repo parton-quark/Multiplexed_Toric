@@ -3,6 +3,17 @@
 #include <vector>
 #include "prob.h"
 
+std::vector<bool> make_erasure_errors(int num_photons, float prob_e, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    // make erasure vector for photons
+    std::vector<bool> erased_photons;
+    for (int phys_ph = 0; phys_ph < num_photons; phys_ph++){
+        bool is_erased = false;
+        is_erased = probabilistic(prob_e, engine, dist);
+        erased_photons.push_back(is_erased);
+    }
+    return erased_photons;
+}
+
 std::vector<bool> make_xerrors(std::vector<bool> erased_qubits, int num_qubits, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
     std::vector<bool> xerrors(num_qubits);
     int qubit_index_x = 0; 

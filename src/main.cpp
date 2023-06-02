@@ -16,17 +16,14 @@ int main()
     std::cin >> l1;
     std::cout << "\nl2:";
     std::cin >> l2;
-
     // number of qubits per photon
-    int multiplexing; 
+    int multiplexing;
     std::cout  << "\nmultiplexing:";
     std::cin >> multiplexing;
-
     // photons: vector of photon(vector of qubits) 
     int num_qubits = (l1*l2) * 2;
     std::cout << "\nnum_qubits:";
     std::cout << num_qubits;
-
     // randomly assign qubits to the photons
     int num_photons;
     num_photons = num_qubits / multiplexing;
@@ -161,7 +158,7 @@ int main()
     // std::cin >> prob_m;
 
     // decoding
-
+    // correction = peeling_decoder()
 
     // show the result of decoding 
     // destructive measurement

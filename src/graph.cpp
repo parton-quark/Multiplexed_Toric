@@ -14,18 +14,6 @@ int graph::num_edges(){
     return num;
 }
 
-// constructor
-graph::graph(std::vector<int> v, std::vector<int> e){
-    vertices = v;
-    edges = e;
-}
-
-// copy constructor
-graph::graph(const graph& g){
-    vertices = g.vertices;
-    edges = g.edges;
-}
-
 std::vector<int> extract_group(std::vector<int> group){
     // Sort and remove duplicate elements
     std::vector<int> res;
@@ -35,13 +23,13 @@ std::vector<int> extract_group(std::vector<int> group){
     return res;
 }
 
-std::vector<graph> devide_graph(graph G){
+std::vector<graph> devide_graph(graph G, int l2){
     // input graph (can be disconnected graph)
     // output vector of connected graphs 
-    
+
     // assign each vertices to groups 
     std::vector<int> group;
-    for (int v; v<= graph.num_edges(); v++){
+    for (int v; v<= G.num_edges(); v++){
         group[v] = v;
     }
     // update groups
@@ -49,7 +37,7 @@ std::vector<graph> devide_graph(graph G){
         // e has v1 and v2
         // Compare groups of v1 and v2 and merge them into the one with the smaller group number
         std::vector<int> v1_v2;
-        v1_v2 = edge_to_vertices(e);
+        v1_v2 = edge_to_vertices(l2, e);
         int g1 = group[v1_v2[0]];
         int g2 = group[v1_v2[1]];
 
@@ -59,7 +47,8 @@ std::vector<graph> devide_graph(graph G){
             group[v1_v2[1]] = g1;
         }
     }
-    groups = extract_group(std::vector<int> group);    
+    std::vector<int> groups;
+    groups = extract_group(group); 
     std::vector<graph> graphs; /* vector of connected graphs*/
 
     for (int c_grph: groups/* connected graph*/){
@@ -70,11 +59,13 @@ std::vector<graph> devide_graph(graph G){
             }
         }
         for (int edg: G.edges){
-            vv = edge_to_vertices(e);
+            std::vector<int> vv;
+            vv = edge_to_vertices(l2, edg);
             if (c_grph == group[vv[0]]){
                 c_grph_edg.push_back(edg);
             } 
         }
+        graph cg;
         cg = graph(c_grph_vert, c_grph_edg);
         graphs.push_back(cg);
     } 
@@ -88,13 +79,19 @@ std::vector<int> extract_vertices(std::vector<int> edges, int l2){
     std::vector<int> vertices; /* vector of vertices which spanning forest spans */
     for (int edge: edges){
         // If the vertex in an edge contains is not included in vertices, add it.
-        std::vector<std::vector<int>> v1_coordinates, v2_coordinates;
-        v1_coordinates = edge_to_coordinate(l2, edge)[0];
-        v2_coordinates = edge_to_coordinate(l2, edge)[1];
+        std::vector<std::vector<int>> v1v2_coordinates, v1_coordinate, v2_coordinate;
+        v1v2_coordinates = edge_to_coordinate(l2, edge); 
+        v1_coordinate = v1v2_coordinates[0];
+        v2_coordinate = v1v2_coordinates[1];
         
+        int v1_x, v1_y, v2_x, v2_y;
+        v1_x = v1_coordinate[0];
+        v1_y = v1_coordinate[1];
+        v1_x = v2_coordinate[0];
+        v1_y = v2_coordinate[1];
         int v1, v2;
-        v1 = coordinate_to_vertex(l2, v1_coordinates[0], v1_coordinates[1]);
-        v2 = coordinate_to_vertex(l2, v2_coordinates[0], v2_coordinates[1]);
+        v1 = coordinate_to_vertex(l2, v1_x, v1_y);
+        v2 = coordinate_to_vertex(l2, v2_x, v2_y);
         
         if (std::count(vertices.begin(), vertices.end(), v1)) {
             // element found in vertices
@@ -109,6 +106,6 @@ std::vector<int> extract_vertices(std::vector<int> edges, int l2){
         }
     // sort vertices
     }
-    std::sort(vertices.begin(), vertices,end());
+    std::sort(vertices.begin(), vertices.end());
     return vertices;
 }

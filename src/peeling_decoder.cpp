@@ -1,8 +1,8 @@
 #include <vector>
 #include <algorithm>
-#include "lattice.h"
-#include "graph.h"
-#include "spanning_forest.h"
+#include "lattice.hpp"
+#include "graph.hpp"
+#include "spanning_forest.hpp"
 // Peeling decoder has been proposed by Nicolas Delfosse and Gilles Zémor in "Linear-time maximum likelihood decoding of surface codes over the quantum erasure channel", Phys. Rev. Research 2, 033042 – Published 9 July 2020
 // This implementation is based on Algorithm 1 from the original paper.
 

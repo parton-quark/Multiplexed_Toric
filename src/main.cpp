@@ -3,13 +3,13 @@
 #include <random>
 #include <vector>
 #include <algorithm>
-#include "lattice.h"
-#include "prob.h"
-#include "error.h"
-#include "stabilizer.h"
-#include "graph.h"
-#include "spanning_forest.h"
-#include "peeling_decoder.h"
+#include "lattice.hpp"
+#include "prob.hpp"
+#include "error.hpp"
+#include "stabilizer.hpp"
+#include "graph.hpp"
+#include "spanning_forest.hpp"
+#include "peeling_decoder.hpp"
 
 int main()
 {   //　lattice size: l1 times l2

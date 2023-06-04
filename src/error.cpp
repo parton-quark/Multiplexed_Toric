@@ -1,7 +1,7 @@
 // make X error vector
 #include <random>
 #include <vector>
-#include "prob.h"
+#include "prob.hpp"
 
 std::vector<bool> make_erasure_errors(int num_photons, float prob_e, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
     // make erasure vector for photons

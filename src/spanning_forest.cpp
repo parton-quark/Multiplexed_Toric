@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
-#include "lattice.h"
-#include "graph.h"
+#include "lattice.hpp"
+#include "graph.hpp"
 
 int pick_min_w_edge(graph left_graph, std::vector<int> edge_weights){
     // pick an edge with minimal weight randomly

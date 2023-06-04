@@ -1,6 +1,6 @@
 #include <vector>
-#include "graph.h"
-#include "lattice.h"
+#include "graph.hpp"
+#include "lattice.hpp"
 
 int graph::num_vertices(){
     int num;

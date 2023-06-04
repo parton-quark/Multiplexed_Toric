@@ -2,7 +2,7 @@
 #include <random>
 #include <vector>
 #include <cstdlib>
-
+// vertex
 std::vector<int> vertex_to_coordinate(int l2, int v){
     // Z stabilizer
     int x,y;
@@ -18,6 +18,69 @@ int coordinate_to_vertex(int l2, int x, int y){
     return vertex;
 }
 
+std::vector<int> vertex_to_edges(int l1, int l2, int v){
+    // 頂点につながっている辺のvectorを返す
+    int e0, e1, e2, e3;
+    if ((v % l1) == 0){ /* 左端 */
+        if (v == (l1 * (l2 - 1))){
+            /* 左上 */
+            e0 = (l1 * (l2 - 1)) * 2;
+            e1 = (((l1 * l2) - 1) * 2) + 1;
+            e2 = 2 * v;
+            e3 = (2 * v) + 1;
+        } else if (v == 0){
+            /* 左下 */
+            e0 = ( l1 * (l2 - 1) ) * 2;
+            e1 = ((l1 - 1) * 2) + 1;
+            e2 = 0;
+            e3 = 1;
+        } else {
+            e0 = 2 * (v - l1); 
+            e1 = ((v + l1 - 1) * 2) + 1;
+            e2 = 2 * v;
+            e3 = (2 * v) + 1
+        }
+    } else if ((v % l1) == (l1 - 1)){ /* 右端 */
+        if (v == ((l1 * l2) - 1)){
+            /* 右上 */
+            e0 = (l1 * l2 - 1) * 2;
+            e1 = (2 * v) - 1
+            e2 = 2 * v;
+            e3 = (2 * v) + 1;
+        } else if (v == (l1 - 1)){
+            /* 右下 */
+            e0 = ((l1 * l2) - 1) * 2;
+            e1 = (2 * v) - 1;
+            e2 = 2 * v;
+            e3 = (2 * v) + 1;
+        } else {
+            e0 = (v - l1) * 2;
+            e1 = (2 * v) - 1;
+            e2 = 2 * v;
+            e3 = (2 * v) + 1;
+        }
+
+    } else if (v >= (l1 * (l2 - 1))){ /* 上端 */
+        e0 = (v - l1) * 2;
+        e1 = (2 * v) - 1;
+        e2 = 2 * v;
+        e3 = (2 * v) + 1;
+    } else if (v < l1){ /* 下端 */
+        e0 = (v + (l1 * (l2 - 1))) * 2;
+        e1 = (2 * v) - 1;
+        e2 = 2 * v;
+        e3 = (2 * v) + 1;
+    } else { // 頂点は角でも端でもない
+        e0 = (v - l1) * 2; /* l2かも？ */ 
+        e1 = (2 * v) - 1;
+        e2 = 2 * v;
+        e3 = (2 * v) + 1;   
+    }
+    std::vector<int>  edges{e0, e1, e2, e3};
+    return edges;
+}
+
+// edge
 std::vector<std::vector<int>> edge_to_coordinate(int l2, int e){
     // qubit
     int v_0_x,v_0_y,v_1_x,v_1_y;

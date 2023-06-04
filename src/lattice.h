@@ -1,6 +1,7 @@
 // vertex
 std::vector<int> vertex_to_coordinate(int l2, int v);
 int coordinate_to_vertex(int l2, int x, int y);
+std::vector<int> vertex_to_edges(int l1, int l2, int v);
 // edge
 std::vector<std::vector<int>> edge_to_coordinate(int l2, int e);
 std::vector<int> edge_to_vertices(int l2, int e);

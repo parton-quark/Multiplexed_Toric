@@ -8,6 +8,8 @@
 #include "error.h"
 #include "stabilizer.h"
 #include "graph.h"
+#include "spanning_forest.h"
+#include "peeling_decoder.h"
 
 int main()
 {   //　lattice size: l1 times l2
@@ -136,11 +138,11 @@ int main()
     // }
 
     // vector of x stabilizers which returns -1
-    std::vector<bool> x_stabs_syndrome;
-    x_stabs_syndrome = x_stab_measurement(l1, l2, xstabs, zerrors);
+    std::vector<bool> x_syndromes;
+    x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
 
     std::cout << "\nZ error syndrome (X stabs syndrome): ";
-    for (int synd : x_stabs_syndrome){
+    for (int synd : x_syndromes){
         std::cout << synd << ",";
     }
 
@@ -153,8 +155,12 @@ int main()
     // std::cin >> prob_m;
 
     // decoding
-    // correction = peeling_decoder()
-
+    std::vector<bool> z_correction;
+    z_correction = peeling_decoder_for_z_errors(l1, l2, num_qubits, erased_qubits, x_syndromes);
+    std::cout << "\nZ error correction: ";
+    for (int correct : z_correction){
+        std::cout << correct << ",";
+    }
     // show the result of decoding 
     // destructive measurement
     return 0;

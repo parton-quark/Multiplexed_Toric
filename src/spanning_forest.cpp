@@ -8,8 +8,8 @@
 int pick_min_w_edge(graph left_graph, std::vector<int> edge_weights){
     // pick an edge with minimal weight randomly
     std::vector<int> left_vertices, left_edges;
-    left_vertices = left_graph.vertices
-    left_edges = left_graph.edges
+    left_vertices = left_graph.vertices;
+    left_edges = left_graph.edges;
     int min_w; /* minimum weight of left edges */
     min_w = *min_element(edge_weights.begin(), edge_weights.end());
     itr = std::find(vec.begin(), vec.end(), min_w);
@@ -60,6 +60,7 @@ graph kruskal(graph G, int l2, std::vector<int> edge_weights){
 
                 // add two vertices of searching_e to mm_st
                 bool is_u_in_mm_st, is_v_in_mm_st;
+                int num_u_in_mm_st, num_v_in_mm_st;
                 num_u_in_mm_st = std::count(mm_st.vertices.begin(), mm_st.vertices.end(), uv[0]);
                 num_v_in_mm_st = std::count(mm_st.vertices.begin(), mm_st.vertices.end(), uv[1]);
                 if (num_u_in_left_v == 0){
@@ -97,11 +98,11 @@ graph maximal_spanning_tree(graph G, int l2){
     // Finding the minimum spanning tree of weight-replaced graphs
     // Since the input is a graph with equal edge weights, it can be replaced by a faster algorithm (depth-first search),
     // but for simplicity, Kruskal's algorithm is used. 
-    graph mst;
+    graph mxst;
     mxst = kruskal(G, l2, edge_weights); /* maximal spanning tree */
     // The weights of each edge should be returned to w 
     // Here all edge weights are 1, so no such transformation is necessary
-    return mx_st;
+    return mxst;
 }
 
 std::vector<graph> spanning_forest(graph G, int l2){
@@ -111,8 +112,10 @@ std::vector<graph> spanning_forest(graph G, int l2){
 
     // 連結成分ごとにグラフを分割する
     std::vector<graph> msf; /* maximal spanning forest */
-    connected_graphs =  devide_graph(G, l2)
-    for (connected_graph: connected graphs){
+    std::vector<graph> connected_graphs;
+    connected_graphs =  devide_graph(G, l2);
+    for (graph connected_graph: connected_graphs){
+        graph tree;
         tree = maximal_spanning_tree(connected_graph, l2);
         // spanning forest に treeを追加
         msf.push_back(tree);

@@ -1,5 +1,6 @@
 // 全てのスタビライザを生成する
 #include <vector>
+#include "lattice.h"
 
 std::vector<int> make_x_stabilzers(int l1, int l2){
     // face corresponds to X stabilizer

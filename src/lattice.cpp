@@ -38,13 +38,13 @@ std::vector<int> vertex_to_edges(int l1, int l2, int v){
             e0 = 2 * (v - l1); 
             e1 = ((v + l1 - 1) * 2) + 1;
             e2 = 2 * v;
-            e3 = (2 * v) + 1
+            e3 = (2 * v) + 1;
         }
     } else if ((v % l1) == (l1 - 1)){ /* 右端 */
         if (v == ((l1 * l2) - 1)){
             /* 右上 */
             e0 = (l1 * l2 - 1) * 2;
-            e1 = (2 * v) - 1
+            e1 = (2 * v) - 1;
             e2 = 2 * v;
             e3 = (2 * v) + 1;
         } else if (v == (l1 - 1)){

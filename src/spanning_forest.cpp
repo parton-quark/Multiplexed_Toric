@@ -16,9 +16,6 @@ int pick_min_w_edge(graph left_graph, std::vector<int> edge_weights){
     const int min_w_index = std::distance(vec.begin(), itr);
     int min_w_edge;
     min_w_edge = min_w_index[rand()%min_w_index.size()];
-    // int edge_index;
-    // // min_w_edgeはG.edges内で何番目の辺だったか
-    // edge_index =  
     return min_w_edge;
 }
 
@@ -82,7 +79,7 @@ graph kruskal(graph G, int l2, std::vector<int> edge_weights){
     return mm_st;
 }
 
-graph maximal_spanning_tree(graph G){
+graph maximal_spanning_tree(graph G, int l2){
     // input: graph G
     // output: graph T (maximal spanning tree of G)
 
@@ -101,23 +98,25 @@ graph maximal_spanning_tree(graph G){
     // Since the input is a graph with equal edge weights, it can be replaced by a faster algorithm (depth-first search),
     // but for simplicity, Kruskal's algorithm is used. 
     graph mst;
-    mxst = kruskal(G, edge_weight); /* maximal spanning tree */
+    mxst = kruskal(G, l2, edge_weights); /* maximal spanning tree */
     // The weights of each edge should be returned to w 
     // Here all edge weights are 1, so no such transformation is necessary
     return mx_st;
 }
 
-std::vector<int> spanning_forest(std::vector<int> edges, int l2){
+std::vector<graph> spanning_forest(graph G, int l2){
     // input: edges
     // output: maximal spanning forest of edges 
     // (maximal subset of edges that contains no cycle and span all the vertices in edges)
 
     // 連結成分ごとにグラフを分割する
-    connected_graphs =  devide_forest() 
-    for connected_graph: connected graphs
-        tree = spanning_tree(色々)
-        spanning_forestにspanning treeを追加
+    std::vector<graph> msf; /* maximal spanning forest */
+    connected_graphs =  devide_graph(G, l2)
+    for (connected_graph: connected graphs){
+        tree = maximal_spanning_tree(connected_graph, l2);
+        // spanning forest に treeを追加
+        msf.push_back(tree);
     }
     return msf;
-} 
+}
 

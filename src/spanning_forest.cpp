@@ -12,8 +12,9 @@ int pick_min_w_edge(graph left_graph, std::vector<int> edge_weights){
     left_edges = left_graph.edges;
     int min_w; /* minimum weight of left edges */
     min_w = *min_element(edge_weights.begin(), edge_weights.end());
-    itr = std::find(vec.begin(), vec.end(), min_w);
-    const int min_w_index = std::distance(vec.begin(), itr);
+    std::vector<int>::iterator itr;
+    itr = std::find(edge_weights.begin(), edge_weights.end(), min_w);
+    const int min_w_index = std::distance(edge_weights.begin(), itr);
     int min_w_edge;
     min_w_edge = min_w_index[rand()%min_w_index.size()];
     return min_w_edge;
@@ -49,9 +50,10 @@ graph kruskal(graph G, int l2, std::vector<int> edge_weights){
                 std::vector<int>::iterator itr;
                 const int wanted = searching_e; 
                 itr = std::find(left_graph.edges.begin(), left_graph.edges.end(), wanted);
-                const int wanted_index = std::distance(vec.begin(), itr);
+                const int wanted_index = std::distance(left_graph.edges.begin(), itr); // edge_weights.begin()かもしれん..
                 // wanted_index番目のedge_weightを削除して詰める
-                // ここから作業する!!
+                // update edge_weights (remove the weight with wanted_index)
+                edge_weights.erase(edge_weights.begin() + wanted_index - 1);
                 // remove two vertices of searching_e from left_vertices
                 left_graph.remove_vertex(uv[0]);
                 left_graph.remove_vertex(uv[1]);

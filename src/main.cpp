@@ -157,11 +157,23 @@ int main()
     // decoding
     std::vector<bool> z_correction;
     z_correction = peeling_decoder_for_z_errors(l1, l2, num_qubits, erased_qubits, x_syndromes);
-    std::cout << "\nZ error correction: ";
+    std::cout << "\nZ correction: ";
     for (int correct : z_correction){
         std::cout << correct << ",";
     }
     // show the result of decoding 
+    std::vector<bool> z_errors_after_decoding[num_qubits];
+    for (int qubit; qubit <= num_qubits; qubit++){
+        z_errors_after_decoding[qubit] = zerrors[qubit] ^ z_correction[qubit];
+    }
+    std::cout << "\nZ error after correction: ";
+    for (bool z_error_after_decoding : z_errors_after_decoding){
+        std::cout << z_error_after_decoding << ",";
+    }
     // destructive measurement
+    char d_measurement_basis;
+    std::cout << "X or Z destructive_measurement";
+    std::cin >> d_measurement_basis; /* x or z */
+
     return 0;
 }

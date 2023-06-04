@@ -96,9 +96,9 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             // pick a leaf edge e={u,v} with pendant vertex u
             leaf_and_pendant = pick_leaf_edge(f_eps, l1, l2);
             int leaf, pendant, connected;
-            leaf = leaf_and_pendant[0];
-            pendant = leaf_and_pendant[1][0];
-            connected = leaf_and_pendant[1][1];
+            leaf = leaf_and_pendant.first;
+            pendant = leaf_and_pendant.second.first;
+            connected = leaf_and_pendant.second.second;
             // remove e from f_eps
             f_eps.remove_edge(leaf);
             // 4. (R1)If u∈σ, add e to A,remove u from σ and flip v in σ.

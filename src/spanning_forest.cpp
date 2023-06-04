@@ -1,4 +1,5 @@
 #include <vector>
+#include <math.h>
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,9 +15,12 @@ int pick_min_w_edge(graph left_graph, std::vector<int> edge_weights){
     min_w = *min_element(edge_weights.begin(), edge_weights.end());
     std::vector<int>::iterator itr;
     itr = std::find(edge_weights.begin(), edge_weights.end(), min_w);
-    const int min_w_index = std::distance(edge_weights.begin(), itr);
+    // const int min_w_index = std::distance(edge_weights.begin(), itr);
+    std::vector min_w_index;
+    min_w_index = std::distance(edge_weights.begin(), itr);
     int min_w_edge;
-    min_w_edge = min_w_index[rand()%min_w_index.size()];
+    srand(10);
+    min_w_edge = min_w_index[rand() % min_w_index.size()];
     return min_w_edge;
 }
 

@@ -12,7 +12,7 @@
 #include "peeling_decoder.hpp"
 
 int main()
-{   //　lattice size: l1 times l2
+{   // lattice size: l1 times l2
     int l1,l2;
     std::cout << "l1:";
     std::cin >> l1;
@@ -66,7 +66,6 @@ int main()
     float prob_e;
     std::cout << "\nerasure probability:";
     std::cin >> prob_e;
-    //　この後たまにSegmentation fault: 11 を吐く。なんでだ？
     // make random device and distribution
     std::random_device rd;
     std::mt19937 engine;
@@ -74,7 +73,6 @@ int main()
 
     std::vector<bool> erased_photons;
     erased_photons = make_erasure_errors(num_photons, prob_e, engine, dist);
-
     // print erased_photons
     std::cout << "\nerasure vector for photons:";
     for (bool c : erased_photons) {
@@ -83,16 +81,16 @@ int main()
 
     // make erasure vector for qubits
     std::vector<bool> erased_qubits(num_qubits);
-
+    
     for (int ph = 0; ph < num_photons; ph++){
-        if (erased_photons[ph] == true){
-            for (int qu = 0 ; qu < num_qubits; qu++){
+        if (erased_photons[ph]){
+            for (int qu = 0 ; qu < multiplexing; qu++){
                 int qubitlabel;
                 qubitlabel = photons[ph][qu];
                 erased_qubits[qubitlabel] = 1;
             }
         }else if (erased_photons[ph] == false){
-            for (int qu = 0 ; qu < num_qubits; qu++){
+            for (int qu = 0 ; qu < multiplexing; qu++){
                 int qubitlabel;
                 qubitlabel = photons[ph][qu];
                 erased_qubits[qubitlabel] = 0;
@@ -171,9 +169,9 @@ int main()
     //     std::cout << z_error_after_decoding << ",";
     // }
     // destructive measurement
-    char d_m_basis;
-    std::cout << "X or Z destructive_measurement";
-    std::cin >> d_m_basis; /* x or z */
+    // char d_m_basis;
+    // std::cout << "X or Z destructive_measurement";
+    // std::cin >> d_m_basis; /* x or z */
 
     return 0;
 }

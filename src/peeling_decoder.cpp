@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #include <algorithm>
 #include "lattice.hpp"
@@ -6,10 +7,13 @@
 // Peeling decoder has been proposed by Nicolas Delfosse and Gilles Zémor in "Linear-time maximum likelihood decoding of surface codes over the quantum erasure channel", Phys. Rev. Research 2, 033042 – Published 9 July 2020
 // This implementation is based on Algorithm 1 from the original paper.
 
-std::pair<int, std::pair<int, int>> pick_leaf_edge(graph G, int l1, int l2){
+std::pair<int, std::pair<int, int> > pick_leaf_edge(graph G, int l1, int l2){
     std::vector<int> edges, vertices;
     edges = G.edges;
     vertices = G.vertices;
+    bool find_leaf;
+    find_leaf = false;
+    std::pair<int, std::pair<int, int> > leaf_and_pendant;
 
     for (int edge: edges){
         std::vector<int> uv;
@@ -64,9 +68,24 @@ std::pair<int, std::pair<int, int>> pick_leaf_edge(graph G, int l1, int l2){
                 connected_vertex = u;
             }
             std::pair<int, int> leaf_vertices{pendant_vertex, connected_vertex};
-            std::pair<int, std::pair<int, int>> leaf_and_pendant{leaf, leaf_vertices};
+            leaf_and_pendant.first = leaf;
+            leaf_and_pendant.second = leaf_vertices;
+            find_leaf = true;
+            // break;
+        }
+        if (find_leaf == true){
             break;
         }
+    }
+    if (find_leaf == false){
+        int leaf;
+        leaf = 0;
+        std::pair<int, int> leaf_vertices{0, 0};
+        static std::pair<int, std::pair<int, int> > leaf_and_pendant;
+        leaf_and_pendant.first = leaf;
+        leaf_and_pendant.second = leaf_vertices;
+        find_leaf = true;
+        std::cout << "Couldn't find leaf!!";
     }
     return leaf_and_pendant;
 }

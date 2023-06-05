@@ -16,8 +16,15 @@ int pick_min_w_edge(graph left_graph, std::vector<int> edge_weights){
     std::vector<int>::iterator itr;
     itr = std::find(edge_weights.begin(), edge_weights.end(), min_w);
     // const int min_w_index = std::distance(edge_weights.begin(), itr);
-    std::vector min_w_index;
-    min_w_index = std::distance(edge_weights.begin(), itr);
+    std::vector<int> min_w_index;
+    // 最小重みの辺のインデックスのベクトルを求める
+    // インデックスのベクトルからランダムに一つ選ぶ
+    for (int ind; ind < edge_weights.size(); ind++){
+        if (edge_weights[ind] == min_w){
+            min_w_index.push_back(ind);
+        }
+    }
+    // min_w_index = std::distance(edge_weights.begin(), itr);
     int min_w_edge;
     srand(10);
     min_w_edge = min_w_index[rand() % min_w_index.size()];

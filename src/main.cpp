@@ -112,8 +112,8 @@ int main()
     std::vector<bool> xerrors;
     xerrors = make_xerrors(erased_qubits, num_qubits, engine, dist);
     // print xerrors
-    std::cout << "\nX errors on qubits        :";
-    print_vec(xerrors);
+    // std::cout << "\nX errors on qubits        :";
+    // print_vec(xerrors);
 
     // make Z error vector
     std::vector<bool> zerrors;
@@ -128,8 +128,8 @@ int main()
     // vector of x stabilizers which returns -1
     std::vector<bool> x_syndromes;
     x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
-    std::cout << "\nX syndromes               :";
-    print_vec(x_syndromes);
+    // std::cout << "\nX syndromes               :";
+    // print_vec(x_syndromes);
     
     // option: input measurement error probability
     // add measurement error to the syndrome
@@ -150,11 +150,10 @@ int main()
     }
     std::cout << "\nZ error after correction  :";
     print_vec(z_errors_after_decoding);
+    std::cout << "\n";
 
     // destructive measurement
-    // char d_m_basis;
-    // std::cout << "X or Z destructive_measurement";
-    // std::cin >> d_m_basis; /* x or z */
+
     std::cout << "\n";
     return 0;
 }

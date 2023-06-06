@@ -3,6 +3,7 @@
 #include <random>
 #include <vector>
 #include <algorithm>
+// #include "print.hpp"
 #include "lattice.hpp"
 #include "prob.hpp"
 #include "error.hpp"
@@ -10,6 +11,12 @@
 #include "graph.hpp"
 #include "spanning_forest.hpp"
 #include "peeling_decoder.hpp"
+
+template <class T> void print_vec(std::vector<T> x){
+    for (T elem: x){ 
+        std::cout << elem;
+    }
+}
 
 int main()
 {   // lattice size: l1 times l2
@@ -40,11 +47,11 @@ int main()
         left_qubits.push_back(q);
     }
 
-    std::vector<std::vector<int>> photons;
+    std::vector<std::vector<int> > photons;
     for (int ph = 0; ph < num_photons; ph++){
-        std::cout << "\nphoton ";
-        std::cout << ph;
-        std::cout << ": ";
+        // std::cout << "\nphoton ";
+        // std::cout << ph;
+        // std::cout << ": ";
         std::vector<int> photon;
         for (int qb = 0; qb < multiplexing; qb++){
             std::srand(time(NULL));
@@ -53,10 +60,10 @@ int main()
             }else{
             int qubit;
             qubit = left_qubits[rand() % left_qubits.size()];
-            left_qubits.erase(std::remove(std::begin(left_qubits), std::end(left_qubits), qubit), std::cend(left_qubits));
+            left_qubits.erase(std::remove(std::begin(left_qubits), std::end(left_qubits), qubit), std::end(left_qubits));
             photon.push_back(qubit);
-            std::cout << qubit;
-            std::cout << ",";
+            // std::cout << qubit;
+            // std::cout << ",";
             }
         }
         photons.push_back(photon);
@@ -66,7 +73,7 @@ int main()
     float prob_e;
     std::cout << "\nerasure probability:";
     std::cin >> prob_e;
-    // make random device and distribution
+    // make random device
     std::random_device rd;
     std::mt19937 engine;
     std::uniform_real_distribution<double> dist(0,1);
@@ -75,9 +82,10 @@ int main()
     erased_photons = make_erasure_errors(num_photons, prob_e, engine, dist);
     // print erased_photons
     std::cout << "\nerasure vector for photons:";
-    for (bool c : erased_photons) {
-        std::cout << c << ",";
-    }
+    print_vec(erased_photons);
+    // for (bool c : erased_photons) {
+    //     std::cout << c << ",";
+    // }
 
     // make erasure vector for qubits
     std::vector<bool> erased_qubits(num_qubits);
@@ -120,31 +128,18 @@ int main()
     for (bool c : zerrors) {
         std::cout << c << ",";
     }
-
-    std::vector<int> xstabs;
+    // make stabilizers
+    std::vector<int> xstabs, zstabs;
     xstabs = make_x_stabilzers(l1, l2);
-    // std::cout << "\nxstabs: ";
-    // for (int stab : xstabs) {
-    //     std::cout << stab << ",";
-    // }
-
-    std::vector<int> zstabs;
     zstabs = make_x_stabilzers(l1, l2);
-    // std::cout << "\nzstabs: ";
-    // for (int stab : zstabs) {
-    //     std::cout << stab << ",";
-    // }
-
     // vector of x stabilizers which returns -1
     std::vector<bool> x_syndromes;
     x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
-
-    std::cout << "\nZ error syndrome (X stabs syndrome): ";
-    for (int synd : x_syndromes){
-        std::cout << synd << ",";
-    }
-
-    // option: vector of z stabilizers which returns -1
+    // std::cout << "AAA";
+    // std::cout << "\nZ error syndrome (X stabs syndrome): " << std::flush;
+    // for (int synd : x_syndromes){
+    //     std::cout << synd << ",";
+    // }
 
     // option: input measurement error probability
     // add measurement error to the syndrome
@@ -159,7 +154,7 @@ int main()
     for (int correct : z_correction){
         std::cout << correct << ",";
     }
-    // show the result of decoding 
+    // show the result of decoding
     // std::vector<bool> z_errors_after_decoding[num_qubits];
     // for (int qubit; qubit <= num_qubits; qubit++){
     //     z_errors_after_decoding[qubit] = zerrors[qubit] ^ z_correction[qubit];

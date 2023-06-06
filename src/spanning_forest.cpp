@@ -122,7 +122,6 @@ std::vector<graph> spanning_forest(graph G, int l2){
     // input: edges
     // output: maximal spanning forest of edges 
     // (maximal subset of edges that contains no cycle and span all the vertices in edges)
-
     // 連結成分ごとにグラフを分割する
     std::vector<graph> msf; /* maximal spanning forest */
     std::vector<graph> connected_graphs;

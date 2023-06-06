@@ -13,8 +13,14 @@
 #include "peeling_decoder.hpp"
 
 template <class T> void print_vec(std::vector<T> x){
+    bool is_first_elem;
+    is_first_elem = true;
     for (T elem: x){ 
-        std::cout << elem;
+        if (is_first_elem){
+            std::cout << elem << std::flush;
+            is_first_elem = false;
+        }
+        std::cout << "," << elem << std::flush;
     }
 }
 
@@ -25,22 +31,20 @@ int main()
     std::cin >> l1;
     std::cout << "\nl2:";
     std::cin >> l2;
-    // number of qubits per photon
+    // number of qubits per one photon
     int multiplexing;
-    std::cout  << "\nmultiplexing:";
+    std::cout << "\nmultiplexing:";
     std::cin >> multiplexing;
     // photons: vector of photon(vector of qubits) 
     int num_qubits = (l1*l2) * 2;
-    std::cout << "\nnum_qubits:";
-    std::cout << num_qubits;
+    std::cout << "\nnum_qubits:" << num_qubits;
     // randomly assign qubits to the photons
     int num_photons;
     num_photons = num_qubits / multiplexing;
     if (num_qubits % multiplexing > 0){
         num_photons  = num_photons  + 1;
     }
-    std::cout  << "\nnum_photons:";
-    std::cout  << num_photons;
+    std::cout  << "\nnum_photons:" << num_photons;
  
     std::vector<int> left_qubits;
     for (int q = 0; q < num_qubits; q++){
@@ -50,8 +54,7 @@ int main()
     std::vector<std::vector<int> > photons;
     for (int ph = 0; ph < num_photons; ph++){
         // std::cout << "\nphoton ";
-        // std::cout << ph;
-        // std::cout << ": ";
+        // print_vec(ph);
         std::vector<int> photon;
         for (int qb = 0; qb < multiplexing; qb++){
             std::srand(time(NULL));
@@ -62,8 +65,6 @@ int main()
             qubit = left_qubits[rand() % left_qubits.size()];
             left_qubits.erase(std::remove(std::begin(left_qubits), std::end(left_qubits), qubit), std::end(left_qubits));
             photon.push_back(qubit);
-            // std::cout << qubit;
-            // std::cout << ",";
             }
         }
         photons.push_back(photon);
@@ -83,9 +84,6 @@ int main()
     // print erased_photons
     std::cout << "\nerasure vector for photons:";
     print_vec(erased_photons);
-    // for (bool c : erased_photons) {
-    //     std::cout << c << ",";
-    // }
 
     // make erasure vector for qubits
     std::vector<bool> erased_qubits(num_qubits);
@@ -107,27 +105,22 @@ int main()
     } 
     // print erased_qubits
     std::cout << "\nerasure vector for qubits :";
-    for (bool c : erased_qubits) {
-        std::cout << c << ",";
-    }
+    print_vec(erased_qubits);
+
     // replace the erased qubits with mixed state -> random pauli
     // make X error vector
     std::vector<bool> xerrors;
     xerrors = make_xerrors(erased_qubits, num_qubits, engine, dist);
     // print xerrors
     std::cout << "\nX errors on qubits        :";
-    for (bool c : xerrors) {
-        std::cout << c << ",";
-    }
+    print_vec(xerrors);
 
     // make Z error vector
     std::vector<bool> zerrors;
     zerrors = make_zerrors(erased_qubits, num_qubits, engine, dist);
     // print zerrors
     std::cout << "\nZ errors on qubits        :";
-    for (bool c : zerrors) {
-        std::cout << c << ",";
-    }
+    print_vec(zerrors);
     // make stabilizers
     std::vector<int> xstabs, zstabs;
     xstabs = make_x_stabilzers(l1, l2);
@@ -135,12 +128,9 @@ int main()
     // vector of x stabilizers which returns -1
     std::vector<bool> x_syndromes;
     x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
-    // std::cout << "AAA";
-    // std::cout << "\nZ error syndrome (X stabs syndrome): " << std::flush;
-    // for (int synd : x_syndromes){
-    //     std::cout << synd << ",";
-    // }
-
+    std::cout << "\nX syndromes               :";
+    print_vec(x_syndromes);
+    
     // option: input measurement error probability
     // add measurement error to the syndrome
     // float prob_m;
@@ -150,23 +140,21 @@ int main()
     // decoding
     std::vector<bool> z_correction;
     z_correction = peeling_decoder_for_z_errors(l1, l2, num_qubits, erased_qubits, x_syndromes);
-    std::cout << "\nZ correction: ";
-    for (int correct : z_correction){
-        std::cout << correct << ",";
-    }
+    std::cout << "\nZ correction              :";
+    print_vec(z_correction);
+    
     // show the result of decoding
-    // std::vector<bool> z_errors_after_decoding[num_qubits];
-    // for (int qubit; qubit <= num_qubits; qubit++){
-    //     z_errors_after_decoding[qubit] = zerrors[qubit] ^ z_correction[qubit];
-    // }
-    // std::cout << "\nZ error after correction: ";
-    // for (bool z_error_after_decoding : z_errors_after_decoding){
-    //     std::cout << z_error_after_decoding << ",";
-    // }
+    std::vector<bool> z_errors_after_decoding(num_qubits);
+    for (int qubit = 0; qubit < num_qubits; qubit++){
+        z_errors_after_decoding[qubit] = zerrors[qubit] ^ z_correction[qubit];
+    }
+    std::cout << "\nZ error after correction  :";
+    print_vec(z_errors_after_decoding);
+
     // destructive measurement
     // char d_m_basis;
     // std::cout << "X or Z destructive_measurement";
     // std::cin >> d_m_basis; /* x or z */
-
+    std::cout << "\n";
     return 0;
 }

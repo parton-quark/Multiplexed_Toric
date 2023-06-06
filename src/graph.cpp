@@ -42,21 +42,24 @@ std::vector<int> extract_group(std::vector<int> group){
 std::vector<graph> devide_graph(graph G, int l2){
     // input graph (can be disconnected graph)
     // output vector of connected graphs 
-
     // assign each vertices to groups 
     std::vector<int> group;
     for (int v; v<= G.num_edges(); v++){
         group[v] = v;
     }
+
     // update groups
     for (int e: G.edges){
         // e has v1 and v2
         // Compare groups of v1 and v2 and merge them into the one with the smaller group number
         std::vector<int> v1_v2;
+        int v1, v2;
         v1_v2 = edge_to_vertices(l2, e);
-        int g1 = group[v1_v2[0]];
-        int g2 = group[v1_v2[1]];
-
+        v1 = v1_v2[0];
+        v2 = v1_v2[0];
+        int g1, g2;
+        g1 = group[v1];
+        g2 = group[v2];
         if (g1 > g2){
             group[v1_v2[0]] = g2;
         } else if (g1 < g2){
@@ -66,7 +69,6 @@ std::vector<graph> devide_graph(graph G, int l2){
     std::vector<int> groups;
     groups = extract_group(group); 
     std::vector<graph> graphs; /* vector of connected graphs*/
-
     for (int c_grph: groups/* connected graph*/){
         std::vector<int> c_grph_vert, c_grph_edg;
         for (int vert: G.vertices){

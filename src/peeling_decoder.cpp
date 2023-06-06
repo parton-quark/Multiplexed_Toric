@@ -71,7 +71,6 @@ std::pair<int, std::pair<int, int> > pick_leaf_edge(graph G, int l1, int l2){
             leaf_and_pendant.first = leaf;
             leaf_and_pendant.second = leaf_vertices;
             find_leaf = true;
-            // break;
         }
         if (find_leaf == true){
             break;
@@ -97,12 +96,10 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
     // x stabilizer syndrome (z error syndrome, std::vector<bool> x_syndrome) 
     // outputs: 
     // Z correction (std::vector<bool> p_z)
-    
     graph epsilon; /* graph which has erased edges */
     for (int erased_qubit: erased_qubits){
         epsilon.add_edge(erased_qubit);
     }
-
     // 1. Construct spanning forest f_eps of 
     std::vector<graph>  msf; /* vector of maximal spanning trees */
     msf = spanning_forest(epsilon, l2);
@@ -120,8 +117,9 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             connected = leaf_and_pendant.second.second;
             // remove e from f_eps
             f_eps.remove_edge(leaf);
-            // 4. (R1)If u∈σ, add e to A,remove u from σ and flip v in σ.
+            
             if (x_syndrome[pendant] == true){
+                // 4. (R1)If u∈σ, add e to A,remove u from σ and flip v in σ.
                 A.add_edge(leaf);
                 x_syndrome[pendant] = false;
                 x_syndrome[connected] = !x_syndrome[connected];

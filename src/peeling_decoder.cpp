@@ -97,15 +97,40 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
     // outputs: 
     // Z correction (std::vector<bool> p_z)
     graph epsilon; /* graph which has erased edges */
-    for (int erased_qubit: erased_qubits){
-        epsilon.add_edge(erased_qubit);
+    // std::cout << "\nepsilon: ";
+    // convert erasure qubits into edges
+    for (int i = 0; i < num_qubits; i++){
+        if (erased_qubits[i] == true){
+            epsilon.add_edge(i);
+            std::vector<int> v0_v1;
+            int v0, v1;
+            v0_v1 = edge_to_vertices(l2, i);
+            v0 = v0_v1[0];
+            v1 = v0_v1[1];
+            epsilon.add_vertex(v0);
+            epsilon.add_vertex(v1);
+            // std::cout << i <<",";
+        }
     }
+
+    // for (int erased_qubit: erased_qubits){
+    //     epsilon.add_edge(erased_qubit);
+    //     std::cout << erased_qubit <<",";
+    // }
+    
     // 1. Construct spanning forest f_eps of 
     std::vector<graph>  msf; /* vector of maximal spanning trees */
     msf = spanning_forest(epsilon, l2);
-    // 2. Initialize A 
+    // 2. Initialize A
     graph A;
     for (graph f_eps: msf){
+        std::cout << "\nf_eps: ";
+        for (graph f_eps: msf){
+            for (int edge: f_eps.edges){
+                std::cout << edge;
+            }
+        }
+
         // 3. While f_eps = ∅, pick a leaf edge e={u,v} with pendant vertex u,remove e from f_eps and apply the two rules: 
         while (f_eps.num_edges() != 0){
             std::pair<int, std::pair<int, int>> leaf_and_pendant; /* leaf edge */
@@ -131,8 +156,14 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
 
     // 6. Return P = Prod_{e∈A} Ze.
     std::vector<bool> p_z(num_qubits); /* Z correction*/
-    for (int edge: A.edges){
+    if (!A.edges.empty()){
+        for (int edge: A.edges){
         p_z[edge] = true;
+        std::cout << edge;
+        }
+    } else {
+        // No correction
+        std::cout << "\n No correction!";
     }
     return p_z;
 }

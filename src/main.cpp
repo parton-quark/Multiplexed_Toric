@@ -3,7 +3,10 @@
 #include <random>
 #include <vector>
 #include <algorithm>
-// #include "print.hpp"
+#include <fstream>
+#include <stdio.h>
+#include <string>
+
 #include "lattice.hpp"
 #include "prob.hpp"
 #include "error.hpp"
@@ -12,16 +15,31 @@
 #include "spanning_forest.hpp"
 #include "peeling_decoder.hpp"
 
-template <class T> void print_vec(std::vector<T> x){
+template <class T> void print_vec(std::vector<T> vec){
     bool is_first_elem;
     is_first_elem = true;
-    for (T elem: x){ 
+    for (T elem: vec){ 
         if (is_first_elem){
             std::cout << elem << std::flush;
             is_first_elem = false;
         }
         std::cout << "," << elem << std::flush;
     }
+}
+
+std::string vec_to_str(std::vector<bool> vec){
+    std::string vecstr;
+    bool is_first_elem;
+    is_first_elem = true;
+    for (bool elem: vec){
+        int x (elem);
+        if (is_first_elem){
+            vecstr = vecstr + std::to_string(x);
+            is_first_elem = false;
+        }
+        vecstr = vecstr + ", " + std::to_string(x);
+    }
+    return vecstr;
 }
 
 int main()
@@ -148,12 +166,21 @@ int main()
     for (int qubit = 0; qubit < num_qubits; qubit++){
         z_errors_after_decoding[qubit] = zerrors[qubit] ^ z_correction[qubit];
     }
-    std::cout << "\nZ error after correction  :";
+    std::cout << "\nZ errors after correction :";
     print_vec(z_errors_after_decoding);
     std::cout << "\n";
 
     // destructive measurement
 
+    // save result
+    std::ofstream writing_file;
+    // std::string filename = sprintf(l1) + "_" + sprintf(l1) + "_" + sprintf(multiplexing) + "_" + sprintf(prob_e) + "_" + ".txt";
+    std::string filename = "sample.txt";
+    writing_file.open(filename, std::ios::out);
+    std::string writing_text = vec_to_str(zerrors);
+    writing_file << writing_text << std::endl;
+    writing_file.close();
+    
     std::cout << "\n";
     return 0;
 }

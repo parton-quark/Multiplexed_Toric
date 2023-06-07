@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #include "graph.hpp"
 #include "lattice.hpp"
@@ -14,12 +15,77 @@ int graph::num_edges(){
     return num;
 }
 
+void graph::print_graph(){    
+    std::cout << "\nV: ";
+    bool is_first_vertex;
+    is_first_vertex = true;
+    for(int vertex: vertices){
+        if (is_first_vertex){
+            std::cout << vertex << std::flush;
+            is_first_vertex = false;
+        } else {
+            std::cout << "," << vertex  << std::flush;  
+        }
+    }
+    std::cout << "\nE: ";
+    bool is_first_edge;
+    is_first_edge = true;
+    for(int edge: edges){
+        if (is_first_edge){
+            std::cout << edge  << std::flush;
+            is_first_edge = false;
+        } else {
+            std::cout << "," << edge << std::flush;  
+        }
+    }
+}
+
+void graph::print_vertices(){
+    bool is_first_vertex;
+    is_first_vertex = true;
+    for(int vertex: vertices){
+        if (is_first_vertex){
+            std::cout << vertex << std::flush;
+            is_first_vertex = false;
+        } else {
+            std::cout << "," << vertex << std::flush;  
+        }
+    }
+}
+
+void graph::print_edges(){
+    bool is_first_edge;
+    is_first_edge = true;
+    for(int edge: edges){
+        if (is_first_edge){
+            std::cout << edge << std::flush;
+            is_first_edge = false;
+        } else {
+            std::cout << "," << edge << std::flush;  
+        }
+    }
+}
+
 void graph::add_vertex(int vertex){
-    vertices.push_back(vertex);
+    size_t num_v;
+    num_v = std::count(vertices.begin(), vertices.end(), vertex);
+    if (num_v == 0){
+        vertices.push_back(vertex);
+    } else {
+        // すでにグラフが持つ辺頂点の時は何もせずcout
+        // std::cout << "vertex " << vertex << " already exits.";
+    }
 }
 
 void graph::add_edge(int edge){
-    edges.push_back(edge);
+    size_t num_e;
+    num_e = std::count(edges.begin(), edges.end(), edge);
+    if (num_e == 0){
+        edges.push_back(edge);
+    } else {
+        // すでにグラフが持つ辺の時は何もせずcout
+        std::cout << "edge " << edge << " already exits.";
+    }
 }
 
 void graph::remove_vertex(int vertex){
@@ -41,13 +107,13 @@ std::vector<int> extract_group(std::vector<int> group){
 
 std::vector<graph> devide_graph(graph G, int l2){
     // input graph (can be disconnected graph)
-    // output vector of connected graphs 
+    // output vector of connected graphs
+
     // assign each vertices to groups 
-    std::vector<int> group;
-    for (int v; v<= G.num_edges(); v++){
+    std::vector<int> group(G.num_vertices());
+    for (int v; v < G.num_vertices(); v++){
         group[v] = v;
     }
-
     // update groups
     for (int e: G.edges){
         // e has v1 and v2
@@ -56,15 +122,17 @@ std::vector<graph> devide_graph(graph G, int l2){
         int v1, v2;
         v1_v2 = edge_to_vertices(l2, e);
         v1 = v1_v2[0];
-        v2 = v1_v2[0];
+        v2 = v1_v2[1];
         int g1, g2;
         g1 = group[v1];
         g2 = group[v2];
+        std::cout << "HUHUHU";
         if (g1 > g2){
             group[v1_v2[0]] = g2;
         } else if (g1 < g2){
             group[v1_v2[1]] = g1;
         }
+        std::cout << "HAHAHA";
     }
     std::vector<int> groups;
     groups = extract_group(group); 
@@ -86,7 +154,7 @@ std::vector<graph> devide_graph(graph G, int l2){
         graph cg;
         cg = graph(c_grph_vert, c_grph_edg);
         graphs.push_back(cg);
-    } 
+    }
     return graphs;
 }
 

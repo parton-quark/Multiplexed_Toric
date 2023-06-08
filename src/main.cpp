@@ -45,14 +45,17 @@ std::string vec_to_str(std::vector<bool> vec){
 int main()
 {   // lattice size: l1 times l2
     int l1,l2;
-    std::cout << "l1:";
-    std::cin >> l1;
-    std::cout << "\nl2:";
-    std::cin >> l2;
+    // std::cout << "l1:";
+    // std::cin >> l1;
+    // std::cout << "\nl2:";
+    // std::cin >> l2;
+    l1 = 5;
+    l2 = 5;
     // number of qubits per one photon
     int multiplexing;
-    std::cout << "\nmultiplexing:";
-    std::cin >> multiplexing;
+    // std::cout << "\nmultiplexing:";
+    // std::cin >> multiplexing;
+    multiplexing = 5;
     // photons: vector of photon(vector of qubits) 
     int num_qubits = (l1*l2) * 2;
     std::cout << "\nnum_qubits:" << num_qubits;
@@ -90,8 +93,9 @@ int main()
     
     // input erasure probability
     float prob_e;
-    std::cout << "\nerasure probability:";
-    std::cin >> prob_e;
+    // std::cout << "\nerasure probability:";
+    // std::cin >> prob_e;
+    prob_e = 0.2;
     // make random device
     std::random_device rd;
     std::mt19937 engine;

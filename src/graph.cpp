@@ -73,7 +73,7 @@ void graph::add_vertex(int vertex){
         vertices.push_back(vertex);
     } else {
         // すでにグラフが持つ辺頂点の時は何もせずcout
-        // std::cout << "vertex " << vertex << " already exits.";
+        std::cout << "vertex " << vertex << " already exits." << std::flush;
     }
 }
 
@@ -84,7 +84,7 @@ void graph::add_edge(int edge){
         edges.push_back(edge);
     } else {
         // すでにグラフが持つ辺の時は何もせずcout
-        std::cout << "edge " << edge << " already exits.";
+        std::cout << "edge " << edge << " already exits." << std::flush;
     }
 }
 
@@ -97,47 +97,57 @@ void graph::remove_edge(int edge){
 }
 
 std::vector<int> extract_group(std::vector<int> group){
+    // seg fault
     // Sort and remove duplicate elements
+    std::cout << "\nHere 102" << std::flush;
     std::vector<int> res;
     res = group;
+    std::cout << "\ngroup: " << std::flush;
+    for (int g: group){
+        std::cout << g << "," << std::flush;
+    }
+
     std::sort(res.begin(), res.end());
     res.erase(std::unique(res.begin(), res.end()), res.end());
+
+    std::cout << "\nres: " << std::flush;
+    for (int r: res){
+        std::cout << r << "," << std::flush;
+    }
     return res;
 }
 
 std::vector<graph> devide_graph(graph G, int l2){
-    // input graph (can be disconnected graph)
+    // input graph
     // output vector of connected graphs
-
-    // assign each vertices to groups 
     std::vector<int> group(G.num_vertices());
     for (int v; v < G.num_vertices(); v++){
         group[v] = v;
     }
-    // update groups
+    // update group based on edges
     for (int e: G.edges){
-        // e has v1 and v2
-        // Compare groups of v1 and v2 and merge them into the one with the smaller group number
-        std::vector<int> v1_v2;
-        int v1, v2;
-        v1_v2 = edge_to_vertices(l2, e);
-        v1 = v1_v2[0];
-        v2 = v1_v2[1];
-        int g1, g2;
-        g1 = group[v1];
-        g2 = group[v2];
-        std::cout << "HUHUHU";
-        if (g1 > g2){
-            group[v1_v2[0]] = g2;
-        } else if (g1 < g2){
-            group[v1_v2[1]] = g1;
+        std::vector<int> uv;
+        uv = edge_to_vertices(l2, e);
+        int u, v;
+        u = uv[0];
+        v = uv[1];
+        int gu, gv;
+        gu = group[u];
+        gv = group[v];
+        if (gu == gv){
+            // do nothing
+        } else if (gu < gv){
+            // update groups of the all edges which has same group of v
+            std::replace(group.begin(), group.end(), gv, gu);
+        } else if (gu > gv){
+            // update groups of the all edges which has same group of u 
+            std::replace(group.begin(), group.end(), gu, gv);
         }
-        std::cout << "HAHAHA";
     }
-    std::vector<int> groups;
-    groups = extract_group(group); 
+    std::vector<int> groups;std::cout << "\nHere 140" << std::flush;
+    groups = extract_group(group); std::cout << "\nHere 141" << std::flush;
     std::vector<graph> graphs; /* vector of connected graphs*/
-    for (int c_grph: groups/* connected graph*/){
+    for (int c_grph: groups /* connected graph*/){
         std::vector<int> c_grph_vert, c_grph_edg;
         for (int vert: G.vertices){
             if (c_grph == group[vert]){

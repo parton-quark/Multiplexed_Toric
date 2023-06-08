@@ -113,11 +113,6 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
         }
     }
 
-    // for (int erased_qubit: erased_qubits){
-    //     epsilon.add_edge(erased_qubit);
-    //     std::cout << erased_qubit <<",";
-    // }
-    
     // 1. Construct spanning forest f_eps of 
     std::vector<graph>  msf; /* vector of maximal spanning trees */
     msf = spanning_forest(epsilon, l2);

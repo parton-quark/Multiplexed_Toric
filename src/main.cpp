@@ -95,7 +95,7 @@ int main()
     float prob_e;
     // std::cout << "\nerasure probability:";
     // std::cin >> prob_e;
-    prob_e = 0.2;
+    prob_e = 0.15;
     // make random device
     std::random_device rd;
     std::mt19937 engine;
@@ -150,8 +150,8 @@ int main()
     // vector of x stabilizers which returns -1
     std::vector<bool> x_syndromes;
     x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
-    // std::cout << "\nX syndromes               :";
-    // print_vec(x_syndromes);
+    std::cout << "\nX syndromes               :";
+    print_vec(x_syndromes);
     
     // option: input measurement error probability
     // add measurement error to the syndrome

@@ -73,7 +73,7 @@ void graph::add_vertex(int vertex){
         vertices.push_back(vertex);
     } else {
         // すでにグラフが持つ辺頂点の時は何もせずcout
-        std::cout << "vertex " << vertex << " already exits." << std::flush;
+        // std::cout << "vertex " << vertex << " already exits." << std::flush;
     }
 }
 
@@ -99,96 +99,146 @@ void graph::remove_edge(int edge){
 std::vector<int> extract_group(std::vector<int> group){
     // seg fault
     // Sort and remove duplicate elements
-    std::cout << "\nHere 102" << std::flush;
+    // std::cout << "\nHere 102" << std::flush;
     std::vector<int> res;
-    res = group;
+
     std::cout << "\ngroup: " << std::flush;
     for (int g: group){
         std::cout << g << "," << std::flush;
     }
-
+    res = group;
     std::sort(res.begin(), res.end());
     res.erase(std::unique(res.begin(), res.end()), res.end());
 
-    std::cout << "\nres: " << std::flush;
+    std::cout << "\nextracted group: " << std::flush;
     for (int r: res){
         std::cout << r << "," << std::flush;
     }
     return res;
 }
 
-std::vector<graph> devide_graph(graph G, int l2){
+std::vector<graph> devide_graph(graph G, int l1, int l2){
     // input graph
     // output vector of connected graphs
-    std::vector<int> group(G.num_vertices());
-    for (int v; v < G.num_vertices(); v++){
-        group[v] = v;
+    std::vector<int> v_group(G.num_vertices());
+    for (int v = 0; v < G.num_vertices(); v++){
+        v_group[v] = v;
     }
-    // update group based on edges
+    std::vector<int> e_group(G.num_edges());
+
+
+    int e_index;
+    e_index = 0;
+
     for (int e: G.edges){
         std::vector<int> uv;
-        uv = edge_to_vertices(l2, e);
+        uv = edge_to_vertices(l1, l2, e);
         int u, v;
         u = uv[0];
         v = uv[1];
-        int gu, gv;
-        gu = group[u];
-        gv = group[v];
-        if (gu == gv){
-            // do nothing
-        } else if (gu < gv){
-            // update groups of the all edges which has same group of v
-            std::replace(group.begin(), group.end(), gv, gu);
-        } else if (gu > gv){
-            // update groups of the all edges which has same group of u 
-            std::replace(group.begin(), group.end(), gu, gv);
-        }
-    }
-    std::vector<int> groups;std::cout << "\nHere 140" << std::flush;
-    groups = extract_group(group); std::cout << "\nHere 141" << std::flush;
-    std::vector<graph> graphs; /* vector of connected graphs*/
-    for (int c_grph: groups /* connected graph*/){
-        std::vector<int> c_grph_vert, c_grph_edg;
-        for (int vert: G.vertices){
-            if (c_grph == group[vert]){
-                c_grph_vert.push_back(vert);
+
+        int index_u, index_v;
+        for (int i=0; i < G.num_vertices(); i++){
+            if (G.vertices[i] == u){
+                index_u = i;
+            }
+            if (G.vertices[i] == v){
+                index_v = i;
             }
         }
-        for (int edg: G.edges){
-            std::vector<int> vv;
-            vv = edge_to_vertices(l2, edg);
-            if (c_grph == group[vv[0]]){
-                c_grph_edg.push_back(edg);
-            } 
+
+        int gu, gv;
+        gu = v_group[index_u];
+        gv = v_group[index_v];
+
+        if (gu == gv){
+            // do nothing
+            e_group[e_index] = gu;
+        } else if (gu < gv){
+            // update groups of e
+            e_group[e_index] = gu;
+            // update groups of all edges which has group gv
+            for (int eg: e_group){
+                if (eg == gv){
+                    eg = gu;
+                }
+            }
+            // update groups of all vertices which has same group of v
+            std::replace(v_group.begin(), v_group.end(), gv, gu);
+        } else if (gu > gv){
+            // update groups of e
+            e_group[e_index] = gv;
+            // update groups of all edges which has group gu
+            for (int eg: e_group){
+                if (eg == gu){
+                    eg = gv;
+                }
+            }
+            // update groups of all vertices which has same group of u
+            std::replace(v_group.begin(), v_group.end(), gu, gv);
         }
-        graph cg;
-        cg = graph(c_grph_vert, c_grph_edg);
-        graphs.push_back(cg);
+        e_index = e_index + 1;
     }
-    return graphs;
+    std::cout << "\nv_group" << std::flush;
+    for (int a: v_group){
+        std::cout << a << "," << std::flush;
+    } 
+    std::cout << "\ne_group" << std::flush;
+    for (int b: e_group){
+        std::cout << b << "," << std::flush;
+    } 
+
+    std::vector<int> v_group_no_dupl;
+    v_group_no_dupl = extract_group(v_group);
+
+    std::vector<graph> connected_graphs;
+    for (int group : v_group_no_dupl){
+        graph connected_graph;
+        // 頂点を追加する
+        int vertex_index;
+        vertex_index = 0;
+        for (int vertex: v_group){
+            if (vertex == group){
+                connected_graph.add_vertex(G.vertices[vertex_index]);
+            }
+            vertex_index = vertex_index + 1;
+        }
+        // 辺を追加する
+        int edge_index;
+        edge_index = 0;
+        for (int edge: e_group){
+            if(edge == group){
+                connected_graph.add_edge(G.edges[edge_index]);
+            }
+            edge_index = edge_index + 1;
+        }
+        connected_graphs.push_back(connected_graph);
+        std::cout << "\nconnected_graph" << std::flush;
+        connected_graph.print_graph();
+    }
+    return connected_graphs;
 }
 
-std::vector<int> extract_vertices(std::vector<int> edges, int l2){
+std::vector<int> extract_vertices(std::vector<int> edges, int l1, int l2){
     // input: edges
     // output: vector of vertices in the edges
 
     std::vector<int> vertices; /* vector of vertices which spanning forest spans */
     for (int edge: edges){
         // If the vertex in an edge contains is not included in vertices, add it.
-        std::vector<std::vector<int>> v1v2_coordinates;
+        std::vector<int> v1v2;
+        int v1, v2;
+        v1v2 = edge_to_vertices(l1, l2, edge);
+        v1 = v1v2[0];
+        v2 = v1v2[1];
         std::vector<int> v1_coordinate, v2_coordinate;
-        v1v2_coordinates = edge_to_coordinate(l2, edge); 
-        v1_coordinate = v1v2_coordinates[0];
-        v2_coordinate = v1v2_coordinates[1];
-        
+        v1_coordinate = vertex_to_coordinate(l2, v1);
+        v2_coordinate = vertex_to_coordinate(l2, v2);
         int v1_x, v1_y, v2_x, v2_y;
         v1_x = v1_coordinate[0];
         v1_y = v1_coordinate[1];
         v1_x = v2_coordinate[0];
         v1_y = v2_coordinate[1];
-        int v1, v2;
-        v1 = coordinate_to_vertex(l2, v1_x, v1_y);
-        v2 = coordinate_to_vertex(l2, v2_x, v2_y);
         
         if (std::count(vertices.begin(), vertices.end(), v1)) {
             // element found in vertices

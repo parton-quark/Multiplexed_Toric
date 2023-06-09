@@ -85,6 +85,8 @@ std::vector<std::vector<int>> edge_to_coordinate(int l2, int e){
     // qubit
     int v_0_x,v_0_y,v_1_x,v_1_y;
     if(e % 2 == 0){
+        // Vertical
+        v_0_x = 
 
         v_0_x = e % l2;
         v_0_y = e / l2;
@@ -92,7 +94,7 @@ std::vector<std::vector<int>> edge_to_coordinate(int l2, int e){
         v_1_y = e / l2;
     }
     else if (e % 2 == 1){
-        // Vertical
+        // Horizontal
         v_0_x = e % l2;
         v_0_y = e / l2;
         v_1_x = e % l2;
@@ -109,16 +111,26 @@ std::vector<std::vector<int>> edge_to_coordinate(int l2, int e){
     return coordinates;
 }
 
-std::vector<int> edge_to_vertices(int l2, int e){
-    std::vector<std::vector<int>> v1_v2;
-    v1_v2 = edge_to_coordinate(l2, e);
-    std::vector<int> v1_coordinate, v2_coordinate;
-    int v1, v2;
-    v1_coordinate = v1_v2[0];
-    v2_coordinate = v1_v2[1];
-    v1 = coordinate_to_vertex(l2, v1_coordinate[0], v1_coordinate[1]);
-    v2 = coordinate_to_vertex(l2, v2_coordinate[0], v2_coordinate[1]);
-    std::vector<int> vertices{v1, v2};
+std::vector<int> edge_to_vertices(int l1, int l2, int e){
+    int u, v;
+    if (e%2 == 0){
+        // vertical edge
+        u = e / 2;
+        if (e >= 2 * (l1 - 1) * l2){// 上端
+            v = (e % (2 * l2)) / 2;
+        } else {
+            v = u + l2;
+        }
+    } else {
+        // horizontal edge
+        u = (e - 1) / 2;
+        if (e % (2 * l2) == (2 * l2) - 1){ // 右端
+            v = (e / (2 * l2)) * l2;
+        } else {
+            v = u + 1;
+        }
+    }
+    std::vector<int> vertices{u, v};
     return vertices;
 }
 

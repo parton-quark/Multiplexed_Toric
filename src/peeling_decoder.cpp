@@ -18,7 +18,7 @@ std::pair<int, std::pair<int, int> > pick_leaf_edge(graph G, int l1, int l2){
     for (int edge: edges){
         std::vector<int> uv;
         int u, v;
-        uv = edge_to_vertices(l2, edge);
+        uv = edge_to_vertices(l1 , l2, edge);
         u = uv[0];
         v = uv[1];
         std::vector<int> eu_list, ev_list;
@@ -104,7 +104,7 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             epsilon.add_edge(i);
             std::vector<int> v0_v1;
             int v0, v1;
-            v0_v1 = edge_to_vertices(l2, i);
+            v0_v1 = edge_to_vertices(l1, l2, i);
             v0 = v0_v1[0];
             v1 = v0_v1[1];
             epsilon.add_vertex(v0);
@@ -112,17 +112,18 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             // std::cout << i <<",";
         }
     }
-
+    std::cout << "\nepsilon" << std::flush;
+    epsilon.print_graph();
     // 1. Construct spanning forest f_eps of 
     std::vector<graph>  msf; /* vector of maximal spanning trees */
-    msf = spanning_forest(epsilon, l2);
+    msf = spanning_forest(epsilon, l1, l2);
     // 2. Initialize A
     graph A;
     for (graph f_eps: msf){
         std::cout << "\nf_eps: ";
         for (graph f_eps: msf){
             for (int edge: f_eps.edges){
-                std::cout << edge;
+                std::cout << edge << ",";
             }
         }
 

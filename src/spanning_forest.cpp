@@ -11,40 +11,40 @@
 int pick_min_w_edge(graph left_graph, std::vector<int> edge_weights){
     // pick an edge with minimal weight randomly
     std::vector<int> left_edges;
-    left_edges = left_graph.edges; std::cout << "le_size" << left_edges.size() << std::flush;
-    std::cout << "\nHere 15"<< std::flush;
+    left_edges = left_graph.edges; std::cout << "\nle_size" << left_edges.size() << std::flush;
+    // std::cout << "\nHere 15"<< std::flush;
     if (left_edges.size() != edge_weights.size()){
-        std::cout << "left ed != ed_we" << std::flush;
+        std::cout << "CAUTION left ed != ed_we" << std::flush;
     } else {
-        std::cout << "NP" << std::flush;
+        // std::cout << "NP" << std::flush;
     }
-    std::cout << "\nHere 21" << std::flush;
+    // std::cout << "\nHere 21" << std::flush;
     int min_w; /* minimum weight of left edges */
     min_w = *min_element(edge_weights.begin(), edge_weights.end());
     std::vector<int> min_w_indexes;
-    std::cout << "\nHere 25" << std::flush;
+    // std::cout << "\nHere 25" << std::flush;
     for (int ind; ind < edge_weights.size(); ind++){
         if (edge_weights[ind] == min_w){
             min_w_indexes.push_back(ind);
         }
     }
     int max;
-    std::cout << "\nHere 32" << std::flush;
+    // std::cout << "\nHere 32" << std::flush;
     max = min_w_indexes.size() - 1;  // なんかおかしいぞ！！！！！！！
     std::cout << "\nmax: " << max << std::flush;
     std::random_device rd;
     std::mt19937 engine;
     std::uniform_int_distribution<int> dist(0, max); // ここをmin_w_indexのサイズの一様分布にしたい
-    std::cout << "\nHere 37" << std::flush;
+    // std::cout << "\nHere 37" << std::flush;
     int candidate_index, candidate_edge;
-    candidate_index =  dist(engine); std::cout << "\nHere 39" << std::flush;
+    candidate_index =  dist(engine); // std::cout << "\nHere 39" << std::flush;
     std::cout << "\ncandidate_index" << candidate_index << std::flush;
     std::cout << "\nleft_edges size" << left_edges.size() << std::flush;
-    candidate_edge = left_edges[candidate_index]; std::cout << "\nHere 40" << std::flush;
+    candidate_edge = left_edges[candidate_index]; // std::cout << "\nHere 40" << std::flush;
     return candidate_edge;
 }
 
-graph kruskal(graph G, int l2, std::vector<int> edge_weights){
+graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
     // Kruskal's algorithm
     // input: graph G (connected g)
     // output: graph T (minimal spanning tree of G)
@@ -55,19 +55,19 @@ graph kruskal(graph G, int l2, std::vector<int> edge_weights){
     graph left_graph(left_vertices, left_edges);
 
     graph mm_st; /* minimal spanning tree */
-    std::cout << "\nleft_graph";
+    std::cout << "\nleft_graph:";
     left_graph.print_graph();
-    std::cout << "\nHere 67"<< std::flush;
+    // std::cout << "\nHere 67"<< std::flush;
     while(left_graph.vertices.size() != 0){/* until all vertices are included in the tree */
         std::cout << "\nleft_graph: "<< std::flush;
         left_graph.print_graph();
         std::cout << "\nleft_vertices_size: " <<  left_graph.vertices.size() << std::flush;
         bool is_cycle = true;
-        int candidate_e; std::cout << "\nHere 71"<< std::flush;
-        candidate_e = pick_min_w_edge(left_graph, edge_weights); std::cout << "\nHere 72"<< std::flush; //どうやら辺が空のグラフを渡しているらしい
+        int candidate_e; // std::cout << "\nHere 71"<< std::flush;
+        candidate_e = pick_min_w_edge(left_graph, edge_weights); //std::cout << "\nHere 72"<< std::flush; //どうやら辺が空のグラフを渡しているらしい
         std::cout << "\ncandidate_e: " << candidate_e << std::flush;
         std::vector<int> candidate_e_vertices;
-        candidate_e_vertices = edge_to_vertices(l2, candidate_e);
+        candidate_e_vertices = edge_to_vertices(l1, l2, candidate_e);
         int candidate_v0, candidate_v1;
         candidate_v0 = candidate_e_vertices[0];
         candidate_v1 = candidate_e_vertices[1];
@@ -123,18 +123,18 @@ graph kruskal(graph G, int l2, std::vector<int> edge_weights){
             // wanted index: can_eはedgesの中で何番目か？
             // wanted index番目のweighted_edgesを削除して詰める
             // edge_weights.erase(edge_weights.begin() + wanted_index - 1); /* remove method必要？*/ std::cout << "Here 88" << std::flush;
-            std::cout << "Here 92" << std::flush;
+            //std::cout << "Here 92" << std::flush;
             // add this edge to tree
             mm_st.add_edge(candidate_e);
             mm_st.add_vertex(candidate_v0);
             mm_st.add_vertex(candidate_v1);      
-            std::cout << "Here 94" << std::flush;
+            //std::cout << "Here 94" << std::flush;
             // remove two vertices of candidate_e from left_vertices
             left_graph.remove_vertex(candidate_v0);
             left_graph.remove_vertex(candidate_v1);
             // remove candidate_e from the left_graph
             left_graph.remove_edge(candidate_e);
-            std::cout << "\nHere 100" << std::flush;
+            //std::cout << "\nHere 100" << std::flush;
             std::cout << "\nmm_st:";
             mm_st.print_graph();
 
@@ -143,7 +143,7 @@ graph kruskal(graph G, int l2, std::vector<int> edge_weights){
     return mm_st;
 }
 
-graph maximal_spanning_tree(graph G, int l2){
+graph maximal_spanning_tree(graph G, int l1, int l2){
     // input: graph G (connected graph)
     // output: graph T (maximal spanning tree of G)
 
@@ -162,29 +162,29 @@ graph maximal_spanning_tree(graph G, int l2){
     // Since the input is a graph with equal edge weights, it can be replaced by a faster algorithm (depth-first search),
     // but for simplicity, Kruskal's algorithm is used. 
     graph mxst;
-    mxst = kruskal(G, l2, edge_weights); /* maximal spanning tree */
+    mxst = kruskal(G, l1, l2, edge_weights); /* maximal spanning tree */
     // The weights of each edge should be returned to w 
     // Here all edge weights are 1, so no such transformation is necessary
     return mxst;
 }
 
-std::vector<graph> spanning_forest(graph G, int l2){
+std::vector<graph> spanning_forest(graph G, int l1, int l2){
     // input: edges
     // output: maximal spanning forest of edges 
     // (maximal subset of edges that contains no cycle and span all the vertices in edges)
     // 連結成分ごとにグラフを分割する
-    std::cout <<  "\nspanning forest function";
-    G.print_graph();
-    std::cout << "done.";
+    // std::cout <<  "\nspanning forest function";
+    // G.print_graph();
+    // std::cout << "done.";
     std::vector<graph> msf; /* maximal spanning forest */
-    std::vector<graph> connected_graphs; std::cout <<  "\nHere 185" << std::flush;
-    connected_graphs =  devide_graph(G, l2); std::cout <<  "\nHere 186" << std::flush;
+    std::vector<graph> connected_graphs; //std::cout <<  "\nHere 185" << std::flush;
+    connected_graphs =  devide_graph(G, l1, l2); // std::cout <<  "\nHere 186" << std::flush;
     for (graph connected_graph: connected_graphs){
         std::cout << "\nconnected graph: ";
         connected_graph.print_graph();
         // ここまでは良い。
         graph tree;
-        tree = maximal_spanning_tree(connected_graph, l2);
+        tree = maximal_spanning_tree(connected_graph, l1, l2);
         std::cout << "\ntree: ";
         tree.print_graph();
         // add tree to spanning forest

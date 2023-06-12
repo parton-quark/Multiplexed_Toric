@@ -72,8 +72,7 @@ void graph::add_vertex(int vertex){
     if (num_v == 0){
         vertices.push_back(vertex);
     } else {
-        // すでにグラフが持つ辺頂点の時は何もせずcout
-        // std::cout << "vertex " << vertex << " already exits." << std::flush;
+        // graph already has vertex
     }
 }
 
@@ -83,8 +82,7 @@ void graph::add_edge(int edge){
     if (num_e == 0){
         edges.push_back(edge);
     } else {
-        // すでにグラフが持つ辺の時は何もせずcout
-        std::cout << "edge " << edge << " already exits." << std::flush;
+        // graph already has edge
     }
 }
 
@@ -99,21 +97,18 @@ void graph::remove_edge(int edge){
 std::vector<int> extract_group(std::vector<int> group){
     // seg fault
     // Sort and remove duplicate elements
-    // std::cout << "\nHere 102" << std::flush;
     std::vector<int> res;
-
-    std::cout << "\ngroup: " << std::flush;
-    for (int g: group){
-        std::cout << g << "," << std::flush;
-    }
+    // std::cout << "\ngroup: " << std::flush;
+    // for (int g: group){
+    //     std::cout << g << "," << std::flush;
+    // }
     res = group;
     std::sort(res.begin(), res.end());
     res.erase(std::unique(res.begin(), res.end()), res.end());
-
-    std::cout << "\nextracted group: " << std::flush;
-    for (int r: res){
-        std::cout << r << "," << std::flush;
-    }
+    // std::cout << "\nextracted group: " << std::flush;
+    // for (int r: res){
+    //     std::cout << r << "," << std::flush;
+    // }
     return res;
 }
 
@@ -122,10 +117,12 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
     // output vector of connected graphs
     std::vector<int> v_group(G.num_vertices());
     for (int v = 0; v < G.num_vertices(); v++){
-        v_group[v] = v;
+        v_group[v] = v + 1;
     }
     std::vector<int> e_group(G.num_edges());
-
+        for (int e = 0; e < G.num_edges(); e++){
+        e_group[e] = 0;
+    }
 
     int e_index;
     e_index = 0;
@@ -158,9 +155,9 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
             // update groups of e
             e_group[e_index] = gu;
             // update groups of all edges which has group gv
-            for (int eg: e_group){
-                if (eg == gv){
-                    eg = gu;
+            for (int e_ind = 0; e_ind < G.num_edges(); e_ind++){
+                if (e_group[e_index] == gv){
+                    e_group[e_index] = gu;
                 }
             }
             // update groups of all vertices which has same group of v
@@ -169,9 +166,9 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
             // update groups of e
             e_group[e_index] = gv;
             // update groups of all edges which has group gu
-            for (int eg: e_group){
-                if (eg == gu){
-                    eg = gv;
+            for (int e_ind = 0; e_ind < G.num_edges(); e_ind++){
+                if (e_group[e_index] == gu){
+                    e_group[e_index] = gv;
                 }
             }
             // update groups of all vertices which has same group of u
@@ -179,11 +176,11 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
         }
         e_index = e_index + 1;
     }
-    std::cout << "\nv_group" << std::flush;
+    std::cout << "\nv_group: " << std::flush;
     for (int a: v_group){
         std::cout << a << "," << std::flush;
     } 
-    std::cout << "\ne_group" << std::flush;
+    std::cout << "\ne_group: " << std::flush;
     for (int b: e_group){
         std::cout << b << "," << std::flush;
     } 

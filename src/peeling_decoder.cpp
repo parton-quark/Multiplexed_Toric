@@ -97,7 +97,6 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
     // outputs: 
     // Z correction (std::vector<bool> p_z)
     graph epsilon; /* graph which has erased edges */
-    // std::cout << "\nepsilon: ";
     // convert erasure qubits into edges
     for (int i = 0; i < num_qubits; i++){
         if (erased_qubits[i] == true){
@@ -109,7 +108,6 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             v1 = v0_v1[1];
             epsilon.add_vertex(v0);
             epsilon.add_vertex(v1);
-            // std::cout << i <<",";
         }
     }
     std::cout << "\nepsilon" << std::flush;
@@ -120,13 +118,6 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
     // 2. Initialize A
     graph A;
     for (graph f_eps: msf){
-        std::cout << "\nf_eps: ";
-        for (graph f_eps: msf){
-            for (int edge: f_eps.edges){
-                std::cout << edge << ",";
-            }
-        }
-
         // 3. While f_eps = ∅, pick a leaf edge e={u,v} with pendant vertex u,remove e from f_eps and apply the two rules: 
         while (f_eps.num_edges() != 0){
             std::pair<int, std::pair<int, int>> leaf_and_pendant; /* leaf edge */
@@ -155,7 +146,6 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
     if (!A.edges.empty()){
         for (int edge: A.edges){
         p_z[edge] = true;
-        std::cout << edge;
         }
     } else {
         // No correction

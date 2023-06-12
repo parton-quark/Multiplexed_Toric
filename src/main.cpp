@@ -15,6 +15,15 @@
 #include "spanning_forest.hpp"
 #include "peeling_decoder.hpp"
 
+void print_ind_of_bool_vec(std::vector<bool>  bv){
+    bool is_first_elem;
+    for (int index = 0; index < bv.size(); index++){
+        if (bv[index]){
+            std::cout << index << "," << std::flush;
+        }
+    }
+}
+
 template <class T> void print_vec(std::vector<T> vec){
     bool is_first_elem;
     is_first_elem = true;
@@ -95,7 +104,7 @@ int main()
     float prob_e;
     // std::cout << "\nerasure probability:";
     // std::cin >> prob_e;
-    prob_e = 0.15;
+    prob_e = 0.2;
     // make random device
     std::random_device rd;
     std::mt19937 engine;
@@ -105,8 +114,8 @@ int main()
     erased_photons = make_erasure_errors(num_photons, prob_e, engine, dist);
     // print erased_photons
     std::cout << "\nerasure vector for photons:";
-    print_vec(erased_photons);
-
+    // print_vec(erased_photons);
+    print_ind_of_bool_vec(erased_photons);
     // make erasure vector for qubits
     std::vector<bool> erased_qubits(num_qubits);
     
@@ -127,8 +136,8 @@ int main()
     } 
     // print erased_qubits
     std::cout << "\nerasure vector for qubits :";
-    print_vec(erased_qubits);
-
+    // print_vec(erased_qubits);
+    print_ind_of_bool_vec(erased_qubits);
     // replace the erased qubits with mixed state -> random pauli
     // make X error vector
     std::vector<bool> xerrors;
@@ -142,7 +151,8 @@ int main()
     zerrors = make_zerrors(erased_qubits, num_qubits, engine, dist);
     // print zerrors
     std::cout << "\nZ errors on qubits        :";
-    print_vec(zerrors);
+    // print_vec(zerrors);
+    print_ind_of_bool_vec(zerrors);
     // make stabilizers
     std::vector<int> xstabs, zstabs;
     xstabs = make_x_stabilzers(l1, l2);
@@ -151,8 +161,8 @@ int main()
     std::vector<bool> x_syndromes;
     x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
     std::cout << "\nX syndromes               :";
-    print_vec(x_syndromes);
-    
+    // print_vec(x_syndromes);
+    print_ind_of_bool_vec(x_syndromes);
     // option: input measurement error probability
     // add measurement error to the syndrome
     // float prob_m;

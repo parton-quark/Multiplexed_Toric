@@ -8,8 +8,8 @@ std::vector<int> vertex_to_coordinate(int l2, int v){
     int x,y;
     x = v % l2;
     y = v / l2;
-    std::vector<int> coordicate{x,y};
-    return coordicate;
+    std::vector<int> coordiate{x,y};
+    return coordinate;
 }
 
 int coordinate_to_vertex(int l2, int x, int y){
@@ -86,8 +86,6 @@ std::vector<std::vector<int>> edge_to_coordinate(int l2, int e){
     int v_0_x,v_0_y,v_1_x,v_1_y;
     if(e % 2 == 0){
         // Vertical
-        v_0_x = 
-
         v_0_x = e % l2;
         v_0_y = e / l2;
         v_1_x = (e % l2) + 1;

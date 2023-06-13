@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <exception> 
 #include "graph.hpp"
 #include "lattice.hpp"
 
@@ -95,38 +96,35 @@ void graph::remove_edge(int edge){
 }
 
 std::vector<int> extract_group(std::vector<int> group){
-    // seg fault
     // Sort and remove duplicate elements
     std::vector<int> res;
-    // std::cout << "\ngroup: " << std::flush;
-    // for (int g: group){
-    //     std::cout << g << "," << std::flush;
-    // }
     res = group;
     std::sort(res.begin(), res.end());
     res.erase(std::unique(res.begin(), res.end()), res.end());
-    // std::cout << "\nextracted group: " << std::flush;
-    // for (int r: res){
-    //     std::cout << r << "," << std::flush;
-    // }
+    std::cout << "\nextracted group: " << std::flush;
+    for (int r: res){
+        std::cout << r << "," << std::flush;
+    }
     return res;
 }
 
 std::vector<graph> devide_graph(graph G, int l1, int l2){
     // input graph
     // output vector of connected graphs
+
+    // assign vertices to groups
     std::vector<int> v_group(G.num_vertices());
     for (int v = 0; v < G.num_vertices(); v++){
         v_group[v] = v + 1;
     }
+    // assign edges to groups
     std::vector<int> e_group(G.num_edges());
-        for (int e = 0; e < G.num_edges(); e++){
+    for (int e = 0; e < G.num_edges(); e++){
         e_group[e] = 0;
     }
 
     int e_index;
     e_index = 0;
-
     for (int e: G.edges){
         std::vector<int> uv;
         uv = edge_to_vertices(l1, l2, e);
@@ -149,15 +147,16 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
         gv = v_group[index_v];
 
         if (gu == gv){
-            // do nothing
+            // update groups of e
             e_group[e_index] = gu;
+            // do nothing for group of u & v
         } else if (gu < gv){
             // update groups of e
             e_group[e_index] = gu;
             // update groups of all edges which has group gv
             for (int e_ind = 0; e_ind < G.num_edges(); e_ind++){
-                if (e_group[e_index] == gv){
-                    e_group[e_index] = gu;
+                if (e_group[e_ind] == gv){
+                    e_group[e_ind] = gu;
                 }
             }
             // update groups of all vertices which has same group of v
@@ -165,10 +164,9 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
         } else if (gu > gv){
             // update groups of e
             e_group[e_index] = gv;
-            // update groups of all edges which has group gu
             for (int e_ind = 0; e_ind < G.num_edges(); e_ind++){
-                if (e_group[e_index] == gu){
-                    e_group[e_index] = gv;
+                if (e_group[e_ind] == gu){
+                    e_group[e_ind] = gv;
                 }
             }
             // update groups of all vertices which has same group of u
@@ -187,11 +185,18 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
 
     std::vector<int> v_group_no_dupl;
     v_group_no_dupl = extract_group(v_group);
+    std::vector<int> e_group_no_dupl;
+    e_group_no_dupl = extract_group(e_group);
+
+    if (v_group_no_dupl != e_group_no_dupl){
+        throw std::runtime_error("v_group_no_dupl != e_group_no_dupl");
+        std::cout << "\nv_group_no_dupl != e_group_no_dupl!!!" << std::flush;
+    }
 
     std::vector<graph> connected_graphs;
     for (int group : v_group_no_dupl){
         graph connected_graph;
-        // 頂点を追加する
+        // add vertices
         int vertex_index;
         vertex_index = 0;
         for (int vertex: v_group){
@@ -200,7 +205,7 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
             }
             vertex_index = vertex_index + 1;
         }
-        // 辺を追加する
+        // add edges
         int edge_index;
         edge_index = 0;
         for (int edge: e_group){

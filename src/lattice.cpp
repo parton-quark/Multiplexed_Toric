@@ -8,7 +8,7 @@ std::vector<int> vertex_to_coordinate(int l2, int v){
     int x,y;
     x = v % l2;
     y = v / l2;
-    std::vector<int> coordiate{x,y};
+    std::vector<int> coordinate{x,y};
     return coordinate;
 }
 
@@ -19,7 +19,6 @@ int coordinate_to_vertex(int l2, int x, int y){
 }
 
 std::vector<int> vertex_to_edges(int l1, int l2, int v){
-    // 頂点につながっている辺のvectorを返す
     int e0, e1, e2, e3;
     if ((v % l1) == 0){ /* 左端 */
         if (v == (l1 * (l2 - 1))){

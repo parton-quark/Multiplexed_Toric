@@ -26,11 +26,27 @@ graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
         std::cout << "\nleft_graph: "<< std::flush;
         left_graph.print_graph();
         std::cout << "\nleft_vertices_size: " <<  left_graph.vertices.size() << std::flush;
+        std::cout << "\nedge_weights: " << std::flush;
+        for (int ed_we: edge_weights){
+            std::cout << ed_we <<  ",";
+        }
 
         int min_w; /* minimum weight of left edges */
-        min_w = *min_element(edge_weights.begin(), edge_weights.end());
+        bool is_first_w;
+        is_first_w = true;
+        for (int ed_we: edge_weights){
+            if (is_first_w){
+                min_w = ed_we;
+                is_first_w = false;
+            } else {
+                if (min_w > ed_we){
+                    min_w = ed_we;
+                }
+            }
+        }
+        std::cout << "\nmin_w:" << min_w;
         std::vector<int> min_w_indexes;
-        for (int ind; ind < edge_weights.size(); ind++){
+        for (int ind = 0 ; ind < edge_weights.size(); ind++){
             if (edge_weights[ind] == min_w){
                 min_w_indexes.push_back(ind);
             }
@@ -74,7 +90,7 @@ graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
                 v_in_tree = false;
             }
             if (u_in_tree && v_in_tree){
-                std::cout << "makes cycle";
+                std::cout << "This candidate edge makes cycle. Reject and pick an edge again.";
                 is_cycle = true;
             } else {
                 is_cycle = false;
@@ -89,16 +105,14 @@ graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
                 wanted_index = ind;
                 break;
             } else {
-                std::cout << "edge_weight not found" << std::flush;
                 wanted_index = 0;
             }
         }            
-        std::cout << "\nedge_weights: " << std::flush;
         edge_weights.erase(edge_weights.begin() + wanted_index);
         // add this edge to tree
         mm_st.add_edge(candidate_edge);
         mm_st.add_vertex(candidate_v0);
-        mm_st.add_vertex(candidate_v1);      
+        mm_st.add_vertex(candidate_v1);
         // remove two vertices of candidate_e from left_vertices
         left_graph.remove_vertex(candidate_v0);
         left_graph.remove_vertex(candidate_v1);
@@ -116,7 +130,6 @@ graph maximal_spanning_tree(graph G, int l1, int l2){
     // let N be (the number of edges that G has) + 1.
     int N;
     N = G.num_edges() + 1;
-    // std::cout << "\nN:" << N << std::flush;
     // all edges has weight
     // replace the weights on each side by N-w where w = 1 here
     std::vector<int> edge_weights;
@@ -137,24 +150,15 @@ std::vector<graph> spanning_forest(graph G, int l1, int l2){
     // input: edges
     // output: maximal spanning forest of edges 
     // (maximal subset of edges that contains no cycle and span all the vertices in edges)
-    // 連結成分ごとにグラフを分割する
     std::vector<graph> msf; /* maximal spanning forest */
     std::vector<graph> connected_graphs;
     connected_graphs =  devide_graph(G, l1, l2); 
     for (graph connected_graph: connected_graphs){
-        // std::cout << "\nconnected graph: ";
-        // connected_graph.print_graph();
         graph tree;
         tree = maximal_spanning_tree(connected_graph, l1, l2);
-        // std::cout << "\ntree: ";
-        // tree.print_graph();
         // add tree to spanning forest
         msf.push_back(tree);
     }
-    // std::cout << "\nmsf trees";
-    // for (graph t: msf){
-    //     t.print_graph();
-    // }
     return msf;
 }
 

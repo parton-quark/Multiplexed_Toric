@@ -104,7 +104,7 @@ int main()
     float prob_e;
     // std::cout << "\nerasure probability:";
     // std::cin >> prob_e;
-    prob_e = 0.2;
+    prob_e = 0.3;
     // make random device
     std::random_device rd;
     std::mt19937 engine;

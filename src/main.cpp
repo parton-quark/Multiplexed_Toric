@@ -6,7 +6,10 @@
 #include <fstream>
 #include <stdio.h>
 #include <string>
-
+#include <sstream>
+#include <iomanip>
+#include <chrono>
+#include <nlohmann/json.hpp>
 #include "lattice.hpp"
 #include "prob.hpp"
 #include "error.hpp"
@@ -186,15 +189,38 @@ int main()
 
     // destructive measurement
 
+
+    auto now = std::chrono::system_clock::now();
+    auto now_c = std::chrono::system_clock::to_time_t(now);
+    std::stringstream ss;
+    ss << std::put_time(localtime(&now_c), "%Y%m%d_%H%M%S");
     // save result
     std::ofstream writing_file;
-    // std::string filename = sprintf(l1) + "_" + sprintf(l1) + "_" + sprintf(multiplexing) + "_" + sprintf(prob_e) + "_" + ".txt";
-    std::string filename = "sample.txt";
-    writing_file.open(filename, std::ios::out);
-    std::string writing_text = vec_to_str(zerrors);
-    writing_file << writing_text << std::endl;
-    writing_file.close();
+    std::string filename = ss.str() + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(multiplexing) + "_" + std::to_string(prob_e) + "_" + ".json";
+
+    nlohmann::json result_json;
+    std::vector<int> lattice_size(l1, l2);
+    result_json["lattice_size"] = lattice_size;
+    result_json["num_qubits"] = num_qubits;
+    result_json["num_photons"] = num_photons;
+    result_json["multiplexing"] = multiplexing;
+    // result_json["qubit list for each photon"]
+    result_json["erasure vector for photons"] = erased_photons;
+    result_json["erasure vector for qubits"] = erased_qubits;
+    result_json["Z errors"] = zerrors;
+    result_json["X syndromes"] = x_syndromes;
+    // result_json["epsilon"]
+    result_json["Z correction"] = z_correction;
+    result_json["Z errors after correction"] = z_errors_after_decoding;
+    // result_json["success/fail"]
+    std::ofstream file(filename);
+    file << result_json;
     
+    // writing_file.open(filename, std::ios::out);
+    // std::string writing_text = vec_to_str(zerrors);
+    // writing_file << writing_text << std::endl;
+    // writing_file.close();
+
     std::cout << "\n";
     return 0;
 }

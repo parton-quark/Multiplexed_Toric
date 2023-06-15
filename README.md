@@ -6,4 +6,4 @@
 
 - Jupyter notebook for visualize the simulator
 
-![vis_toric](five_five_toric.png)
+![vis_toric](five_five_toric.pdf)

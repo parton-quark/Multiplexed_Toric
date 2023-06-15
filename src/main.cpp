@@ -192,13 +192,37 @@ int main()
     std::cout << "\nZ errors after correction :";
     print_ind_of_bool_vec(z_errors_after_decoding);
     std::cout << "\n";
-
+    
     // destructive measurement
+    // Z_L measurement
+    
+    
+    // X_L measurement
+    // Masure all data qubits in X basis
+    int product_XL;
+    product_XL = 1;
+    for (bool z_e: z_errors_after_decoding){
+        if (z_e){
+            product_XL = product_XL * -1;
+        } else {
+            // do nothing
+        }
+    }
+
+    std::cout << "\n is success:  ";
+    bool correction_res;
+    if (product_XL==1){
+        correction_res = true;
+        std::cout << "Success";
+    } else {
+        correction_res = false;
+        std::cout << "Failed";
+    }
+    // save result
     auto now = std::chrono::system_clock::now();
     auto now_c = std::chrono::system_clock::to_time_t(now);
     std::stringstream ss;
     ss << std::put_time(localtime(&now_c), "%Y%m%d_%H%M%S");
-    // save result
     std::ofstream writing_file;
     std::string filename = ss.str() + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(multiplexing) + "_" + std::to_string(prob_e) + "_" + ".json";
 

@@ -178,13 +178,14 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
     for (int a: v_group){
         std::cout << a << "," << std::flush;
     } 
+    std::vector<int> v_group_no_dupl;
+    v_group_no_dupl = extract_group(v_group);
+
     std::cout << "\ne_group: " << std::flush;
     for (int b: e_group){
         std::cout << b << "," << std::flush;
     } 
-
-    std::vector<int> v_group_no_dupl;
-    v_group_no_dupl = extract_group(v_group);
+    
     std::vector<int> e_group_no_dupl;
     e_group_no_dupl = extract_group(e_group);
 

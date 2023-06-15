@@ -39,6 +39,12 @@ template <class T> void print_vec(std::vector<T> vec){
     }
 }
 
+void print_vec_of_vec(std::vector<std::vector<int> > vec_vec){
+    for (std::vector<int> vec: vec_vec){
+        print_vec(vec);
+    }
+}
+
 std::string vec_to_str(std::vector<bool> vec){
     std::string vecstr;
     bool is_first_elem;
@@ -102,12 +108,13 @@ int main()
         }
         photons.push_back(photon);
     }
-    
+    std::cout << "\nphoton: ";
+    print_vec_of_vec(photons);
     // input erasure probability
     float prob_e;
     // std::cout << "\nerasure probability:";
     // std::cin >> prob_e;
-    prob_e = 0.3;
+    prob_e = 0.2;
     // make random device
     std::random_device rd;
     std::mt19937 engine;
@@ -139,7 +146,6 @@ int main()
     } 
     // print erased_qubits
     std::cout << "\nerasure vector for qubits :";
-    // print_vec(erased_qubits);
     print_ind_of_bool_vec(erased_qubits);
     // replace the erased qubits with mixed state -> random pauli
     // make X error vector
@@ -164,8 +170,8 @@ int main()
     std::vector<bool> x_syndromes;
     x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
     std::cout << "\nX syndromes               :";
-    // print_vec(x_syndromes);
     print_ind_of_bool_vec(x_syndromes);
+
     // option: input measurement error probability
     // add measurement error to the syndrome
     // float prob_m;
@@ -176,20 +182,18 @@ int main()
     std::vector<bool> z_correction;
     z_correction = peeling_decoder_for_z_errors(l1, l2, num_qubits, erased_qubits, x_syndromes);
     std::cout << "\nZ correction              :";
-    print_vec(z_correction);
+    print_ind_of_bool_vec(z_correction);
     
     // show the result of decoding
     std::vector<bool> z_errors_after_decoding(num_qubits);
-    for (int qubit = 0; qubit < num_qubits; qubit++){
-        z_errors_after_decoding[qubit] = zerrors[qubit] ^ z_correction[qubit];
+    for (int qubitind = 0; qubitind < num_qubits; qubitind++){
+        z_errors_after_decoding[qubitind] = zerrors[qubitind] ^ z_correction[qubitind];
     }
     std::cout << "\nZ errors after correction :";
-    print_vec(z_errors_after_decoding);
+    print_ind_of_bool_vec(z_errors_after_decoding);
     std::cout << "\n";
 
     // destructive measurement
-
-
     auto now = std::chrono::system_clock::now();
     auto now_c = std::chrono::system_clock::to_time_t(now);
     std::stringstream ss;
@@ -209,18 +213,11 @@ int main()
     result_json["erasure vector for qubits"] = erased_qubits;
     result_json["Z errors"] = zerrors;
     result_json["X syndromes"] = x_syndromes;
-    // result_json["epsilon"]
     result_json["Z correction"] = z_correction;
     result_json["Z errors after correction"] = z_errors_after_decoding;
     // result_json["success/fail"]
     std::ofstream file(filename);
     file << result_json;
-    
-    // writing_file.open(filename, std::ios::out);
-    // std::string writing_text = vec_to_str(zerrors);
-    // writing_file << writing_text << std::endl;
-    // writing_file.close();
-
     std::cout << "\n";
     return 0;
 }

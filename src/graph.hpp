@@ -20,7 +20,7 @@ class graph{
             std::vector<int> edges;
         }
         graph(std::vector<int> vs, std::vector<int> es){
-            // 頂点・　辺が重複していたら削除
+            // delete duplicate vertices and edges if any
             std::sort(vs.begin(), vs.end());
             vs.erase(std::unique(vs.begin(), vs.end()), vs.end());
             std::sort(es.begin(), es.end());

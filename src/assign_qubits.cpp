@@ -31,6 +31,10 @@ std::vector<std::vector<int> > assign_random(int l1, int l2, int multiplexing, i
             photon.push_back(qubit);
             }
         }
+        std::cout << "\n photon: ";
+        for (int ph: photon){
+            std::cout << ph << ", ";
+        }
         photons.push_back(photon);
     }
     return photons;
@@ -44,15 +48,16 @@ std::vector<std::vector<int> > assign_random_distance(int l1, int l2, int multip
     for (int q = 0; q < num_qubits; q++){
         left_qubits.push_back(q);
     }
-    
     int threshold;
-    threshold = (l1 + l2) / 2;
-
-    
+    threshold = (l1 + l2) / 2 ;
+    std::cout << "\nthreshold: " << threshold << std::flush;
     for (int ph = 0; ph < num_photons; ph++){
-        std::mt19937 get_rand_mt;
-        std::shuffle( left_qubits.begin(), left_qubits.end(), get_rand_mt);
+        std::random_device rd;
+        std::mt19937 engine(rd());
+        // std::mt19937 get_rand_mt;
+        std::shuffle(left_qubits.begin(), left_qubits.end(), engine);
         std::vector<int> photon;
+
         int first_qubit_in_photon;
         first_qubit_in_photon = left_qubits[0];
         photon.push_back(first_qubit_in_photon);
@@ -74,11 +79,17 @@ std::vector<std::vector<int> > assign_random_distance(int l1, int l2, int multip
                         distance = dist_other_qb;
                     }
                 }
-                if (distance < threshold){
+                if (distance >= threshold){
                     photon.push_back(candidate_qb);
+
                     if (photon.size() == multiplexing){
                         is_photon_sat = true;
                         photons.push_back(photon);
+
+                        std::cout << "\n photon: ";
+                        for (int ph: photon){
+                            std::cout << ph << ", ";
+                        }
                     }
                 } 
             }

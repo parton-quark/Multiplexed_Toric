@@ -90,7 +90,7 @@ graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
                 v_in_tree = false;
             }
             if (u_in_tree && v_in_tree){
-                std::cout << "This candidate edge makes cycle. Reject and pick an edge again.";
+                std::cout << "  This candidate edge makes cycle. Reject and pick an edge again.";
                 is_cycle = true;
             } else {
                 is_cycle = false;

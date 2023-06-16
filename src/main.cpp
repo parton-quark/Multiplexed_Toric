@@ -35,15 +35,16 @@ template <class T> void print_vec(std::vector<T> vec){
         if (is_first_elem){
             std::cout << elem << std::flush;
             is_first_elem = false;
+        } else {
+            std::cout << "," << elem << std::flush;
         }
-        std::cout << "," << elem << std::flush;
     }
 }
 
 void print_vec_of_vec(std::vector<std::vector<int> > vec_vec){
     for (std::vector<int> vec: vec_vec){
         print_vec(vec);
-        std::cout << "-";
+        std::cout << "\n";
     }
 }
 
@@ -87,9 +88,9 @@ int main()
     }
     std::cout  << "\nnum_photons:" << num_photons;
     std::vector<std::vector<int>> photons;
+
+    // photons = assign_random(l1, l2, multiplexing, num_photons, num_qubits);
     photons = assign_random_distance(l1, l2, multiplexing, num_photons, num_qubits);
-    std::cout << "\nphotons:      ";
-    print_vec_of_vec(photons);
     // input erasure probability
     float prob_e;
     // std::cout << "\nerasure probability:";

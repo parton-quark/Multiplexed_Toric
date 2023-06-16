@@ -177,9 +177,92 @@ int coordinates_to_face(int l2, int x0, int y0, int x1, int y1, int x2, int y2, 
     return face;
 }
 
-int distance(int v_1_x, int v_1_y, int v_2_x, int v_2_y){
-    // returns the distance between v1 and v2
+int distance_c(int l1, int l2, int v_1_x, int v_1_y, int v_2_x, int v_2_y){
+    // returns the distance between two coordinates
     int distance;
-    distance = abs((v_1_x - v_2_x)) + abs((v_2_x - v_2_y));
+    int x_distance, x_distance_reverse, y_distance, y_distance_reverse;
+
+    x_distance = abs((v_1_x - v_2_x));
+    x_distance_reverse = l1 - x_distance;
+
+    y_distance = abs((v_1_y - v_2_y));
+    y_distance_reverse = l2 - x_distance;
+
+    if (x_distance > x_distance_reverse){
+        x_distance = x_distance_reverse;
+    }
+    if (y_distance > y_distance_reverse){
+        y_distance = y_distance_reverse;
+    }
+    distance = x_distance + y_distance;
     return distance;
+}
+
+
+int distance_v(int l1, int l2, int v_1, int v_2){
+    // returns the distance between v1 and v2
+    std::vector<int> v_1_c, v_2_c;
+    int v_1_x, v_1_y, v_2_x, v_2_y;
+    v_1_c = vertex_to_coordinate(l2, v_1);
+    v_1_x = v_1_c[0];
+    v_1_x = v_1_c[1];
+
+    v_2_c = vertex_to_coordinate(l2, v_2);
+    v_2_x = v_2_c[0];
+    v_2_x = v_2_c[1];
+
+    int distance;
+    int x_distance, x_distance_reverse, y_distance, y_distance_reverse;
+
+    x_distance = abs((v_1_x - v_2_x));
+    x_distance_reverse = l1 - x_distance;
+
+    y_distance = abs((v_1_y - v_2_y));
+    y_distance_reverse = l2 - x_distance;
+
+    if (x_distance > x_distance_reverse){
+        x_distance = x_distance_reverse;
+    }
+    if (y_distance > y_distance_reverse){
+        y_distance = y_distance_reverse;
+    }
+    distance = x_distance + y_distance;
+    return distance;
+}
+
+int distance_e(int l1, int l2, int e1, int e2){
+    std::vector<int> e1_uv, e2_uv;
+    int e1_u, e1_v, e2_u, e2_v;
+    e1_uv = edge_to_vertices(l1, l2, e1);
+    e1_u = e1_uv[0];
+    e1_v = e1_uv[1];
+    e2_uv = edge_to_vertices(l1, l2, e2);
+    e2_u = e2_uv[0];
+    e2_v = e2_uv[1];
+
+    std::vector<int> e1_u_c, e1_v_c, e2_u_c, e2_v_c;
+    e1_u_c = vertex_to_coordinate(l2, e1_u);
+    e1_v_c = vertex_to_coordinate(l2, e1_v);
+    e2_u_c = vertex_to_coordinate(l2, e2_u);
+    e2_v_c = vertex_to_coordinate(l2, e2_v);
+
+    int e1_u_x, e1_u_y, e1_v_x, e1_v_y, e2_u_x, e2_u_y, e2_v_x, e2_v_y;
+    e1_u_x = e1_u_c[0];
+    e1_u_y = e1_u_c[1];
+    e1_v_x = e1_v_c[0];
+    e1_v_y = e1_v_c[1];
+    e2_u_x = e2_u_c[0];
+    e2_u_y = e2_u_c[1];
+    e2_v_x = e2_v_c[0];
+    e2_v_y = e2_v_c[1];
+
+    int e1_u_e2_u, e1_u_e2_v, e1_v_e2_u, e1_v_e2_v;
+    e1_u_e2_u = distance_c(l1,l2, e1_u_x, e1_u_y, e2_u_x, e2_u_y);
+    e1_u_e2_v = distance_c(l1,l2, e1_u_x, e1_u_y, e2_v_x, e2_v_y);
+    e1_v_e2_u = distance_c(l1,l2, e1_v_x, e1_v_y, e2_u_x, e2_u_y);
+    e1_v_e2_v = distance_c(l1,l2, e1_v_x, e1_v_y, e2_v_x, e2_v_y);
+    std::vector<int> e1_e2_vec{e1_u_e2_u, e1_u_e2_v, e1_v_e2_u, e1_v_e2_v};
+    int e1_e2;
+    e1_e2 = *min_element(e1_e2_vec.begin(), e1_e2_vec.end());
+    return e1_e2;
 }

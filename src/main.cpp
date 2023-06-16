@@ -17,6 +17,7 @@
 #include "graph.hpp"
 #include "spanning_forest.hpp"
 #include "peeling_decoder.hpp"
+#include "assign_qubits.hpp"
 
 void print_ind_of_bool_vec(std::vector<bool>  bv){
     bool is_first_elem;
@@ -42,6 +43,7 @@ template <class T> void print_vec(std::vector<T> vec){
 void print_vec_of_vec(std::vector<std::vector<int> > vec_vec){
     for (std::vector<int> vec: vec_vec){
         print_vec(vec);
+        std::cout << "-";
     }
 }
 
@@ -84,31 +86,9 @@ int main()
         num_photons  = num_photons  + 1;
     }
     std::cout  << "\nnum_photons:" << num_photons;
- 
-    std::vector<int> left_qubits;
-    for (int q = 0; q < num_qubits; q++){
-        left_qubits.push_back(q);
-    }
-
-    std::vector<std::vector<int> > photons;
-    for (int ph = 0; ph < num_photons; ph++){
-        // std::cout << "\nphoton ";
-        // print_vec(ph);
-        std::vector<int> photon;
-        for (int qb = 0; qb < multiplexing; qb++){
-            std::srand(time(NULL));
-            if (left_qubits.empty()== true){
-                break;
-            }else{
-            int qubit;
-            qubit = left_qubits[rand() % left_qubits.size()];
-            left_qubits.erase(std::remove(std::begin(left_qubits), std::end(left_qubits), qubit), std::end(left_qubits));
-            photon.push_back(qubit);
-            }
-        }
-        photons.push_back(photon);
-    }
-    std::cout << "\nphoton: ";
+    std::vector<std::vector<int>> photons;
+    photons = assign_random_distance(l1, l2, multiplexing, num_photons, num_qubits);
+    std::cout << "\nphotons:      ";
     print_vec_of_vec(photons);
     // input erasure probability
     float prob_e;
@@ -232,14 +212,14 @@ int main()
     result_json["num_qubits"] = num_qubits;
     result_json["num_photons"] = num_photons;
     result_json["multiplexing"] = multiplexing;
-    // result_json["qubit list for each photon"]
+    result_json["qubit list for each photon"] = photons;
     result_json["erasure vector for photons"] = erased_photons;
     result_json["erasure vector for qubits"] = erased_qubits;
     result_json["Z errors"] = zerrors;
     result_json["X syndromes"] = x_syndromes;
     result_json["Z correction"] = z_correction;
     result_json["Z errors after correction"] = z_errors_after_decoding;
-    // result_json["success/fail"]
+    result_json["success/fail"] = correction_res;
     std::ofstream file(filename);
     file << result_json;
     std::cout << "\n";

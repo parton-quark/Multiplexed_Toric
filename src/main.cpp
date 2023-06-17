@@ -70,8 +70,8 @@ int main()
     // std::cin >> l1;
     // std::cout << "\nl2:";
     // std::cin >> l2;
-    l1 = 5;
-    l2 = 5;
+    l1 = 10;
+    l2 = 10;
     // number of qubits per one photon
     int multiplexing;
     // std::cout << "\nmultiplexing:";
@@ -101,44 +101,27 @@ int main()
     std::mt19937 engine;
     std::uniform_real_distribution<double> dist(0,1);
 
-    std::vector<bool> erased_photons;
-    erased_photons = make_erasure_errors(num_photons, prob_e, engine, dist);
-    // print erased_photons
-    std::cout << "\nerasure vector for photons:";
-    // print_vec(erased_photons);
-    print_ind_of_bool_vec(erased_photons);
+    std::vector<bool> photon_loss;
+    photon_loss = make_erasure_errors(num_photons, prob_e, engine, dist);
+    std::cout << "\nphoton loss:  ";
+    print_ind_of_bool_vec(photon_loss);
     // make erasure vector for qubits
-    std::vector<bool> erased_qubits(num_qubits);
-    
-    for (int ph = 0; ph < num_photons; ph++){
-        if (erased_photons[ph]){
-            for (int qu = 0 ; qu < multiplexing; qu++){
-                int qubitlabel;
-                qubitlabel = photons[ph][qu];
-                erased_qubits[qubitlabel] = 1;
-            }
-        }else if (erased_photons[ph] == false){
-            for (int qu = 0 ; qu < multiplexing; qu++){
-                int qubitlabel;
-                qubitlabel = photons[ph][qu];
-                erased_qubits[qubitlabel] = 0;
-            }
-        }
-    } 
-    // print erased_qubits
+    std::vector<bool> qubit_loss(num_qubits);
+    qubit_loss = convert_photon_loss_to_qubit_loss(num_photons, num_qubits, multiplexing, photons, photon_loss);
+    // print qubit_loss
     std::cout << "\nerasure vector for qubits :";
-    print_ind_of_bool_vec(erased_qubits);
+    print_ind_of_bool_vec(qubit_loss);
     // replace the erased qubits with mixed state -> random pauli
     // make X error vector
     std::vector<bool> xerrors;
-    xerrors = make_xerrors(erased_qubits, num_qubits, engine, dist);
+    xerrors = make_xerrors(qubit_loss, num_qubits, engine, dist);
     // print xerrors
-    // std::cout << "\nX errors on qubits        :";
-    // print_vec(xerrors);
+    std::cout << "\nX errors on qubits        :";
+    print_ind_of_bool_vec(xerrors);
 
     // make Z error vector
     std::vector<bool> zerrors;
-    zerrors = make_zerrors(erased_qubits, num_qubits, engine, dist);
+    zerrors = make_zerrors(qubit_loss, num_qubits, engine, dist);
     // print zerrors
     std::cout << "\nZ errors on qubits        :";
     // print_vec(zerrors);
@@ -146,7 +129,7 @@ int main()
     // make stabilizers
     std::vector<int> xstabs, zstabs;
     xstabs = make_x_stabilzers(l1, l2);
-    zstabs = make_x_stabilzers(l1, l2);
+    zstabs = make_z_stabilzers(l1, l2);
     // vector of x stabilizers which returns -1
     std::vector<bool> x_syndromes;
     x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
@@ -161,7 +144,7 @@ int main()
 
     // decoding
     std::vector<bool> z_correction;
-    z_correction = peeling_decoder_for_z_errors(l1, l2, num_qubits, erased_qubits, x_syndromes);
+    z_correction = peeling_decoder_for_z_errors(l1, l2, num_qubits, qubit_loss, x_syndromes);
     std::cout << "\nZ correction              :";
     print_ind_of_bool_vec(z_correction);
     
@@ -190,7 +173,7 @@ int main()
         }
     }
 
-    std::cout << "\n is success:  ";
+    std::cout << "\nis success:  ";
     bool correction_res;
     if (product_XL==1){
         correction_res = true;
@@ -214,8 +197,8 @@ int main()
     result_json["num_photons"] = num_photons;
     result_json["multiplexing"] = multiplexing;
     result_json["qubit list for each photon"] = photons;
-    result_json["erasure vector for photons"] = erased_photons;
-    result_json["erasure vector for qubits"] = erased_qubits;
+    result_json["erasure vector for photons"] = photon_loss;
+    result_json["erasure vector for qubits"] = qubit_loss;
     result_json["Z errors"] = zerrors;
     result_json["X syndromes"] = x_syndromes;
     result_json["Z correction"] = z_correction;

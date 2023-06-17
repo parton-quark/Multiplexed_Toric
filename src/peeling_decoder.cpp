@@ -23,7 +23,7 @@ std::pair<int, std::pair<int, int> > pick_leaf_edge(graph G, int l1, int l2){
         u = uv[0];
         v = uv[1];
         std::vector<int> eu_list, ev_list;
-        std::vector<int> edges_u, edges_v; /* u,vに接続されている辺 */
+        std::vector<int> edges_u, edges_v; /* edges connected to u (v) */
         edges_u = vertex_to_edges(l1, l2, u);
         edges_v = vertex_to_edges(l1, l2, v);
         

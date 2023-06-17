@@ -2,11 +2,12 @@
 - C++ implementation of multiplexed toric codes simulator
   
 ## Simulation Flow
-- Erasure error
+- Multiplexing (assign qubits to photons)
+- Erasure error on a photon cause erasure errrors on multiple qubits
 - Replace erased qubits with mixed state -> erasure can be regarded as a random Pauli error.
 - X/Z stabilizer measurement
 - Run peeling decoder
-- Determines if a logical error occurred during simulation.
+- Determines if any logical errors remain after decoding.
   - X/Z stabilizer measurement
   - Matching errors that remain after decoding
 
@@ -18,5 +19,5 @@
   - JSON library for C++
 
 - PyMatching
-  - MWPM decoder 
-  - Determines if a logical error occurred during simulation.
+  - MWPM decoder
+  - Determines if a logical error occurred during simulation

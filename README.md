@@ -1,9 +1,22 @@
 # multiplexed toric codes on erasure channels
 - C++ implementation of multiplexed toric codes simulator
-  - erasure error
+  
+## Simulation Flow
+- Erasure error
+- Replace erased qubits with mixed state -> erasure can be regarded as a random Pauli error.
+- X/Z stabilizer measurement
+- Run peeling decoder
+- Determines if a logical error occurred during simulation.
   - X/Z stabilizer measurement
-  - peeling decoder
+  - Matching errors that remain after decoding
 
-- Jupyter notebook for visualize the simulator
+- Visualize the result of the simulation on Jupyter notebook
+![vis_toric](ten_ten_toric.png)
 
-![vis_toric](five_five_toric.pdf)
+## Requirements
+- [nlohmann/json](https://github.com/nlohmann/json)
+  - JSON library for C++
+
+- PyMatching
+  - MWPM decoder 
+  - Determines if a logical error occurred during simulation.

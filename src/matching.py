@@ -11,8 +11,11 @@ print("l1:" + str(l1))
 l2 = int(args[2])
 print("l2:" + str(l2))
 jsonfilename = args[3]
-json_open = open(jsonfilename, 'r')
-json_load = json.load(json_open)
+# jsonfilename = "result.json"
+# json_open = open(jsonfilename, 'r')
+# json_load = json.load(json_open)
+with open(jsonfilename, 'r') as f:
+    json_load = json.load(f)
 
 x_pcm = json_load['X parity check matrix']
 x_pcm_arr = np.array(x_pcm)
@@ -34,4 +37,8 @@ for ele in prediction:
     if ele == 1:
         matching_qubits.append(qubit_index)
     qubit_index  = qubit_index + 1
-print(matching_qubits)
+
+json_load['matching qubits'] = matching_qubits
+
+with open(jsonfilename, 'w') as f:
+    json.dump(json_load, f)

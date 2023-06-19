@@ -9,6 +9,9 @@
 #include <sstream>
 #include <iomanip>
 #include <chrono>
+#include <iostream>
+// #include <pybind11/embed.h>
+#include "pybind11/include/pybind11/embed.h"
 #include <nlohmann/json.hpp>
 #include "lattice.hpp"
 #include "prob.hpp"
@@ -136,20 +139,12 @@ int main()
     // make parity check matrix
     std::vector<std::vector<int> > x_pcm;
     x_pcm = make_x_pcm(l1, l2, num_qubits, x_stabs);
-    // std::cout << "\nx_pcm";
-    // print_vec_of_vec(x_pcm);
 
     // vector of x stabilizers which returns -1
     std::vector<bool> x_syndromes;
     x_syndromes = x_stab_measurement(l1, l2, x_stabs, zerrors);
     std::cout << "\nX syndromes               :";
     print_ind_of_bool_vec(x_syndromes);
-
-    // option: input measurement error probability
-    // add measurement error to the syndrome
-    // float prob_m;
-    // std::cout << "\nmeasurement probability:";
-    // std::cin >> prob_m;
 
     // decoding
     std::vector<bool> z_correction;
@@ -170,37 +165,14 @@ int main()
     std::vector<bool> x_syndromes_after_dec;
     x_syndromes_after_dec = x_stab_measurement(l1, l2, x_stabs,z_errors_after_decoding);
     
-    // Z_L measurement
-    // X_L measurement
-    // Masure all data qubits in X basis
-    int product_XL;
-    product_XL = 1;
-    for (bool z_e: z_errors_after_decoding){
-        if (z_e){
-            product_XL = product_XL * -1;
-        } else {
-            // do nothing
-        }
-    }
-
-    std::cout << "\nis success:  ";
-    bool correction_res;
-    if (product_XL==1){
-        correction_res = true;
-        std::cout << "Success";
-    } else {
-        correction_res = false;
-        std::cout << "Failed";
-    }
-
     // save result
     auto now = std::chrono::system_clock::now();
     auto now_c = std::chrono::system_clock::to_time_t(now);
     std::stringstream ss;
     ss << std::put_time(localtime(&now_c), "%Y%m%d_%H%M%S");
     std::ofstream writing_file;
-    std::string filename = ss.str() + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(multiplexing) + "_" + std::to_string(prob_e) + "_" + ".json";
-
+    // std::string filename = ss.str() + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(multiplexing) + "_" + std::to_string(prob_e) + "_" + ".json";
+    std::string filename = "result.json";
     nlohmann::json result_json;
     std::vector<int> lattice_size(l1, l2);
     result_json["lattice_size"] = lattice_size;
@@ -216,7 +188,6 @@ int main()
     result_json["Z correction"] = z_correction;
     result_json["Z errors after correction"] = z_errors_after_decoding;
     result_json["X syndromes after decoding"] = x_syndromes_after_dec;
-    result_json["success/fail"] = correction_res;
     std::ofstream file(filename);
     file << result_json;
     std::cout << "\n";

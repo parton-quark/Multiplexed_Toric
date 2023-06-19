@@ -1,0 +1,1 @@
+std::vector<std::vector<int> > make_x_pcm(int l1, int l2, int num_qubits, std::vector<int> x_stabs);

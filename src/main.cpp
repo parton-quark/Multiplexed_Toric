@@ -18,6 +18,7 @@
 #include "spanning_forest.hpp"
 #include "peeling_decoder.hpp"
 #include "assign_qubits.hpp"
+#include "parity_check_matrix.hpp"
 
 void print_ind_of_bool_vec(std::vector<bool>  bv){
     bool is_first_elem;
@@ -91,6 +92,7 @@ int main()
 
     // photons = assign_random(l1, l2, multiplexing, num_photons, num_qubits);
     photons = assign_random_distance(l1, l2, multiplexing, num_photons, num_qubits);
+
     // input erasure probability
     float prob_e;
     // std::cout << "\nerasure probability:";
@@ -127,12 +129,19 @@ int main()
     // print_vec(zerrors);
     print_ind_of_bool_vec(zerrors);
     // make stabilizers
-    std::vector<int> xstabs, zstabs;
-    xstabs = make_x_stabilzers(l1, l2);
-    zstabs = make_z_stabilzers(l1, l2);
+    std::vector<int> x_stabs, z_stabs;
+    x_stabs = make_x_stabilzers(l1, l2);
+    z_stabs = make_z_stabilzers(l1, l2);
+
+    // make parity check matrix
+    std::vector<std::vector<int> > x_pcm;
+    x_pcm = make_x_pcm(l1, l2, num_qubits, x_stabs);
+    // std::cout << "\nx_pcm";
+    // print_vec_of_vec(x_pcm);
+
     // vector of x stabilizers which returns -1
     std::vector<bool> x_syndromes;
-    x_syndromes = x_stab_measurement(l1, l2, xstabs, zerrors);
+    x_syndromes = x_stab_measurement(l1, l2, x_stabs, zerrors);
     std::cout << "\nX syndromes               :";
     print_ind_of_bool_vec(x_syndromes);
 
@@ -158,9 +167,10 @@ int main()
     std::cout << "\n";
     
     // destructive measurement
+    std::vector<bool> x_syndromes_after_dec;
+    x_syndromes_after_dec = x_stab_measurement(l1, l2, x_stabs,z_errors_after_decoding);
+    
     // Z_L measurement
-    
-    
     // X_L measurement
     // Masure all data qubits in X basis
     int product_XL;
@@ -182,6 +192,7 @@ int main()
         correction_res = false;
         std::cout << "Failed";
     }
+
     // save result
     auto now = std::chrono::system_clock::now();
     auto now_c = std::chrono::system_clock::to_time_t(now);
@@ -201,8 +212,10 @@ int main()
     result_json["erasure vector for qubits"] = qubit_loss;
     result_json["Z errors"] = zerrors;
     result_json["X syndromes"] = x_syndromes;
+    result_json["X parity check matrix"] = x_pcm;
     result_json["Z correction"] = z_correction;
     result_json["Z errors after correction"] = z_errors_after_decoding;
+    result_json["X syndromes after decoding"] = x_syndromes_after_dec;
     result_json["success/fail"] = correction_res;
     std::ofstream file(filename);
     file << result_json;

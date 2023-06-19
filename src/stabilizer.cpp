@@ -22,12 +22,12 @@ std::vector<int> make_z_stabilzers(int l1, int l2){
 }
 
 // stabilzer to qubits
-std::vector<int> xstab_to_qubits(int l1, int l2,int xstab){
+std::vector<int> xstab_to_qubits(int l1, int l2,int x_stab){
     // returns qubits in a X stabilizer
     int q0, q1, q2, q3;
 
     std::vector<int>  connected_edges;
-    connected_edges = vertex_to_edges(l1, l2, xstab);
+    connected_edges = vertex_to_edges(l1, l2, x_stab);
     q0 = connected_edges[0];
     q1 = connected_edges[1];
     q2 = connected_edges[2];
@@ -37,31 +37,31 @@ std::vector<int> xstab_to_qubits(int l1, int l2,int xstab){
     return qubits;
 }
 
-std::vector<int> zstab_to_qubits(int l1, int l2,int zstab){
+std::vector<int> zstab_to_qubits(int l1, int l2,int z_stab){
     // returns qubits in a Z stabilizer
     int q0, q1, q2, q3;
-    if (zstab >= (l1 * (l2 - 1))){ /* is top edge */
-        if ((zstab % l1) == (l1 - 1)){ /* is rightmost */
-            q0 = 2 * zstab;
-            q1 = (2 * zstab) + 1;
+    if (z_stab >= (l1 * (l2 - 1))){ /* is top edge */
+        if ((z_stab % l1) == (l1 - 1)){ /* is rightmost */
+            q0 = 2 * z_stab;
+            q1 = (2 * z_stab) + 1;
             q2 = 2 * (l1 * (l2 - 1));
             q3 = (l1 * 2) - 1;
         }else{
-            q0 = 2 * zstab;
-            q1 = 2 * zstab + 1;
-            q2 = 2 * zstab + 2;
-            q3 = 2 * (zstab - (l1 * (l2 - 1))) + 1;
+            q0 = 2 * z_stab;
+            q1 = 2 * z_stab + 1;
+            q2 = 2 * z_stab + 2;
+            q3 = 2 * (z_stab - (l1 * (l2 - 1))) + 1;
         }
-    }else if ((zstab % l1) == (l1 - 1)){ /* is rightmost */
-        q0 = 2 * zstab;
-        q1 = 2 * zstab + 1;
-        q2 = 2 * (zstab - (l1 - 1));
-        q3 = 2 * zstab + 1 + (2 * l1);
+    }else if ((z_stab % l1) == (l1 - 1)){ /* is rightmost */
+        q0 = 2 * z_stab;
+        q1 = 2 * z_stab + 1;
+        q2 = 2 * (z_stab - (l1 - 1));
+        q3 = 2 * z_stab + 1 + (2 * l1);
     }else{
-        q0 = 2 * zstab;
-        q1 = 2 * zstab + 1;
-        q2 = 2 * zstab + 2;
-        q3 = 2 * zstab + 1 + (2 * l1);
+        q0 = 2 * z_stab;
+        q1 = 2 * z_stab + 1;
+        q2 = 2 * z_stab + 2;
+        q3 = 2 * z_stab + 1 + (2 * l1);
     }
     std::vector<int> qubits{q0,q1,q2,q3};
     return qubits;
@@ -88,5 +88,5 @@ std::vector<bool> x_stab_measurement(int l1, int l2, std::vector<int> xstabs, st
     return x_stabs_syndrome;
 }
 
-// std::vector<bool> z_stab_measurement(int l1, int l2, std::vector<int> zstabs, std::vector<bool> xerrors){
+// std::vector<bool> z_stab_measurement(int l1, int l2, std::vector<int> z_stabs, std::vector<bool> xerrors){
 // }

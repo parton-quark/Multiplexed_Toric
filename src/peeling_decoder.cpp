@@ -90,17 +90,17 @@ std::pair<int, std::pair<int, int> > pick_leaf_edge(graph G, int l1, int l2){
     return leaf_and_pendant;
 }
 
-std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, std::vector<bool> erased_qubits, std::vector<bool> x_syndrome){
+std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, std::vector<bool> qubit_loss, std::vector<bool> x_syndrome){
     // inputs: 
     // lattice size (int l1, int l2)
-    // erasure vector(std::vector<bool> erased_qubits)
+    // erasure vector(std::vector<bool> qubit_loss)
     // x stabilizer syndrome (z error syndrome, std::vector<bool> x_syndrome) 
     // outputs: 
     // Z correction (std::vector<bool> p_z)
     graph epsilon; /* graph which has erased edges */
     // convert erasure qubits into edges
     for (int i = 0; i < num_qubits; i++){
-        if (erased_qubits[i] == true){
+        if (qubit_loss[i] == true){
             epsilon.add_edge(i);
             std::vector<int> v0_v1;
             int v0, v1;

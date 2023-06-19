@@ -19,8 +19,6 @@ graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
     graph left_graph(left_vertices, left_edges);
 
     graph mm_st; /* minimal spanning tree */
-    std::cout << "\nleft_graph:";
-    left_graph.print_graph();
 
     while(left_graph.vertices.size() != 0){/* until all vertices are included in the tree */
         std::cout << "\nleft_graph: "<< std::flush;
@@ -90,7 +88,7 @@ graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
                 v_in_tree = false;
             }
             if (u_in_tree && v_in_tree){
-                std::cout << "  This candidate edge makes cycle. Reject and pick an edge again.";
+                std::cout << "  This candidate edge makes cycle. Reject and pick another edge again.";
                 is_cycle = true;
             } else {
                 is_cycle = false;

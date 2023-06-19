@@ -5,6 +5,7 @@ from scipy.sparse import csc_matrix
 import pymatching
 import json
 
+print("matching.py")
 args = sys.argv
 l1 = int(args[1])
 print("l1:" + str(l1))

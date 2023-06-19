@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+src/result.json
+src/main
+src/.ipynb_checkpoints/result-checkpoint.json

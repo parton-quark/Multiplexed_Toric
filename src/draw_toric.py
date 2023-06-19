@@ -73,6 +73,9 @@ def face_to_coordinate(l2, v):
     coordinates = [[v_0_x,v_0_y],[v_1_x,v_1_y],[v_2_x,v_2_y],[v_3_x,v_3_y]]
     return coordinates
 
+
+
+print("draw_toric.py")
 args = sys.argv
 l1 = int(args[1])
 l2 = int(args[2])
@@ -118,6 +121,15 @@ for z_cor in z_correction_vec:
     if z_cor == True:
         z_correction.append(z_correction_index)
     z_correction_index = z_correction_index + 1
+
+
+x_syndromes_aft_vec = json_load['X syndromes after decoding']
+x_syndromes_aft = []
+x_synd_aft_index  = 0
+for x_synd_aft in x_syndromes_aft_vec:
+    if x_synd_aft == True:
+        x_syndromes_aft.append(x_synd_aft_index)
+    x_synd_aft_index= x_synd_aft_index + 1
 
 # z_errors_after_correction = json_load['Z errors after correction']
 z_errors_matching = json_load['matching qubits']
@@ -173,8 +185,7 @@ plt.legend(loc='upper left')
 plt.xlim(-1,l2 + 1)
 plt.ylim(-1,l1 + 2)
 [ax.spines[side].set_visible(False) for side in ['right','top']]
-plt.savefig("ten_ten_toric.pdf")
-
+plt.savefig(str(l1) + "_" + str(l2) + "_toric.pdf")
 # draw codes
 fig, ax = plt.subplots(figsize=(l1, l2))
 
@@ -204,13 +215,13 @@ ax.add_collection(lc)
 
 # X stab
 first_stab = True
-for x_synd in x_syndromes:
-    x_xy = vertex_to_coordinate(l2, x_synd)
+for x_synd_aft in x_syndromes_aft:
+    x_xy = vertex_to_coordinate(l2, x_synd_aft)
     if first_stab:
-        plt.plot(x_xy[0], x_xy[1],'.',markersize=25, color = "red", label="X stabilizer")
+        plt.plot(x_xy[0], x_xy[1],'.',markersize=25, color = "lightcoral", label="X stabilizer after decoding")
         first_stab = False
     else:
-        plt.plot(x_xy[0], x_xy[1],'.',markersize=25, color = "red") # lightcoral
+        plt.plot(x_xy[0], x_xy[1],'.',markersize=25, color = "lightcoral") # lightcoral
 
 # Z correction
 zlines = []
@@ -233,7 +244,7 @@ zlines = []
 for z in z_errors_matching:
     cdn = edge_to_coordinate(l1, l2, z)
     zlines.append(cdn)
-lc = LineCollection(zlines, linewidth = 2,color = "purple", label="Matching")
+lc = LineCollection(zlines, linewidth = 4,color = "purple", label="Matching")
 ax.add_collection(lc)
 
     
@@ -243,5 +254,4 @@ plt.legend(loc='upper left')
 plt.xlim(-1,l2 + 1)
 plt.ylim(-1,l1 + 2)
 [ax.spines[side].set_visible(False) for side in ['right','top']]
-plt.savefig("toric_correctionadsaf.pdf")
-# plt.show()
+plt.savefig(str(l1) + "_" + str(l2) + "_toric_matching.pdf")

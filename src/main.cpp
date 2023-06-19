@@ -10,8 +10,6 @@
 #include <iomanip>
 #include <chrono>
 #include <iostream>
-// #include <pybind11/embed.h>
-#include "pybind11/include/pybind11/embed.h"
 #include <nlohmann/json.hpp>
 #include "lattice.hpp"
 #include "prob.hpp"

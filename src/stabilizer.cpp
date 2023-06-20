@@ -75,7 +75,7 @@ std::vector<bool> x_stab_measurement(int l1, int l2, std::vector<int> xstabs, st
 
         int num_zerrors_in_xstab = 0;
         for (int qubit: qubits_in_xstab){
-            if (zerrors[qubit] == true){
+            if (zerrors[qubit]){
                 num_zerrors_in_xstab = num_zerrors_in_xstab + 1;
             }
         }

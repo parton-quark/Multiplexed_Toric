@@ -7,7 +7,18 @@
 
 // Peeling decoder has been proposed by Nicolas Delfosse and Gilles Zémor in "Linear-time maximum likelihood decoding of surface codes over the quantum erasure channel", Phys. Rev. Research 2, 033042 – Published 9 July 2020
 // This implementation is based on Algorithm 1 from the original paper.
-
+template <class T> void print_vec(std::vector<T> vec){
+    bool is_first_elem;
+    is_first_elem = true;
+    for (T elem: vec){ 
+        if (is_first_elem){
+            std::cout << elem << std::flush;
+            is_first_elem = false;
+        } else {
+            std::cout << "," << elem << std::flush;
+        }
+    }
+}
 std::pair<int, std::pair<int, int> > pick_leaf_edge(graph G, int l1, int l2){
     std::vector<int> edges, vertices;
     edges = G.edges;
@@ -119,6 +130,8 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
     // 2. Initialize A
     graph A;
     for (graph f_eps: msf){
+        std::cout << "\nspanning tree:";
+        f_eps.print_graph();
         // 3. While f_eps = ∅, pick a leaf edge e={u,v} with pendant vertex u,remove e from f_eps and apply the two rules: 
         while (f_eps.num_edges() != 0){
             std::pair<int, std::pair<int, int>> leaf_and_pendant; /* leaf edge */
@@ -128,16 +141,25 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             leaf = leaf_and_pendant.first;
             pendant = leaf_and_pendant.second.first;
             connected = leaf_and_pendant.second.second;
+            std::cout << "\nleaf: ";
+            std::cout << leaf;
+            std::cout << "\npendant: ";
+            std::cout << pendant;
+            std::cout << "\nconnected: ";
+            std::cout << connected;
             // remove e from f_eps
             f_eps.remove_edge(leaf);
-            
-            if (x_syndrome[pendant] == true){
+            std::cout << "\nx_syndrome: ";
+            print_vec(x_syndrome);
+            if (x_syndrome[pendant]){
+                std::cout << "\nu is in sigma";
                 // 4. (R1)If u∈σ, add e to A,remove u from σ and flip v in σ.
                 A.add_edge(leaf);
                 x_syndrome[pendant] = false;
                 x_syndrome[connected] = !x_syndrome[connected];
-            } else{
+            } else {
                 // 5. (R2)If u/∈σ do nothing. 
+                std::cout << "\nu is not in sigma";
             }
         }
     }

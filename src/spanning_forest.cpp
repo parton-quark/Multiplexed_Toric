@@ -61,10 +61,13 @@ graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
         std::mt19937 engine;
         std::uniform_int_distribution<int> dist(0, index_max);
         bool is_cycle = true;
+        bool is_connected = false;
+        bool is_first_edge = true;
+
         int candidate_index, candidate_edge;
         std::vector<int> candidate_e_vertices;
         int candidate_v0, candidate_v1;
-        while (is_cycle == true){// 候補を選び、サイクルになってしまったらまた候補を選ぶ
+        while (is_cycle || is_connected){// 候補を選び、サイクルになってしまったらまた候補を選ぶ
             candidate_index =  dist(engine);
             std::cout << "\ncandidate_index" << candidate_index << std::flush;
             candidate_edge = left_graph.edges[candidate_index];    
@@ -87,12 +90,20 @@ graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
             } else {
                 v_in_tree = false;
             }
+            // 両点とも含まれていないなら連結成分ではないので却下 ただし最初の辺のみこれを許す
+            if (!u_in_tree && !v_in_tree){
+                is_connected = false;
+                if (is_first_edge){
+                    is_connected = true;
+                }
+            } 
             if (u_in_tree && v_in_tree){
                 std::cout << "  This candidate edge makes cycle. Reject and pick another edge again.";
                 is_cycle = true;
             } else {
                 is_cycle = false;
             }
+            is_first_edge = false;
         }
         // update edge weight (remove the weight of candidate)
         std::vector<int>::iterator itr;

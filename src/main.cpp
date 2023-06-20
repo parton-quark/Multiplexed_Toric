@@ -72,8 +72,8 @@ int main()
     // std::cin >> l1;
     // std::cout << "\nl2:";
     // std::cin >> l2;
-    l1 = 10;
-    l2 = 10;
+    l1 = 5;
+    l2 = 5;
     // number of qubits per one photon
     int multiplexing;
     // std::cout << "\nmultiplexing:";
@@ -98,7 +98,7 @@ int main()
     float prob_e;
     // std::cout << "\nerasure probability:";
     // std::cin >> prob_e;
-    prob_e = 0.2;
+    prob_e = 0.3;
     // make random device
     std::random_device rd;
     std::mt19937 engine;
@@ -160,6 +160,55 @@ int main()
     std::cout << "\n";
     
     // destructive measurement
+    std::vector<int> x_1, x_2;
+    for (int q = 0; q < l2; q++){
+        int qubit;
+        qubit = q * 2;
+        x_1.push_back(qubit);
+    }
+    
+    for (int r = 0; r < l1; r++){
+        int qubit;
+        qubit = r *(2 * l2) + 1;
+        x_2.push_back(qubit);
+
+    }
+    std::cout << "\nx_1: ";
+    print_vec(x_1);
+    std::cout << "\nx_2: ";
+    print_vec(x_2);
+
+    int num_error_in_x_1,num_error_in_x_2;
+    num_error_in_x_1 = 0;
+    num_error_in_x_2 = 0;
+    for (int x_m: x_1){
+        if (z_errors_after_decoding[x_m]){
+            num_error_in_x_1  = num_error_in_x_1 + 1;
+        }
+    }
+    for (int x_m: x_2){
+        if (z_errors_after_decoding[x_m]){
+            num_error_in_x_1  = num_error_in_x_2 + 1;
+        }
+    }
+    if (num_error_in_x_1 % 2 == 0){
+        std::cout << "\nno error in x_1 basis";
+    } else {
+        std::cout << "\nnum_error_in_x_1: " << num_error_in_x_1;
+    }
+    if (num_error_in_x_2 % 2 == 0){
+        std::cout << "\nno error in x_2 basis";
+    } else {
+        std::cout << "\nnum_error_in_x_2: " << num_error_in_x_2;
+    }
+    
+    bool is_success;
+    if (num_error_in_x_1 % 2 == 0 && num_error_in_x_2 % 2 == 0){
+        is_success = true;
+    } else {
+        is_success = false;
+    }
+
     std::vector<bool> x_syndromes_after_dec;
     x_syndromes_after_dec = x_stab_measurement(l1, l2, x_stabs,z_errors_after_decoding);
     
@@ -186,6 +235,7 @@ int main()
     result_json["Z correction"] = z_correction;
     result_json["Z errors after correction"] = z_errors_after_decoding;
     result_json["X syndromes after decoding"] = x_syndromes_after_dec;
+    result_json["is success"] = is_success;
     std::ofstream file(filename);
     file << result_json;
     std::cout << "\n";

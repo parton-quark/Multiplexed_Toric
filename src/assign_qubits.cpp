@@ -10,6 +10,16 @@ template<typename T> void pop_front(std::vector<T> &v){
     }
 }
 
+std::vector<std::vector<int> > assign_without_multiplexing(int l1, int l2, int num_photons, int num_qubits){
+    std::vector<std::vector<int> > photons;
+    for (int ph = 0; ph < num_photons; ph++){
+        std::vector<int> photon;
+        photon.push_back(ph);
+        photons.push_back(photon);
+    }
+    return photons;
+}
+
 std::vector<std::vector<int> > assign_random(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
     // randomly assign qubits
     std::vector<std::vector<int> > photons;
@@ -31,7 +41,7 @@ std::vector<std::vector<int> > assign_random(int l1, int l2, int multiplexing, i
             photon.push_back(qubit);
             }
         }
-        std::cout << "\n photon: ";
+        // std::cout << "\n photon: ";
         for (int ph: photon){
             std::cout << ph << ", ";
         }
@@ -40,7 +50,8 @@ std::vector<std::vector<int> > assign_random(int l1, int l2, int multiplexing, i
     return photons;
 }
 
-std::vector<std::vector<int> > assign_random_distance(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+// std::vector<std::vector<int> > assign_random_distance(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
     // Adopt or reject multiple qubits that are more than a threshold distance apart and assign them to the same photon
     // If allocation is not possible within the threshold, update the threshold
     std::vector<std::vector<int> > photons;
@@ -50,7 +61,7 @@ std::vector<std::vector<int> > assign_random_distance(int l1, int l2, int multip
     }
     int threshold;
     threshold = (l1 + l2) / 2 ;
-    std::cout << "\nthreshold: " << threshold << std::flush;
+    // std::cout << "\nthreshold: " << threshold << std::flush;
     for (int ph = 0; ph < num_photons; ph++){
         std::random_device rd;
         std::mt19937 engine(rd());
@@ -86,18 +97,22 @@ std::vector<std::vector<int> > assign_random_distance(int l1, int l2, int multip
                         is_photon_sat = true;
                         photons.push_back(photon);
 
-                        std::cout << "\n photon: ";
-                        for (int ph: photon){
-                            std::cout << ph << ", ";
-                        }
+                        // std::cout << "\n photon: ";
+                        // for (int ph: photon){
+                            // std::cout << ph << ", ";
+                        // }
                     }
                 } 
             }
             if (!is_photon_sat){
                 threshold = threshold - 1;
-                std::cout << "\nthreshold update: " << threshold << std::flush;
+                // std::cout << "\nthreshold update: " << threshold << std::flush;
+
             }
         }
     }
-    return photons;
+    std::pair<std::vector<std::vector<int> >, int> photon_and_threshold;
+    photon_and_threshold.first = photons;
+    photon_and_threshold.second = threshold;
+    return photon_and_threshold;
 }

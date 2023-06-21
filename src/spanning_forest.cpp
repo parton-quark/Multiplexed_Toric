@@ -9,7 +9,7 @@
 #include "graph.hpp"
 
 graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
-    std::cout << "\nprim start " << std::flush;
+    // std::cout << "\nprim start " << std::flush;
     std::vector<int> left_vertices, left_edges;
     left_vertices = G.vertices;
     left_edges = G.edges;
@@ -38,7 +38,7 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             // std::cout << "\nleft_edge_v1: " << left_edge_v1 << std::flush;
             int num_v0_in_tree, num_v1_in_tree;
             // std::cout << "\nmm_st: ";
-            mm_st.print_graph();
+            // mm_st.print_graph();
             std::vector<int> mm_st_vertices;
             mm_st_vertices = mm_st.vertices;
             num_v0_in_tree = std::count(mm_st_vertices.begin(), mm_st_vertices.end(), left_edge_v0);
@@ -110,7 +110,7 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
                 winner_u = winner_v1;
                 winner_v = winner_v0;
             } else {
-                std::cout << "妙だぞ!" << std::flush;
+                // std::cout << "妙だぞ!" << std::flush;
             }
             mm_st.add_edge(winner);
             mm_st.add_vertex(winner_v);
@@ -131,12 +131,12 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             // edge_weights.erase(remove(edge_weights.begin(), edge_weights.end(), 2), edge_weights.end());
             edge_weights.erase(edge_weights.begin() + wanted_index);
         } else {
-            std::cout << "\ncoudnt find..." << std::flush;
+            // std::cout << "\ncoudnt find..." << std::flush;
         }
     }
-    std::cout << "\nmm_st" << std::flush;
-    mm_st.print_graph();
-    std::cout << "\nprim finish" << std::flush;
+    // std::cout << "\nmm_st" << std::flush;
+    // mm_st.print_graph();
+    // std::cout << "\nprim finish" << std::flush;
     return mm_st;
 }
 

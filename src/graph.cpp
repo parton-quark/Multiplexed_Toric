@@ -17,26 +17,26 @@ int graph::num_edges(){
 }
 
 void graph::print_graph(){    
-    std::cout << "\n    V: ";
+    // std::cout << "\n    V: ";
     bool is_first_vertex;
     is_first_vertex = true;
     for(int vertex: vertices){
         if (is_first_vertex){
-            std::cout << vertex << std::flush;
+            // std::cout << vertex << std::flush;
             is_first_vertex = false;
         } else {
-            std::cout << "," << vertex  << std::flush;  
+            // std::cout << "," << vertex  << std::flush;  
         }
     }
-    std::cout << "\n    E: ";
+    // std::cout << "\n    E: ";
     bool is_first_edge;
     is_first_edge = true;
     for(int edge: edges){
         if (is_first_edge){
-            std::cout << edge  << std::flush;
+            // std::cout << edge  << std::flush;
             is_first_edge = false;
         } else {
-            std::cout << "," << edge << std::flush;  
+            // std::cout << "," << edge << std::flush;  
         }
     }
 }
@@ -46,10 +46,10 @@ void graph::print_vertices(){
     is_first_vertex = true;
     for(int vertex: vertices){
         if (is_first_vertex){
-            std::cout << vertex << std::flush;
+            // std::cout << vertex << std::flush;
             is_first_vertex = false;
         } else {
-            std::cout << "," << vertex << std::flush;  
+            // std::cout << "," << vertex << std::flush;  
         }
     }
 }
@@ -59,10 +59,10 @@ void graph::print_edges(){
     is_first_edge = true;
     for(int edge: edges){
         if (is_first_edge){
-            std::cout << edge << std::flush;
+            // std::cout << edge << std::flush;
             is_first_edge = false;
         } else {
-            std::cout << "," << edge << std::flush;  
+            // std::cout << "," << edge << std::flush;  
         }
     }
 }
@@ -101,10 +101,10 @@ std::vector<int> extract_group(std::vector<int> group){
     res = group;
     std::sort(res.begin(), res.end());
     res.erase(std::unique(res.begin(), res.end()), res.end());
-    std::cout << "\nextracted group: " << std::flush;
-    for (int r: res){
-        std::cout << r << "," << std::flush;
-    }
+    // std::cout << "\nextracted group: " << std::flush;
+    // for (int r: res){
+    //     std::cout << r << "," << std::flush;
+    // }
     return res;
 }
 
@@ -174,24 +174,24 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
         }
         e_index = e_index + 1;
     }
-    std::cout << "\nv_group: " << std::flush;
-    for (int a: v_group){
-        std::cout << a << "," << std::flush;
-    } 
+    // std::cout << "\nv_group: " << std::flush;
+    // for (int a: v_group){
+    //     std::cout << a << "," << std::flush;
+    // } 
     std::vector<int> v_group_no_dupl;
     v_group_no_dupl = extract_group(v_group);
 
-    std::cout << "\ne_group: " << std::flush;
-    for (int b: e_group){
-        std::cout << b << "," << std::flush;
-    } 
+    // std::cout << "\ne_group: " << std::flush;
+    // for (int b: e_group){
+    //     std::cout << b << "," << std::flush;
+    // } 
     
     std::vector<int> e_group_no_dupl;
     e_group_no_dupl = extract_group(e_group);
 
     if (v_group_no_dupl != e_group_no_dupl){
         throw std::runtime_error("v_group_no_dupl != e_group_no_dupl");
-        std::cout << "\nv_group_no_dupl != e_group_no_dupl!!!" << std::flush;
+        // std::cout << "\nv_group_no_dupl != e_group_no_dupl!!!" << std::flush;
     }
 
     std::vector<graph> connected_graphs;
@@ -216,8 +216,8 @@ std::vector<graph> devide_graph(graph G, int l1, int l2){
             edge_index = edge_index + 1;
         }
         connected_graphs.push_back(connected_graph);
-        std::cout << "\nconnected_graph" << std::flush;
-        connected_graph.print_graph();
+        // std::cout << "\nconnected_graph" << std::flush;
+        // connected_graph.print_graph();
     }
     return connected_graphs;
 }

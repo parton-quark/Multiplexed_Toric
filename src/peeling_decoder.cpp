@@ -7,18 +7,7 @@
 
 // Peeling decoder has been proposed by Nicolas Delfosse and Gilles Zémor in "Linear-time maximum likelihood decoding of surface codes over the quantum erasure channel", Phys. Rev. Research 2, 033042 – Published 9 July 2020
 // This implementation is based on Algorithm 1 from the original paper.
-template <class T> void print_vec(std::vector<T> vec){
-    bool is_first_elem;
-    is_first_elem = true;
-    for (T elem: vec){ 
-        if (is_first_elem){
-            std::cout << elem << std::flush;
-            is_first_elem = false;
-        } else {
-            std::cout << "," << elem << std::flush;
-        }
-    }
-}
+
 std::pair<int, std::pair<int, int> > pick_leaf_edge(graph G, int l1, int l2){
     std::vector<int> edges, vertices;
     edges = G.edges;
@@ -28,56 +17,67 @@ std::pair<int, std::pair<int, int> > pick_leaf_edge(graph G, int l1, int l2){
     std::pair<int, std::pair<int, int> > leaf_and_pendant;
 
     for (int edge: edges){
-        std::vector<int> uv;
-        int u, v;
-        uv = edge_to_vertices(l1 , l2, edge);
-        u = uv[0];
-        v = uv[1];
-        std::vector<int> eu_list, ev_list;
-        std::vector<int> edges_u, edges_v; /* edges connected to u (v) */
-        edges_u = vertex_to_edges(l1, l2, u);
-        edges_v = vertex_to_edges(l1, l2, v);
-        
-        for (int eu: edges_u){
-            if (eu != edge){
-                eu_list.push_back(eu);
+        std::vector<int> v0_v1;
+        int v0, v1;
+        v0_v1 = edge_to_vertices(l1 , l2, edge);
+        v0 = v0_v1[0];
+        v1 = v0_v1[1];
+        std::cout << "\nv0: " << v0;
+        std::cout << "\nv1: " << v1;
+        std::vector<int> es_of_v0, es_of_v1; // v0, v1が持ちうる辺
+        es_of_v0 = vertex_to_edges(l1, l2, v0);
+        es_of_v1 = vertex_to_edges(l1, l2, v1);
+         std::vector<int> other_es_of_v0, other_es_of_v1; // 選んでいる辺以外のv0, v1が持ちうる辺
+
+        for (int e_of_v0: es_of_v0){
+            if (e_of_v0 != edge){
+                other_es_of_v0.push_back(e_of_v0);
+            } 
+        }
+        for (int e_of_v1: es_of_v1){
+            if (e_of_v1 != edge){
+                other_es_of_v1.push_back(e_of_v1);
+            } 
+        }
+
+        int degree_v0, degree_v1;
+        degree_v0 = 1;
+        degree_v1 = 1;
+
+        for (int other_e_of_v0: other_es_of_v0){
+            if (std::count(edges.begin(), edges.end(), other_e_of_v0)){
+                degree_v0 = degree_v0 + 1;
             }
         }
-        for (int ev: edges_v){
-            if (ev != edge){
-                ev_list.push_back(ev);
+        for (int other_e_of_v1: other_es_of_v1){
+            if (std::count(edges.begin(), edges.end(), other_e_of_v1)){
+                degree_v1 = degree_v1 + 1;
             }
         }
-
-        int degree_u, degree_v;
-        degree_u = 1;
-        degree_v = 1;
-        for (int eu: eu_list){
-            degree_u = degree_u + std::count(edges.begin(), edges.end(), eu);
+        std::cout << "\n degree_v0: " << degree_v0 << std::flush;
+        std::cout << "\n degree_v1: " << degree_v1 << std::flush;
+        bool is_pendant_v0, is_pendant_v1;
+        is_pendant_v0 = true;
+        is_pendant_v1 = true;
+        if (degree_v0 > 1){
+            is_pendant_v0 = false;
         }
-        for (int ev: ev_list){
-            degree_v = degree_v + std::count(edges.begin(), edges.end(), ev);
+        if (degree_v1 > 1){
+            is_pendant_v1 = false;
         }
-
-        bool is_pendant_u, is_pendant_v;
-        if (degree_u == 1){
-            is_pendant_u = true;
-        }
-        if (degree_v == 1){
-            is_pendant_v = true;
-        }
-
-        if (is_pendant_u || is_pendant_v){
+        std::cout << "\n is_pendant_v0: " << is_pendant_v0 << std::flush;
+        std::cout << "\n is_pendant_v1: " << is_pendant_v1 << std::flush;
+        if (is_pendant_v0 || is_pendant_v1){
             /* edgeがleaf edgeである：uvのどちらかは他の辺を持たない。 */
             int leaf;
             leaf = edge;
             int pendant_vertex, connected_vertex;
-            if (is_pendant_u){
-                pendant_vertex = u;
-                connected_vertex = v;
-            } else if (is_pendant_v){
-                pendant_vertex = v;
-                connected_vertex = u;
+            if (is_pendant_v0){
+                pendant_vertex = v0;
+                connected_vertex = v1;
+            } else if (is_pendant_v1){
+                pendant_vertex = v1;
+                connected_vertex = v0;
             }
             std::pair<int, int> leaf_vertices{pendant_vertex, connected_vertex};
             leaf_and_pendant.first = leaf;
@@ -143,14 +143,22 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             connected = leaf_and_pendant.second.second;
             std::cout << "\nleaf: ";
             std::cout << leaf;
-            std::cout << "\npendant: ";
+            std::cout << "\n    pendant: ";
             std::cout << pendant;
-            std::cout << "\nconnected: ";
+            std::cout << "\n    connected: ";
             std::cout << connected;
             // remove e from f_eps
             f_eps.remove_edge(leaf);
             std::cout << "\nx_syndrome: ";
-            print_vec(x_syndrome);
+            int x_syndrome_index;
+            x_syndrome_index = 0;
+            for (bool x_stab:x_syndrome){
+                if (x_stab){
+                    std::cout << x_syndrome_index << ", ";
+                } 
+                x_syndrome_index = x_syndrome_index + 1;
+            }
+
             if (x_syndrome[pendant]){
                 std::cout << "\nu is in sigma";
                 // 4. (R1)If u∈σ, add e to A,remove u from σ and flip v in σ.

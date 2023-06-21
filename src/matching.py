@@ -8,9 +8,7 @@ import json
 print("matching.py")
 args = sys.argv
 l1 = int(args[1])
-print("l1:" + str(l1))
 l2 = int(args[2])
-print("l2:" + str(l2))
 jsonfilename = args[3]
 # jsonfilename = "result.json"
 # json_open = open(jsonfilename, 'r')

@@ -72,8 +72,8 @@ int main()
     // std::cin >> l1;
     // std::cout << "\nl2:";
     // std::cin >> l2;
-    l1 = 5;
-    l2 = 5;
+    l1 = 10;
+    l2 = 10;
     // number of qubits per one photon
     int multiplexing;
     // std::cout << "\nmultiplexing:";
@@ -98,7 +98,7 @@ int main()
     float prob_e;
     // std::cout << "\nerasure probability:";
     // std::cin >> prob_e;
-    prob_e = 0.3;
+    prob_e = 0.55;
     // make random device
     std::random_device rd;
     std::mt19937 engine;
@@ -111,6 +111,7 @@ int main()
     // make erasure vector for qubits
     std::vector<bool> qubit_loss(num_qubits);
     qubit_loss = convert_photon_loss_to_qubit_loss(num_photons, num_qubits, multiplexing, photons, photon_loss);
+    // qubit_loss = {false, false,false,false,false,false,false,false,true,false,true,false,true,false,false,false,false,false,true,true,false,false,false,false,false,false,true,false,false,true,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,false,true};
     // print qubit_loss
     std::cout << "\nerasure vector for qubits :";
     print_ind_of_bool_vec(qubit_loss);
@@ -119,12 +120,13 @@ int main()
     std::vector<bool> xerrors;
     xerrors = make_xerrors(qubit_loss, num_qubits, engine, dist);
     // print xerrors
-    std::cout << "\nX errors on qubits        :";
-    print_ind_of_bool_vec(xerrors);
+    // std::cout << "\nX errors on qubits        :";
+    // print_ind_of_bool_vec(xerrors);
 
     // make Z error vector
     std::vector<bool> zerrors;
     zerrors = make_zerrors(qubit_loss, num_qubits, engine, dist);
+    // zerrors = {false,false,false,false,false,false,false,false,false,false,true,false,true,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false,true,false,false,false,true};
     // print zerrors
     std::cout << "\nZ errors on qubits        :";
     // print_vec(zerrors);
@@ -238,6 +240,15 @@ int main()
     result_json["is success"] = is_success;
     std::ofstream file(filename);
     file << result_json;
+
+    // std::cout << " xstab_to_qubits";
+    // for (int x_stab: x_stabs){
+    //     std::vector<int> qubits;
+    //     std::cout << "\n" << x_stab << ": ";
+    //     qubits =  xstab_to_qubits(l1, l2, x_stab);
+    //     print_vec(qubits);
+    // }
+    
     std::cout << "\n";
     return 0;
 }

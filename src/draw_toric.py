@@ -131,7 +131,14 @@ for x_synd_aft in x_syndromes_aft_vec:
         x_syndromes_aft.append(x_synd_aft_index)
     x_synd_aft_index= x_synd_aft_index + 1
 
-# z_errors_after_correction = json_load['Z errors after correction']
+z_errors_after_correction_vec = json_load['Z errors after correction']
+z_errors_after_correction = []
+z_errors_aft_index  = 0
+for z_error_aft in z_errors_after_correction_vec:
+    if z_error_aft  == True:
+        z_errors_after_correction .append(z_errors_aft_index)
+    z_errors_aft_index = z_errors_aft_index + 1
+
 z_errors_matching = json_load['matching qubits']
 
 # draw codes
@@ -206,12 +213,12 @@ for e in erasure_vector_for_qubits:
 lc = LineCollection(lines, linewidth = 10,color = "gray", label="Erasure error")
 ax.add_collection(lc)
 
-zlines = []
-for z in z_errors_on_qubits:
-    cdn = edge_to_coordinate(l1, l2, z)
-    zlines.append(cdn)
-lc = LineCollection(zlines, linewidth = 6,color = "blue", label="Z error")
-ax.add_collection(lc)
+# zlines = []
+# for z in z_errors_on_qubits:
+#     cdn = edge_to_coordinate(l1, l2, z)
+#     zlines.append(cdn)
+# lc = LineCollection(zlines, linewidth = 6,color = "blue", label="Z error")
+# ax.add_collection(lc)
 
 # X stab
 first_stab = True
@@ -228,24 +235,24 @@ zlines = []
 for z in z_correction:
     cdn = edge_to_coordinate(l1, l2, z)
     zlines.append(cdn)
-lc = LineCollection(zlines, linewidth = 4,color = "yellow", label="Z correction")
+lc = LineCollection(zlines, linewidth = 6,color = "yellow", label="Z correction")
 ax.add_collection(lc)
 
 # Z error after corretion
-# zlines = []
-# for z in z_errors_after_correction:
-#     cdn = edge_to_coordinate(l1, l2, z)
-#     zlines.append(cdn)
-# lc = LineCollection(zlines, linewidth = 2,color = "blue", label="Z error after correction")
-# ax.add_collection(lc)
-
-
 zlines = []
-for z in z_errors_matching:
+for z in z_errors_after_correction:
     cdn = edge_to_coordinate(l1, l2, z)
     zlines.append(cdn)
-lc = LineCollection(zlines, linewidth = 4,color = "purple", label="Matching")
+lc = LineCollection(zlines, linewidth = 4,color = "blue", label="Z error after correction")
 ax.add_collection(lc)
+
+
+# zlines = []
+# for z in z_errors_matching:
+#     cdn = edge_to_coordinate(l1, l2, z)
+#     zlines.append(cdn)
+# lc = LineCollection(zlines, linewidth = 4,color = "purple", label="Matching")
+# ax.add_collection(lc)
 
     
 first_time_to_show = True

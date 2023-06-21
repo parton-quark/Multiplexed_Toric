@@ -17,7 +17,7 @@ int graph::num_edges(){
 }
 
 void graph::print_graph(){    
-    std::cout << "\nV: ";
+    std::cout << "\n    V: ";
     bool is_first_vertex;
     is_first_vertex = true;
     for(int vertex: vertices){
@@ -28,7 +28,7 @@ void graph::print_graph(){
             std::cout << "," << vertex  << std::flush;  
         }
     }
-    std::cout << "\nE: ";
+    std::cout << "\n    E: ";
     bool is_first_edge;
     is_first_edge = true;
     for(int edge: edges){

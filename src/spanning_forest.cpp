@@ -8,126 +8,135 @@
 #include "lattice.hpp"
 #include "graph.hpp"
 
-graph kruskal(graph G, int l1, int l2, std::vector<int> edge_weights){
-    // Kruskal's algorithm
-    // input: graph G (connected g)
-    // output: graph T (minimal spanning tree of G)
-    std::vector<int> left_vertices;
-    std::vector<int> left_edges;
+graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
+    std::cout << "\nprim start " << std::flush;
+    std::vector<int> left_vertices, left_edges;
     left_vertices = G.vertices;
     left_edges = G.edges;
     graph left_graph(left_vertices, left_edges);
-
     graph mm_st; /* minimal spanning tree */
 
-    while(left_graph.vertices.size() != 0){/* until all vertices are included in the tree */
-        std::cout << "\nleft_graph: "<< std::flush;
-        left_graph.print_graph();
-        std::cout << "\nleft_vertices_size: " <<  left_graph.vertices.size() << std::flush;
-        std::cout << "\nedge_weights: " << std::flush;
-        for (int ed_we: edge_weights){
-            std::cout << ed_we <<  ",";
+    int first_vertex;
+    first_vertex = left_graph.vertices[0];
+    mm_st.add_vertex(first_vertex);
+    left_graph.remove_vertex(first_vertex);
+
+    std::vector<int> candidates, candidates_edge_weights;
+    int left_edge_index = 0;
+    bool find_leaf;
+    find_leaf = false;
+    while (left_graph.num_vertices() != 0){
+        std::vector<int> candidates;
+        for (int  left_edge: left_graph.edges){
+            std::vector<int> left_edge_vertices;
+            int left_edge_v0, left_edge_v1;
+            left_edge_vertices = edge_to_vertices(l1, l2, left_edge);
+            left_edge_v0 = left_edge_vertices[0];
+            left_edge_v1 = left_edge_vertices[1];
+            // std::cout << "\nleft_edge" << left_edge << std::flush;
+            // std::cout << "\nleft_edge_v0: " << left_edge_v0 << std::flush;
+            // std::cout << "\nleft_edge_v1: " << left_edge_v1 << std::flush;
+            int num_v0_in_tree, num_v1_in_tree;
+            // std::cout << "\nmm_st: ";
+            mm_st.print_graph();
+            std::vector<int> mm_st_vertices;
+            mm_st_vertices = mm_st.vertices;
+            num_v0_in_tree = std::count(mm_st_vertices.begin(), mm_st_vertices.end(), left_edge_v0);
+            num_v1_in_tree = std::count(mm_st_vertices.begin(), mm_st_vertices.end(), left_edge_v1);
+            // std::cout << "\nnum_v0_in_tree: " << num_v0_in_tree << std::flush;
+            // std::cout << "\nnum_v1_in_tree: " << num_v1_in_tree << std::flush;
+
+            if (num_v0_in_tree == 1 && num_v1_in_tree == 0){/* v0 is in tree, v1 is not in tree */
+                candidates_edge_weights.push_back(edge_weights[left_edge_index]);
+                candidates.push_back(left_edge);
+                find_leaf = true;
+            }
+            if (num_v0_in_tree == 0 && num_v1_in_tree == 1){/* v0 is not in tree, v1 is in tree */
+                candidates_edge_weights.push_back(edge_weights[left_edge_index]);
+                candidates.push_back(left_edge);
+                find_leaf = true;
+            }
+            left_edge_index = left_edge_index + 1;
         }
 
-        int min_w; /* minimum weight of left edges */
-        bool is_first_w;
-        is_first_w = true;
-        for (int ed_we: edge_weights){
-            if (is_first_w){
-                min_w = ed_we;
-                is_first_w = false;
+        if (find_leaf){
+            // std::cout << "\nfind leaf " << std::flush;
+            // 候補者リストにおける最小重み
+            int min_w_in_candidates;
+            bool is_first_candidate;
+            int cand_index;
+            is_first_candidate = true;
+            cand_index = 0;
+            for (int candidate: candidates){
+                if (is_first_candidate){
+                    min_w_in_candidates = candidates_edge_weights[cand_index];
+                    is_first_candidate = false;
+                } else {
+                    if (min_w_in_candidates > candidates_edge_weights[cand_index]){
+                        min_w_in_candidates = candidates_edge_weights[cand_index];
+                    }
+                }
+                cand_index = cand_index + 1;
+            }
+            std::vector<int> candidates_with_min_w;
+            cand_index = 0;
+            for (int candidate: candidates){
+                if (min_w_in_candidates == candidates_edge_weights[cand_index]){
+                    candidates_with_min_w.push_back(candidate);
+                }
+                cand_index = cand_index + 1;
+            }
+            int winner;
+            int random_index;
+            random_index = rand()%candidates_with_min_w.size();
+            // std::cout << "\nrandom_index: " << random_index << std::flush;
+            // std::cout << "\ncandidates_with_min_w.size(): " << candidates_with_min_w.size() << std::flush;
+            winner = candidates_with_min_w[random_index];
+            left_graph.add_edge(winner);
+            std::vector<int> winner_vertices;
+            int winner_v0, winner_v1;
+            winner_vertices = edge_to_vertices(l1, l2, winner);
+            winner_v0 = winner_vertices[0];
+            winner_v1 = winner_vertices[1];
+            int num_winner_v0_in_tree, num_winner_v1_in_tree;
+            num_winner_v0_in_tree = std::count(mm_st.vertices.begin(), mm_st.vertices.end(), winner_v0);
+            num_winner_v1_in_tree = std::count(mm_st.vertices.begin(), mm_st.vertices.end(), winner_v1);
+            // u in mm_st, v is not in mm_st
+            int winner_u, winner_v;
+            if (num_winner_v1_in_tree == 0){
+                winner_u = winner_v0;
+                winner_v = winner_v1;
+            } else if (num_winner_v0_in_tree == 0){
+                winner_u = winner_v1;
+                winner_v = winner_v0;
             } else {
-                if (min_w > ed_we){
-                    min_w = ed_we;
+                std::cout << "妙だぞ!" << std::flush;
+            }
+            mm_st.add_edge(winner);
+            mm_st.add_vertex(winner_v);
+
+            left_graph.remove_edge(winner);
+            left_graph.remove_vertex(winner_v);
+            // update edge_weights
+            std::vector<int>::iterator itr;
+            int wanted_index;
+            for (int ind = 0; ind < left_graph.num_edges(); ind++){
+                if (left_graph.edges[ind] == winner){
+                    wanted_index = ind;
+                    break;
+                } else {
+                    wanted_index = 0;
                 }
             }
+            // edge_weights.erase(remove(edge_weights.begin(), edge_weights.end(), 2), edge_weights.end());
+            edge_weights.erase(edge_weights.begin() + wanted_index);
+        } else {
+            std::cout << "\ncoudnt find..." << std::flush;
         }
-        std::cout << "\nmin_w:" << min_w;
-        std::vector<int> min_w_indexes;
-        for (int ind = 0 ; ind < edge_weights.size(); ind++){
-            if (edge_weights[ind] == min_w){
-                min_w_indexes.push_back(ind);
-            }
-        }
-        std::cout << "\nmin_w_indexes: " << std::flush;
-        for (int mwi: min_w_indexes){
-            std::cout << mwi << "," << std::flush;
-        }
-
-        int index_max;
-        index_max = min_w_indexes.size() - 1; 
-        std::cout << "\nindex_max: " << index_max << std::flush;
-        std::random_device rd;
-        std::mt19937 engine;
-        std::uniform_int_distribution<int> dist(0, index_max);
-        bool is_cycle = true;
-        bool is_connected = false;
-        bool is_first_edge = true;
-
-        int candidate_index, candidate_edge;
-        std::vector<int> candidate_e_vertices;
-        int candidate_v0, candidate_v1;
-        while (is_cycle || is_connected){// 候補を選び、サイクルになってしまったらまた候補を選ぶ
-            candidate_index =  dist(engine);
-            std::cout << "\ncandidate_index" << candidate_index << std::flush;
-            candidate_edge = left_graph.edges[candidate_index];    
-            std::cout << "\ncandidate_edge: " << candidate_edge << std::flush;
-            candidate_e_vertices = edge_to_vertices(l1, l2, candidate_edge);
-            candidate_v0 = candidate_e_vertices[0];
-            candidate_v1 = candidate_e_vertices[1];
-
-            int num_u_in_tree, num_v_in_tree;
-            num_u_in_tree = std::count(mm_st.vertices.begin(), mm_st.vertices.end(), candidate_v0);
-            num_v_in_tree = std::count(mm_st.vertices.begin(), mm_st.vertices.end(), candidate_v1);
-            bool u_in_tree, v_in_tree;
-            if (num_u_in_tree > 0){
-                u_in_tree = true;
-            } else {
-                u_in_tree = false;
-            }
-            if (num_v_in_tree > 0){
-                v_in_tree = true;
-            } else {
-                v_in_tree = false;
-            }
-            // 両点とも含まれていないなら連結成分ではないので却下 ただし最初の辺のみこれを許す
-            if (!u_in_tree && !v_in_tree){
-                is_connected = false;
-                if (is_first_edge){
-                    is_connected = true;
-                }
-            } 
-            if (u_in_tree && v_in_tree){
-                std::cout << "  This candidate edge makes cycle. Reject and pick another edge again.";
-                is_cycle = true;
-            } else {
-                is_cycle = false;
-            }
-            is_first_edge = false;
-        }
-        // update edge weight (remove the weight of candidate)
-        std::vector<int>::iterator itr;
-        int num_edge_in_left_g, wanted_index;
-        num_edge_in_left_g = left_graph.num_edges();
-        for (int ind = 0; ind < num_edge_in_left_g; ind++){
-            if (left_graph.edges[ind] == candidate_edge){
-                wanted_index = ind;
-                break;
-            } else {
-                wanted_index = 0;
-            }
-        }            
-        edge_weights.erase(edge_weights.begin() + wanted_index);
-        // add this edge to tree
-        mm_st.add_edge(candidate_edge);
-        mm_st.add_vertex(candidate_v0);
-        mm_st.add_vertex(candidate_v1);
-        // remove two vertices of candidate_e from left_vertices
-        left_graph.remove_vertex(candidate_v0);
-        left_graph.remove_vertex(candidate_v1);
-        // remove candidate_e from the left_graph
-        left_graph.remove_edge(candidate_edge);
     }
+    std::cout << "\nmm_st" << std::flush;
+    mm_st.print_graph();
+    std::cout << "\nprim finish" << std::flush;
     return mm_st;
 }
 
@@ -146,10 +155,9 @@ graph maximal_spanning_tree(graph G, int l1, int l2){
         edge_weights.push_back(N-1); 
     }
     // Finding the minimum spanning tree of weight-replaced graphs
-    // Since the input is a graph with equal edge weights, it can be replaced by a faster algorithm (depth-first search),
-    // but for simplicity, Kruskal's algorithm is used. 
     graph mxst;
-    mxst = kruskal(G, l1, l2, edge_weights); /* maximal spanning tree */
+    mxst = prim(G, l1, l2, edge_weights);
+    // mxst = kruskal(G, l1, l2, edge_weights); /* maximal spanning tree */
     // The weights of each edge should be returned to w 
     // Here all edge weights are 1, so no such transformation is necessary
     return mxst;
@@ -170,4 +178,5 @@ std::vector<graph> spanning_forest(graph G, int l1, int l2){
     }
     return msf;
 }
+
 

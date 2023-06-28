@@ -41,16 +41,12 @@ std::vector<std::vector<int> > assign_random(int l1, int l2, int multiplexing, i
             photon.push_back(qubit);
             }
         }
-        // std::cout << "\n photon: ";
-        // for (int ph: photon){
-        //     std::cout << ph << ", ";
-        // }
         photons.push_back(photon);
     }
     return photons;
 }
 
-std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, int l2, int multiplexing, int num_photons, int num_qubits, std::mt19937& engine){
     // Adopt or reject multiple qubits that are more than a threshold distance apart and assign them to the same photon
     // If allocation is not possible within the threshold, update the threshold
     std::vector<std::vector<int> > photons;
@@ -60,23 +56,14 @@ std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, in
     }
     int threshold;
     threshold = (l1 + l2) / 2;
-    std::cout << "\nthreshold                 :" << threshold;
-
+    // std::cout << "\nthreshold                 :" << threshold;
     for (int ph = 0; ph < num_photons; ph++){
         std::vector<int> photon;
-        std::random_device rd;
-        std::mt19937 engine(rd());
         std::shuffle(left_qubits.begin(), left_qubits.end(), engine);
         int first_qubit_in_photon;
         first_qubit_in_photon = left_qubits[left_qubits.size() - 1];
         photon.push_back(first_qubit_in_photon);
-        // std::cout << "\nfirst qubit in this photon:" << first_qubit_in_photon;
-        // std::cout << "\nleft_qubits        ";
-        // print_vec(left_qubits);
         left_qubits.erase(std::remove(left_qubits.begin(), left_qubits.end(),first_qubit_in_photon), left_qubits.end());
-        // std::cout << "\nleft_qubits updated";
-        // print_vec(left_qubits);
-
         bool is_photon_sat;
         is_photon_sat = false;
         while (!is_photon_sat){
@@ -113,12 +100,6 @@ std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, in
             }
         }
     }
-    // std::cout << "\nleft_qubits               :";
-    // for (int lq: left_qubits){
-    //     std::cout << lq;
-    //     std::cout << ",";
-    // }
-    // std::cout << "\nnum_assigned_qubits: " << num_assigned_qubits;
     std::pair<std::vector<std::vector<int> >, int> photon_and_threshold;
     photon_and_threshold.first = photons;
     photon_and_threshold.second = threshold;
@@ -126,11 +107,7 @@ std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, in
 }
 
 // assign_deterministic
-// 決定論的に量子ビットを配置する
-
 std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
-    // 量子ビットを割り当てる...
-    // l１, l2ともに偶数
     // multiplexing = 2
     std::vector<int> photon_of_qubits;
 
@@ -141,10 +118,8 @@ std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiple
     for (int left_qubit: left_qubits){
         if (left_qubit % 2 == 0){
             // vertical
-            // std::cout << " vertical"<< std::flush;
             if (left_qubit < l1 * l2){
                 // lower block
-                // std::cout << " lower"<< std::flush;
                 int photon_index;
                 photon_index = left_qubit  / 2; 
                 photon_index = photon_index + (num_photons) / 2; 
@@ -152,7 +127,6 @@ std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiple
                 
             } else {
                 // upper block
-                // std::cout << " upper"<< std::flush;
                 int photon_index;
                 photon_index = (left_qubit - (l1 * l2)) / 2; /*上段と同じ並び ここから半分ずらす*/
                 int row_index, column_index;
@@ -174,14 +148,11 @@ std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiple
             // std::cout << " horizontal"<< std::flush;
             if (left_qubit < l1 * l2){
                 // lower block
-                // std::cout << " lower"<< std::flush;
                 int photon_index;
                 photon_index = left_qubit / 2;
-                // photons[photon_index].push_back(left_qubit);
                 photon_of_qubits.push_back(photon_index);
             } else {
                 // upper block
-                // std::cout << " upper"<< std::flush;
                 int photon_index;
                 photon_index = (left_qubit - (l1 * l2)) / 2;
                 int row_index, column_index;

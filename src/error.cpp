@@ -40,7 +40,7 @@ std::vector<bool> make_xerrors(std::vector<bool> qubit_loss, int num_qubits, std
     for (bool qubit : qubit_loss){
         if (qubit == true){
             bool is_xerror = false;
-            is_xerror = probabilistic(0.5, engine, dist);
+            is_xerror = probabilistic(0.500, engine, dist);
             xerrors[qubit_index_x]  = is_xerror;
         }else if (qubit == false){
             bool is_xerror = false;
@@ -57,7 +57,7 @@ std::vector<bool> make_zerrors(std::vector<bool> qubit_loss, int num_qubits, std
     for (bool qubit : qubit_loss){
         if (qubit == true){
             bool is_zerror = false;
-            is_zerror = probabilistic(0.5, engine, dist);
+            is_zerror = probabilistic(0.500, engine, dist);
             zerrors[qubit_index_z]  = is_zerror;
         }else if (qubit == false){
             bool is_zerror = false;

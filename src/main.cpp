@@ -73,10 +73,10 @@ std::string vec_to_str(std::vector<bool> vec){
 //     l1 = 10;
 //     l2 = 10;
 //     // number of qubits per one photon
-//     multiplexing = 1;
+//     multiplexing = 2;
 //     // input erasure probability
 //     float prob_e;
-//     prob_e = 1.0;
+//     prob_e = 0.6;
 //     // random device
 //     std::random_device rd;
 //     std::mt19937 engine(rd());
@@ -93,9 +93,10 @@ std::string vec_to_str(std::vector<bool> vec){
 //     std::vector<std::vector<int> > photons;
 
 //     int strategy;
-//     strategy =  0;
+//     strategy =  4;
 //     if (strategy == 0){
 //         // strategy 0: no multiplexing 
+//         multiplexing = 1;
 //         photons = assign_without_multiplexing(l1, l2, num_photons, num_qubits);
 //     } else if (strategy == 1){
 //         // strategy 1: randomly assign qubits to the photons
@@ -109,7 +110,11 @@ std::string vec_to_str(std::vector<bool> vec){
 //         threshold = photons_and_threshold.second;
 //         std::cout << "\nthreshold                 :" << threshold;
 //     } else if (strategy == 3){
+//         multiplexing = 2;
 //         photons = assign_deterministic(l1, l2, multiplexing, num_photons, num_qubits);
+//     } else if (strategy == 4){
+//         multiplexing = 2;
+//         photons = assign_deterministic_shrink(l1, l2, multiplexing, num_photons, num_qubits);
 //     }
 //     std::cout << "\nphotons                   :";
 //     print_vec_of_vec(photons);
@@ -285,8 +290,12 @@ int main(){   // lattice size: l1 times l2
     // for (int lattice_size = 5; lattice_size < 20; lattice_size =  lattice_size + 5){
     std::random_device rd;
     std::mt19937 engine(rd());
+    std::uniform_real_distribution<double> dist(0,1);
     // std::uniform_real_distribution<double> dist(0,1);
-    for (int lattice_size = 12; lattice_size < 16; lattice_size =  lattice_size + 4){
+    std::vector<int> lattice_sizes;
+    lattice_sizes = {20};
+    for (int lattice_size: lattice_sizes){
+    // for (int lattice_size = 12; lattice_size < 16; lattice_size =  lattice_size + 4){
         std::cout << "\nlattice_size: " << lattice_size;
         int l1,l2;
         l1 = lattice_size;
@@ -294,10 +303,9 @@ int main(){   // lattice size: l1 times l2
         int num_qubits = (l1*l2) * 2;
         int num_shots = 10000;
         std::vector<int> strategies;
-        strategies = {2};
+        strategies = {0,3,4};
         for (int strategy: strategies){
         // for (int strategy = 0; strategy < 5; strategy = strategy + 1){
-            std::uniform_real_distribution<double> dist(0,1);
             std::cout << "\nstrategy: " << strategy;
             auto now = std::chrono::system_clock::now();
             auto now_c = std::chrono::system_clock::to_time_t(now);
@@ -314,9 +322,10 @@ int main(){   // lattice size: l1 times l2
                 // random with distance
                 multiplexing = 2;
             } else if (strategy == 3){
-                // deterministic optimal
+                // deterministic min dist
                 multiplexing = 2;
             } else if (strategy == 4){
+                // deterministic max dist
                 multiplexing = 2;
             }
 
@@ -349,7 +358,7 @@ int main(){   // lattice size: l1 times l2
             std::vector<double> vec_loss_rate_average, vec_z_error_rate_average;
 
             // for (float prob_e = 0.40; prob_e < 0.61; prob_e = prob_e + 0.01){
-            for (float prob_e = 0.400; prob_e < 0.610; prob_e = prob_e + 0.010){
+            for (float prob_e = 0.3000; prob_e < 0.5600; prob_e = prob_e + 0.0100){
                 prob_e_vec.push_back(prob_e);
                 int num_success;
                 int num_fail;
@@ -394,7 +403,6 @@ int main(){   // lattice size: l1 times l2
                     z_error_rate = f_num_z_errors / f_num_qubits;
                     vec_zerror_rate.push_back(z_error_rate);
 
-
                     // make stabilizers
                     std::vector<int> x_stabs;
                     x_stabs = make_x_stabilzers(l1, l2);
@@ -407,7 +415,6 @@ int main(){   // lattice size: l1 times l2
                     // decoding
                     std::vector<bool> z_correction;
                     z_correction = peeling_decoder_for_z_errors(l1, l2, num_qubits, qubit_loss, x_syndromes);
-                    
                     // show the result of decoding
                     std::vector<bool> z_errors_after_decoding(num_qubits);
                     for (int qubitind = 0; qubitind < num_qubits; qubitind++){

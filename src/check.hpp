@@ -1,0 +1,1 @@
+bool is_correction_involved_in_loss(std::vector<bool> correction, std::vector<bool> qubit_loss);

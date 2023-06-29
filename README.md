@@ -17,7 +17,3 @@
 ## Requirements
 - [nlohmann/json](https://github.com/nlohmann/json)
   - JSON library for C++
-
-- [PyMatching](https://github.com/oscarhiggott/PyMatching)
-  - MWPM decoder
-  - Determines if a logical error occurred during simulation

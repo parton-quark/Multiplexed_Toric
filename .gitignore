@@ -31,6 +31,10 @@
 *.out
 *.app
 
+# result files
+*.json
+*.pdf
+
 src/result.json
 src/main
 src/.ipynb_checkpoints/result-checkpoint.json

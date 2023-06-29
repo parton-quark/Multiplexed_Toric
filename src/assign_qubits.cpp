@@ -55,7 +55,7 @@ std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, in
         left_qubits.push_back(q);
     }
     int threshold;
-    threshold = (l1 + l2) / 2;
+    threshold = (l1 + l2) / 4;
     // std::cout << "\nthreshold                 :" << threshold;
     for (int ph = 0; ph < num_photons; ph++){
         std::vector<int> photon;
@@ -191,6 +191,23 @@ std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiple
         // photonをvectorに変換
         std::vector<int> photon_vec = {photon.first, photon.second};
         photons.push_back(photon_vec);
+    }
+    return photons;
+}
+
+
+std::vector<std::vector<int> > assign_deterministic_shrink(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+    std::vector<std::vector<int> > photons;
+    std::vector<int> left_qubits;
+    for (int q = 0; q < num_qubits; q++){
+        left_qubits.push_back(q);
+    }
+
+    for (int i = 0; i < num_qubits / 2; i++){
+        std::vector<int> photon;
+        photon.push_back(left_qubits[2*i]);
+        photon.push_back(left_qubits[2*i + 1]);
+        photons.push_back(photon);
     }
     return photons;
 }

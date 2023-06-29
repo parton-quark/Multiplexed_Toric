@@ -37,6 +37,6 @@
 
 src/result.json
 src/main
-src/.ipynb_checkpoints/result-checkpoint.json
+src/.ipynb_checkpoints/
 src/analyze/
 .DS_Store

@@ -35,8 +35,9 @@
 *.json
 *.pdf
 
-src/result.json
 src/main
-src/.ipynb_checkpoints/
+src/spanning_forest
 src/analyze/
+src/.ipynb_checkpoints/
 .DS_Store
+

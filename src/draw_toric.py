@@ -139,7 +139,7 @@ for z_error_aft in z_errors_after_correction_vec:
         z_errors_after_correction .append(z_errors_aft_index)
     z_errors_aft_index = z_errors_aft_index + 1
 
-z_errors_matching = json_load['matching qubits']
+# z_errors_matching = json_load['matching qubits']
 
 X_1_Logical_operator = json_load['X_1 Logical operator']
 X_2_Logical_operator = json_load['X_2 Logical operator']
@@ -197,6 +197,7 @@ plt.ylim(-1,l1 + 3)
 [ax.spines[side].set_visible(False) for side in ['right','top']]
 plt.savefig(str(l1) + "_" + str(l2) + "_toric.pdf")
 fig, ax = plt.subplots(figsize=(l1, l2))
+print(str(l1) + "_" + str(l2) + "_toric.pdf saved")
 
 ############################################################################
 # vertices, Z stab
@@ -249,9 +250,6 @@ for z in z_errors_after_correction:
 lc = LineCollection(zlines, linewidth = 4,color = "blue", label="Z error after correction")
 ax.add_collection(lc)
 
-print(X_1_Logical_operator)
-print(X_2_Logical_operator)
-
 # logicalxlines = []
 # for qubit in X_1_Logical_operator:
 #     cdn = edge_to_coordinate(l1, l2, qubit)
@@ -281,4 +279,5 @@ plt.legend(loc='upper left')
 plt.xlim(-1,l2 + 2)
 plt.ylim(-1,l1 + 3)
 [ax.spines[side].set_visible(False) for side in ['right','top']]
-plt.savefig(str(l1) + "_" + str(l2) + "_toric_matching.pdf")
+plt.savefig(str(l1) + "_" + str(l2) + "_toric_correction.pdf")
+print(str(l1) + "_" + str(l2) + "_toric_correction.pdf saved")

@@ -195,23 +195,6 @@ std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiple
     return photons;
 }
 
-
-// std::vector<std::vector<int> > assign_deterministic_shrink(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
-//     std::vector<std::vector<int> > photons;
-//     std::vector<int> left_qubits;
-//     for (int q = 0; q < num_qubits; q++){
-//         left_qubits.push_back(q);
-//     }
-
-//     for (int i = 0; i < num_qubits / 2; i++){
-//         std::vector<int> photon;
-//         photon.push_back(left_qubits[2*i]);
-//         photon.push_back(left_qubits[2*i + 1]);
-//         photons.push_back(photon);
-//     }
-//     return photons;
-// }
-
 std::vector<std::vector<int> > assign_deterministic_shrink(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
     std::vector<std::vector<int> > photons;
     std::vector<int> left_qubits;

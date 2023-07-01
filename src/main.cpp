@@ -26,26 +26,28 @@
 int main()
 {   // lattice size: l1 times l2
     int l1,l2, multiplexing;
-    l1 = 10;
-    l2 = 10;
+    l1 = 5;
+    l2 = 5;
     // number of qubits per one photon
-    multiplexing = 4;
+    multiplexing = 5;
+    std::cout << "\nmultiplexing              :" << multiplexing;
     // input erasure probability
     float prob_e;
     prob_e = 0.6;
+    std::cout << "\nphoton loss probability   :" << prob_e;
     // random device
     std::random_device rd;
     std::mt19937 engine(rd());
     std::uniform_real_distribution<double> dist(0,1);
     // photons: vector of photon(vector of qubits) 
     int num_qubits = (l1*l2) * 2;
-    std::cout << "\nnum_qubits                :" << num_qubits;
+    std::cout << "\nnumber of qubits          :" << num_qubits;
     int num_photons;
     num_photons = num_qubits / multiplexing;
     if (num_qubits % multiplexing > 0){
         num_photons  = num_photons  + 1;
     }
-    std::cout  << "\nnum_photons               :" << num_photons;
+    std::cout  << "\nnumber of photons         :" << num_photons;
     std::vector<std::vector<int> > photons;
 
     int strategy;

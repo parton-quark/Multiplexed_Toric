@@ -14,7 +14,7 @@ std::vector<bool> make_erasure_errors(int num_photons, float prob_e, std::mt1993
     return photon_loss;
 }
 
-std::vector<bool> make_burst_errors(int num_qubits, float p_good, float p_burst, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+std::vector<bool> make_burst_errors(int num_photons, float p_good, float p_burst, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
     bool gilbert_state;
     gilbert_state = true;
     // true: good
@@ -22,7 +22,7 @@ std::vector<bool> make_burst_errors(int num_qubits, float p_good, float p_burst,
 
     std::vector<bool> vec_loss;
 
-    for (int i = 0; i < num_qubits; i++){
+    for (int i = 0; i < num_photons; i++){
         float random_number;
         random_number = probabilistic_float(engine, dist);
         

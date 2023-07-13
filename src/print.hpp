@@ -12,5 +12,6 @@ template <class T> void print_vec(std::vector<T> vec){
 }
 
 void print_vec_of_vec(std::vector<std::vector<int> > vec_vec);
+void print_vec_of_vec(std::vector<std::vector<float> > vec_vec);
 void print_ind_of_bool_vec(std::vector<bool>  bv);
 std::string vec_to_str(std::vector<bool> vec);

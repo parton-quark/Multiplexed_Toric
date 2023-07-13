@@ -19,6 +19,14 @@ void print_vec_of_vec(std::vector<std::vector<int> > vec_vec){
     }
 }
 
+void print_vec_of_vec(std::vector<std::vector<float> > vec_vec){
+    for (std::vector<float> vec: vec_vec){
+        std::cout << "[";
+        print_vec(vec);
+        std::cout << "], ";
+    }
+}
+
 std::string vec_to_str(std::vector<bool> vec){
     std::string vecstr;
     bool is_first_elem;

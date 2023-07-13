@@ -41,3 +41,4 @@ src/analyze/
 src/.ipynb_checkpoints/
 .DS_Store
 
+src/assign_qubits.cpp

@@ -231,8 +231,6 @@ std::vector<float> weights_from_degrees(std::vector<int> degrees, int force){
     for (int fr: vec_fr){
         sum = sum  + fr;
     }
-    // std::cout << "\nsum: ";
-    // std::cout << sum;
 
     // 規格化する
     std::vector<float> vec_afr;
@@ -248,16 +246,13 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
     // Inspired by L. J. Duckers, and R. G. Ross. "Percolation with non-random site occupation." Physics Letters A 49.5 (1974): 361-362. 
     std::vector<std::vector<int> > photons;
     std::vector<int> left_qubits;
-    std::cout << "\nassignment random with occupation enhancement" << std::flush;
     for (int q = 0; q < num_qubits; q++){
         left_qubits.push_back(q);
     }
 
-    // std::cout << "\nleft qubits:" << std::flush;
-    // print_vec(left_qubits);
-
     for (int ph = 0; ph < num_photons; ph++){
         // initialize degree vector
+        // std::cout << "\nnew photon!";
         std::vector<int> degrees;
         for (int left_qubit: left_qubits){
             int deg = 0;
@@ -271,7 +266,7 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
         for (int qb = 0; qb < multiplexing; qb++){
             // std::cout << "\nleft qubits:" << std::flush;
             // print_vec(left_qubits);
-            // std::cout << "\ndegrees:" << std::flush;
+            // std::cout << "\ndegrees    :" << std::flush;
             // print_vec(degrees);
 
             // pick weighted random
@@ -280,14 +275,9 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
             selected_item_and_index = weighted_random(left_qubits, weights, engine, dist);
             selected_qubit = selected_item_and_index.first;
             selected_index = selected_item_and_index.second;
-
+            // std::cout << "\nselected qubit " << selected_qubit << " selected index " << selected_index;
+            // add selected_qubit to photon
             photon.push_back(selected_qubit);
-            // remove degree of selected_qubit
-            degrees.erase(degrees.begin() + selected_index);
-
-            // remove selected_qubit from left_qubits
-            left_qubits.erase(remove(left_qubits.begin(), left_qubits.end(), selected_qubit), left_qubits.end());
-
             // update degrees
             std::vector<int> vertices;// vertices of the selected qubit
             vertices =  edge_to_vertices(l1, l2, selected_qubit);
@@ -296,12 +286,13 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
                 std::vector<int> edges;
                 edges = vertex_to_edges(l1, l2, vertex);
                 for (int edge: edges){
-                    adjacent_qubits.push_back(edge);
+                    if (edge != selected_qubit){
+                        adjacent_qubits.push_back(edge);  
+                    }
                 }
             }
-            adjacent_qubits.erase(remove(adjacent_qubits.begin(), adjacent_qubits.end(), selected_qubit), adjacent_qubits.end());
-            adjacent_qubits.erase(remove(adjacent_qubits.begin(), adjacent_qubits.end(), selected_qubit), adjacent_qubits.end());
-
+            // std::cout << "\nadjacent qubits";
+            // print_vec(adjacent_qubits);
             for (int adjacent_qubit: adjacent_qubits){
                 size_t adj_count = std::count(left_qubits.begin(), left_qubits.end(), adjacent_qubit);
 
@@ -313,10 +304,18 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
                         if (left_q == adjacent_qubit){
                             break;
                         }
+                        adjacent_qubits_index = adjacent_qubits_index + 1;
                     }
                     degrees[adjacent_qubits_index] = degrees[adjacent_qubits_index] + 1;
                 }
             }
+
+            // remove degree of selected_qubit
+            degrees.erase(degrees.begin() + selected_index);
+
+            // remove selected_qubit from left_qubits
+            left_qubits.erase(remove(left_qubits.begin(), left_qubits.end(), selected_qubit), left_qubits.end());
+
             // update weights
             weights = weights_from_degrees(degrees, force);
         }

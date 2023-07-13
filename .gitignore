@@ -43,3 +43,4 @@ src/.ipynb_checkpoints/
 
 src/assign_qubits.cpp
 src/main.cpp
+src/print

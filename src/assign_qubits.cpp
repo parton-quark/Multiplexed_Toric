@@ -269,10 +269,10 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
 
         std::vector<int> photon;
         for (int qb = 0; qb < multiplexing; qb++){
-            std::cout << "\nleft qubits:" << std::flush;
-            print_vec(left_qubits);
-            std::cout << "\ndegrees:" << std::flush;
-            print_vec(degrees);
+            // std::cout << "\nleft qubits:" << std::flush;
+            // print_vec(left_qubits);
+            // std::cout << "\ndegrees:" << std::flush;
+            // print_vec(degrees);
 
             // pick weighted random
             std::pair <int, int> selected_item_and_index;

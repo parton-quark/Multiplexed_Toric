@@ -36,11 +36,11 @@ std::pair<int, int> weighted_random(std::vector<int> values,std::vector<float> w
         // std::cout << cumulative_sum;
         cumulative_sums.push_back(cumulative_sum);
     }
-    std::cout << "\ncumulative sums: ";
-    print_vec(cumulative_sums);
+    // std::cout << "\ncumulative sums: ";
+    // print_vec(cumulative_sums);
     double val;
     val = dist(engine);
-    std::cout << "\nval:" << val << std::flush;
+    // std::cout << "\nval:" << val << std::flush;
     int index, selected_index, selected_item;
     index = 0;
     for (float cumulative_sum: cumulative_sums){

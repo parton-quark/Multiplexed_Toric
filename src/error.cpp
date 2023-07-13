@@ -1,4 +1,5 @@
 // make X error vector
+#include <iostream>
 #include <random>
 #include <vector>
 #include "prob.hpp"
@@ -15,35 +16,39 @@ std::vector<bool> make_erasure_errors(int num_photons, float prob_e, std::mt1993
 }
 
 std::vector<bool> make_burst_errors(int num_photons, float p_good, float p_burst, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    // Gilbert model of burst error
+    // based on automata with two states
+    // true: good state
+    // false: burst state
+
     bool gilbert_state;
     gilbert_state = true;
-    // true: good
-    // false: burst
-
-    std::vector<bool> vec_loss;
+    std::vector<bool> vec_error;
 
     for (int i = 0; i < num_photons; i++){
         float random_number;
         random_number = probabilistic_float(engine, dist);
+        // std::cout << "\nrandom number" << random_number;
         
         if(gilbert_state){
             // goodからp_goodの確率でbadに遷移
             // (1-p_good)の確率でgoodに留まる
             if (random_number <= p_good){
-                // badに遷移
+                // burstに遷移
                 gilbert_state = false;
             } 
         } else {
-            // burst からp_burstの確率でgoodに遷移
-            // (1-p_burst)の確率でburstに留まる
-            if (random_number <= p_burst){
+            // burst から1 - p_burstの確率でgoodに遷移
+            // p_burstの確率でburstに留まる
+            if (random_number > p_burst){
                 gilbert_state = true;
             } 
         }
-
-        vec_loss.push_back(!gilbert_state); 
+        // if the state is good, error is false
+        // otherwise error is true
+        vec_error.push_back(!gilbert_state); 
     }
-    return vec_loss;
+    return vec_error;
 }
 
 std::vector<bool> convert_photon_loss_to_qubit_loss(int num_photons, int num_qubits, int multiplexing, std::vector<std::vector<int> > photons, std::vector<bool> photon_loss){

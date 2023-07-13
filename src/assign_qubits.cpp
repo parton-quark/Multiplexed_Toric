@@ -7,11 +7,6 @@
 #include "lattice.hpp"
 #include "prob.hpp"
 
-
-template<typename T> void remove_with_index(std::vector<T>& vector, unsigned int index){
-    vector.erase(vector.begin() + index);
-}
-
 template<typename T> void pop_front(std::vector<T> &v){
     if (v.size() > 0) {
         v.erase(v.begin());
@@ -288,10 +283,8 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
 
             photon.push_back(selected_qubit);
             // remove degree of selected_qubit
-
             degrees.erase(degrees.begin() + selected_index);
-            // remove_with_index(degrees, selected_qubit_index);
-            std::cout << "\nThis is 293" << std::flush;
+
             // remove selected_qubit from left_qubits
             left_qubits.erase(remove(left_qubits.begin(), left_qubits.end(), selected_qubit), left_qubits.end());
 

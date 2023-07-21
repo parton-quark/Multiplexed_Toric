@@ -5,4 +5,5 @@ std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, in
 std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiplexing, int num_photons, int num_qubits);
 std::vector<std::vector<int> > assign_deterministic_shrink(int l1, int l2, int multiplexing, int num_photons, int num_qubits);
 std::vector<float> weights_from_degrees(std::vector<int> degrees, int force);
+std::vector<std::vector<int> > assign_random_with_occupation_enhancement_for_each_photon(int l1, int l2, int multiplexing, int num_photons, int num_qubits, int force, std::mt19937& engine, std::uniform_real_distribution<double>& dist);
 std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1, int l2, int multiplexing, int num_photons, int num_qubits, int force, std::mt19937& engine, std::uniform_real_distribution<double>& dist);

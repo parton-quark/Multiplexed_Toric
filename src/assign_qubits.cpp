@@ -168,7 +168,6 @@ std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiple
                     // 右側なので左側にずらす
                     photon_index =  photon_index - (l2/2);
                 }
-                // photons[photon_index].push_back(left_qubit);
                 photon_of_qubits.push_back(photon_index);
             }
         }    
@@ -191,7 +190,6 @@ std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiple
                 //
             }
         }
-        // photonをvectorに変換
         std::vector<int> photon_vec = {photon.first, photon.second};
         photons.push_back(photon_vec);
     }
@@ -221,8 +219,6 @@ std::vector<float> weights_from_degrees(std::vector<int> degrees, int force){
     for (int degree: degrees){
         int fr;
         fr = pow(force, degree);
-        // std::cout << "\nfr: ";
-        // std::cout << fr;
         vec_fr.push_back(fr);
     }
     // 規格化するために和を取る
@@ -242,7 +238,7 @@ std::vector<float> weights_from_degrees(std::vector<int> degrees, int force){
     return vec_afr;
 }
 
-std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1, int l2, int multiplexing, int num_photons, int num_qubits, int force, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+std::vector<std::vector<int> > assign_random_with_occupation_enhancement_for_each_photon(int l1, int l2, int multiplexing, int num_photons, int num_qubits, int force, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
     // Inspired by L. J. Duckers, and R. G. Ross. "Percolation with non-random site occupation." Physics Letters A 49.5 (1974): 361-362. 
     std::vector<std::vector<int> > photons;
     std::vector<int> left_qubits;
@@ -264,18 +260,12 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
 
         std::vector<int> photon;
         for (int qb = 0; qb < multiplexing; qb++){
-            // std::cout << "\nleft qubits:" << std::flush;
-            // print_vec(left_qubits);
-            // std::cout << "\ndegrees    :" << std::flush;
-            // print_vec(degrees);
-
             // pick weighted random
             std::pair <int, int> selected_item_and_index;
             int selected_qubit, selected_index;
             selected_item_and_index = weighted_random(left_qubits, weights, engine, dist);
             selected_qubit = selected_item_and_index.first;
             selected_index = selected_item_and_index.second;
-            // std::cout << "\nselected qubit " << selected_qubit << " selected index " << selected_index;
             // add selected_qubit to photon
             photon.push_back(selected_qubit);
             // update degrees
@@ -291,11 +281,8 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
                     }
                 }
             }
-            // std::cout << "\nadjacent qubits";
-            // print_vec(adjacent_qubits);
             for (int adjacent_qubit: adjacent_qubits){
                 size_t adj_count = std::count(left_qubits.begin(), left_qubits.end(), adjacent_qubit);
-
                 if (adj_count > 0){
                     // update degree
                     int adjacent_qubits_index;
@@ -312,10 +299,80 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
 
             // remove degree of selected_qubit
             degrees.erase(degrees.begin() + selected_index);
-
             // remove selected_qubit from left_qubits
             left_qubits.erase(remove(left_qubits.begin(), left_qubits.end(), selected_qubit), left_qubits.end());
+            // update weights
+            weights = weights_from_degrees(degrees, force);
+        }
+        photons.push_back(photon);
+    }
+    return photons;
+}
 
+
+
+std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1, int l2, int multiplexing, int num_photons, int num_qubits, int force, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    // Inspired by L. J. Duckers, and R. G. Ross. "Percolation with non-random site occupation." Physics Letters A 49.5 (1974): 361-362. 
+    std::vector<std::vector<int> > photons;
+    std::vector<int> left_qubits;
+    for (int q = 0; q < num_qubits; q++){
+        left_qubits.push_back(q);
+    }
+    // initialize degree vector
+    std::vector<int> degrees;
+    for (int left_qubit: left_qubits){
+        int deg = 0;
+        degrees.push_back(deg);
+    }
+
+    for (int ph = 0; ph < num_photons; ph++){
+        // convert degree vector into weight vector (AF^r)
+        std::vector<float> weights;
+        weights = weights_from_degrees(degrees, force);
+
+        std::vector<int> photon;
+        for (int qb = 0; qb < multiplexing; qb++){
+            // pick weighted random
+            std::pair <int, int> selected_item_and_index;
+            int selected_qubit, selected_index;
+            selected_item_and_index = weighted_random(left_qubits, weights, engine, dist);
+            selected_qubit = selected_item_and_index.first;
+            selected_index = selected_item_and_index.second;
+            // add selected_qubit to photon
+            photon.push_back(selected_qubit);
+            // update degrees
+            std::vector<int> vertices;// vertices of the selected qubit
+            vertices =  edge_to_vertices(l1, l2, selected_qubit);
+            std::vector<int> adjacent_qubits; 
+            for (int vertex: vertices){
+                std::vector<int> edges;
+                edges = vertex_to_edges(l1, l2, vertex);
+                for (int edge: edges){
+                    if (edge != selected_qubit){
+                        adjacent_qubits.push_back(edge);  
+                    }
+                }
+            }
+            for (int adjacent_qubit: adjacent_qubits){
+                size_t adj_count = std::count(left_qubits.begin(), left_qubits.end(), adjacent_qubit);
+                if (adj_count > 0){
+                    // update degree
+                    int adjacent_qubits_index;
+                    adjacent_qubits_index = 0;
+                    for (int left_q: left_qubits){
+                        if (left_q == adjacent_qubit){
+                            break;
+                        }
+                        adjacent_qubits_index = adjacent_qubits_index + 1;
+                    }
+                    degrees[adjacent_qubits_index] = degrees[adjacent_qubits_index] + 1;
+                }
+            }
+
+            // remove degree of selected_qubit
+            degrees.erase(degrees.begin() + selected_index);
+            // remove selected_qubit from left_qubits
+            left_qubits.erase(remove(left_qubits.begin(), left_qubits.end(), selected_qubit), left_qubits.end());
             // update weights
             weights = weights_from_degrees(degrees, force);
         }

@@ -268,9 +268,9 @@ int main(){
     std::random_device rd;
     std::mt19937 engine(rd());
     std::uniform_real_distribution<double> dist(0,1);
-    // std::uniform_real_distribution<double> dist(0,1);
+    
     std::vector<int> lattice_sizes;
-    lattice_sizes = {4,16};
+    lattice_sizes = {30};
     for (int lattice_size: lattice_sizes){
     // for (int lattice_size = 12; lattice_size < 16; lattice_size =  lattice_size + 4){
         std::cout << "\nlattice_size: " << lattice_size;
@@ -280,7 +280,7 @@ int main(){
         int num_qubits = (l1*l2) * 2;
         int num_shots = 10000;
         std::vector<int> strategies;
-        strategies = {1};
+        strategies = {6};
         for (int strategy: strategies){
         // for (int strategy = 0; strategy < 5; strategy = strategy + 1){
             std::cout << "\nstrategy: " << strategy;
@@ -319,6 +319,11 @@ int main(){
             std::vector<std::vector<int> > photons;
             int threthold;
             threthold = 0;
+
+            int force;
+            force = 15;
+
+
             if (strategy == 0){
                 photons = assign_without_multiplexing(l1, l2, num_photons, num_qubits);
             } else if (strategy == 1){
@@ -333,12 +338,8 @@ int main(){
             } else if (strategy == 4){
                 photons = assign_deterministic_shrink(l1, l2, multiplexing, num_photons, num_qubits);
             } else if (strategy == 5){
-                int force;
-                force = 15;
                 photons = assign_random_with_occupation_enhancement_for_each_photon(l1, l2, multiplexing, num_photons, num_qubits, force, engine, dist);
             } else if (strategy == 6){
-                int force;
-                force = 15;
                 photons = assign_random_with_occupation_enhancement(l1, l2, multiplexing, num_photons, num_qubits, force, engine, dist);
             }
 
@@ -361,18 +362,19 @@ int main(){
                 std::vector<float> vec_loss_rate, vec_zerror_rate;
                 
                 for (int i = 0; i < num_shots; i++){
-                    std::string error_model;
+                    // std::string error_model;
                     std::vector<bool> photon_loss;
-                    error_model = 'uniform_random'
+                    // error_model = 'uniform_random';
+                    // error_model = 'burst';
 
-                    if (errormodel == 'uniform_random'){
-                        photon_loss = make_erasure_errors(num_photons, prob_e, engine, dist);
-                    } else if (errormodel == 'burst'){
-                        float p_good, p_burst;
-                        p_good = 0.10;
-                        p_burst = prob_e;
-                        photon_loss = make_burst_errors(num_photons, p_good, p_burst, engine, dist);
-                    }
+                    // if (error_model == 'uniform_random'){
+                        // photon_loss = make_erasure_errors(num_photons, prob_e, engine, dist);
+                    // } else if (error_model == 'burst'){
+                    float p_good, p_burst;
+                    p_good = 0.10;
+                    p_burst = prob_e;
+                    photon_loss = make_burst_errors(num_photons, p_good, p_burst, engine, dist);
+                    // }
 
                     std::vector<bool> qubit_loss(num_qubits);
                     qubit_loss = convert_photon_loss_to_qubit_loss(num_photons, num_qubits, multiplexing, photons, photon_loss);
@@ -479,6 +481,9 @@ int main(){
 
                 std::ofstream writing_file;
                 std::string filename = "result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + ".json";
+                if (strategy == 5 || strategy == 6){
+                    filename = "result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + "_f" +std::to_string(force) + ".json";
+                }
 
                 auto now = std::chrono::system_clock::now();
                 auto now_c = std::chrono::system_clock::to_time_t(now);
@@ -499,6 +504,9 @@ int main(){
                 result_json["success_rate"] = success_rate;
                 if (strategy == 2){
                     result_json["threshold"] = threthold;
+                }
+                if (strategy == 5 || strategy == 6){
+                    result_json["force"] = force;
                 }
                 result_json["loss rate average"] = vec_loss_rate_average;
                 result_json["z error rate average"] =  vec_z_error_rate_average;

@@ -56,14 +56,12 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
                 candidates.push_back(left_edge);
                 find_leaf = true;
             }
-            // find_ここで脱出するべきなのかも
-            // あるいはインデックスをここで加算するべきではないのかも
             left_edge_index = left_edge_index + 1;
         }
 
         if (find_leaf){
             // std::cout << "\nfind leaf " << std::flush;
-            // 候補者リストにおける最小重み
+            // find minimum weight in candidates
             int min_w_in_candidates;
             bool is_first_candidate;
             int cand_index;

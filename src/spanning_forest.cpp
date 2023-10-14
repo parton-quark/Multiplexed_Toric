@@ -56,6 +56,8 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
                 candidates.push_back(left_edge);
                 find_leaf = true;
             }
+            // find_ここで脱出するべきなのかも
+            // あるいはインデックスをここで加算するべきではないのかも
             left_edge_index = left_edge_index + 1;
         }
 
@@ -92,7 +94,6 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             // std::cout << "\nrandom_index: " << random_index << std::flush;
             // std::cout << "\ncandidates_with_min_w.size(): " << candidates_with_min_w.size() << std::flush;
             winner = candidates_with_min_w[random_index];
-            left_graph.add_edge(winner);
             std::vector<int> winner_vertices;
             int winner_v0, winner_v1;
             winner_vertices = edge_to_vertices(l1, l2, winner);
@@ -131,7 +132,7 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             // edge_weights.erase(remove(edge_weights.begin(), edge_weights.end(), 2), edge_weights.end());
             edge_weights.erase(edge_weights.begin() + wanted_index);
         } else {
-            // std::cout << "\ncoudnt find..." << std::flush;
+            std::cout << "\ncoudnt find..." << std::flush;
         }
     }
     // std::cout << "\nmm_st" << std::flush;
@@ -178,5 +179,3 @@ std::vector<graph> spanning_forest(graph G, int l1, int l2){
     }
     return msf;
 }
-
-

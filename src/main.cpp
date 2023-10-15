@@ -47,7 +47,7 @@
 //     std::vector<std::vector<int> > photons;
 
 //     int strategy;
-//     strategy =  6;
+//     strategy =  1;
 //     if (strategy == 0){
 //         // strategy 0: no multiplexing 
 //         multiplexing = 1;
@@ -270,7 +270,7 @@ int main(){
     std::uniform_real_distribution<double> dist(0,1);
     
     std::vector<int> lattice_sizes;
-    lattice_sizes = {30};
+    lattice_sizes = {10};
     for (int lattice_size: lattice_sizes){
     // for (int lattice_size = 12; lattice_size < 16; lattice_size =  lattice_size + 4){
         std::cout << "\nlattice_size: " << lattice_size;
@@ -278,9 +278,9 @@ int main(){
         l1 = lattice_size;
         l2 = lattice_size;
         int num_qubits = (l1*l2) * 2;
-        int num_shots = 10000;
+        int num_shots = 100;
         std::vector<int> strategies;
-        strategies = {6};
+        strategies = {1};
         for (int strategy: strategies){
         // for (int strategy = 0; strategy < 5; strategy = strategy + 1){
             std::cout << "\nstrategy: " << strategy;
@@ -294,7 +294,7 @@ int main(){
                 multiplexing = 1;
             } else if (strategy == 1){
                 // random
-                multiplexing = 1;
+                multiplexing = 2;
             } else if (strategy == 2){
                 // random with distance
                 multiplexing = 2;
@@ -319,10 +319,8 @@ int main(){
             std::vector<std::vector<int> > photons;
             int threthold;
             threthold = 0;
-
             int force;
             force = 15;
-
 
             if (strategy == 0){
                 photons = assign_without_multiplexing(l1, l2, num_photons, num_qubits);
@@ -343,7 +341,6 @@ int main(){
                 photons = assign_random_with_occupation_enhancement(l1, l2, multiplexing, num_photons, num_qubits, force, engine, dist);
             }
 
-
             std::vector<std::pair<int,int>> success_rate;
             std::pair <float, std::vector<std::pair<int,int> > > prob_e_and_success_rate;
 
@@ -360,25 +357,20 @@ int main(){
                 int num_error_happens;
                 num_error_happens = 0;
                 std::vector<float> vec_loss_rate, vec_zerror_rate;
-                
                 for (int i = 0; i < num_shots; i++){
-                    // std::string error_model;
+                    std::string error_model("uniform");
                     std::vector<bool> photon_loss;
-                    // error_model = 'uniform_random';
                     // error_model = 'burst';
-
-                    // if (error_model == 'uniform_random'){
-                        // photon_loss = make_erasure_errors(num_photons, prob_e, engine, dist);
-                    // } else if (error_model == 'burst'){
+                    if (error_model == "uniform"){
+                    photon_loss = make_erasure_errors(num_photons, prob_e, engine, dist);
+                    } else if (error_model == "burst"){
                     float p_good, p_burst;
                     p_good = 0.10;
                     p_burst = prob_e;
                     photon_loss = make_burst_errors(num_photons, p_good, p_burst, engine, dist);
-                    // }
-
+                    }
                     std::vector<bool> qubit_loss(num_qubits);
                     qubit_loss = convert_photon_loss_to_qubit_loss(num_photons, num_qubits, multiplexing, photons, photon_loss);
-
                     int num_qubit_loss;
                     num_qubit_loss = 0;
                     for (bool one_qubit_loss: qubit_loss){
@@ -391,11 +383,9 @@ int main(){
                     f_num_qubits = (float) num_qubits;
                     loss_rate = f_num_qubit_loss / f_num_qubits;
                     vec_loss_rate.push_back(loss_rate);
-
                     // make Z error vector
                     std::vector<bool> zerrors;
                     zerrors = make_zerrors(qubit_loss, num_qubits, engine, dist);
-
                     int num_z_errors;
                     num_z_errors = 0;
                     for (bool zerror: zerrors){
@@ -407,7 +397,6 @@ int main(){
                     f_num_z_errors = (float) num_z_errors;
                     z_error_rate = f_num_z_errors / f_num_qubits;
                     vec_zerror_rate.push_back(z_error_rate);
-
                     // make stabilizers
                     std::vector<int> x_stabs;
                     x_stabs = make_x_stabilzers(l1, l2);
@@ -466,25 +455,20 @@ int main(){
                         num_error_happens = num_error_happens + 1;
                     }
                 }
-
-
-                //vec_loss_rateから平均値を導出する
+                //get average from vec_loss_rate
                 double loss_rate_average = accumulate(vec_loss_rate.begin(), vec_loss_rate.end(), 0.0) / vec_loss_rate.size();
                 double z_error_rate_average = accumulate(vec_zerror_rate.begin(), vec_zerror_rate.end(), 0.0) / vec_zerror_rate.size();
                 vec_loss_rate_average.push_back(loss_rate_average);
                 vec_z_error_rate_average.push_back(z_error_rate_average);
-
                 std::pair<int, int> num_success_fail;
                 num_success_fail.first = num_success;
                 num_success_fail.second = num_fail;
                 success_rate.push_back(num_success_fail);
-
                 std::ofstream writing_file;
                 std::string filename = "result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + ".json";
                 if (strategy == 5 || strategy == 6){
                     filename = "result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + "_f" +std::to_string(force) + ".json";
                 }
-
                 auto now = std::chrono::system_clock::now();
                 auto now_c = std::chrono::system_clock::to_time_t(now);
                 std::stringstream sf;

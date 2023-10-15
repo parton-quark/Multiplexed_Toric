@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "lattice.hpp"
 #include "graph.hpp"
+#include "print.hpp"
 
 graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
     // std::cout << "\nprim start " << std::flush;
@@ -45,7 +46,6 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             num_v1_in_tree = std::count(mm_st_vertices.begin(), mm_st_vertices.end(), left_edge_v1);
             // std::cout << "\nnum_v0_in_tree: " << num_v0_in_tree << std::flush;
             // std::cout << "\nnum_v1_in_tree: " << num_v1_in_tree << std::flush;
-
             if (num_v0_in_tree == 1 && num_v1_in_tree == 0){/* v0 is in tree, v1 is not in tree */
                 candidates_edge_weights.push_back(edge_weights[left_edge_index]);
                 candidates.push_back(left_edge);
@@ -109,13 +109,11 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
                 winner_u = winner_v1;
                 winner_v = winner_v0;
             } else {
-                // std::cout << "妙だぞ!" << std::flush;
+                std::cout << "Error! Candidate edge is not connected to the spanning tree." << std::flush;
             }
             mm_st.add_edge(winner);
             mm_st.add_vertex(winner_v);
 
-            left_graph.remove_edge(winner);
-            left_graph.remove_vertex(winner_v);
             // update edge_weights
             std::vector<int>::iterator itr;
             int wanted_index;
@@ -127,8 +125,15 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
                     wanted_index = 0;
                 }
             }
+            left_graph.remove_edge(winner);
+            left_graph.remove_vertex(winner_v);
             // edge_weights.erase(remove(edge_weights.begin(), edge_weights.end(), 2), edge_weights.end());
+            // std::cout << "\nedge_weights.size()" << std::flush;
+            // std::cout << edge_weights.size() << std::flush;
+            // std::cout << "\nwanted_index" << std::flush;
+            // std::cout << wanted_index << std::flush;
             edge_weights.erase(edge_weights.begin() + wanted_index);
+            // edge_weights.shrink_to_fit();
         } else {
             std::cout << "\ncoudnt find..." << std::flush;
         }

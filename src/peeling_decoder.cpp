@@ -159,7 +159,6 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             //     } 
             //     x_syndrome_index = x_syndrome_index + 1;
             // }
-
             if (x_syndrome[pendant]){
                 // std::cout << "\nu is in sigma";
                 // 4. (R1)If u∈σ, add e to A,remove u from σ and flip v in σ.
@@ -172,7 +171,6 @@ std::vector<bool> peeling_decoder_for_z_errors(int l1, int l2, int num_qubits, s
             }
         }
     }
-
     // 6. Return P = Prod_{e∈A} Ze.
     std::vector<bool> p_z(num_qubits); /* Z correction*/
     if (!A.edges.empty()){

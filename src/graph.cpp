@@ -240,8 +240,8 @@ std::vector<int> extract_vertices(std::vector<int> edges, int l1, int l2){
         int v1_x, v1_y, v2_x, v2_y;
         v1_x = v1_coordinate[0];
         v1_y = v1_coordinate[1];
-        v1_x = v2_coordinate[0];
-        v1_y = v2_coordinate[1];
+        v2_x = v2_coordinate[0];
+        v2_y = v2_coordinate[1];
         
         if (std::count(vertices.begin(), vertices.end(), v1)) {
             // element found in vertices

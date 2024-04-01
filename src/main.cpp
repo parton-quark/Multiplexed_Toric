@@ -295,7 +295,7 @@ int main(){
         int num_qubits = (l1*l2) * 2;
         int num_shots = 100;
         std::vector<int> strategies;
-        strategies = {1};
+        strategies = {7};
         for (int strategy: strategies){
         // for (int strategy = 0; strategy < 5; strategy = strategy + 1){
             std::cout << "\nstrategy: " << strategy;

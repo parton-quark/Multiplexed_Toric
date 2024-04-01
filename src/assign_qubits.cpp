@@ -510,8 +510,8 @@ std::vector<std::vector<int> > assign_by_plaquette_stabilizer_even_coordinate(in
             plaquette_stabilizers.push_back(plaquette_stabilizer);
         }
     }
-    std::cout << "\nplaquette stabilizers      :";
-    print_vec(plaquette_stabilizers);
+    // std::cout << "\nplaquette stabilizers      :";
+    // print_vec(plaquette_stabilizers);
     // assign qubits by stabilizer
     std::vector<std::vector<int> > photons;
     for (int plaquette_stabilizer: plaquette_stabilizers){

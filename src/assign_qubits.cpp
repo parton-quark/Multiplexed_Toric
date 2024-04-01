@@ -486,3 +486,101 @@ std::vector<std::vector<int> > assign_by_star_stabilizer_odd_coordinate(int l1, 
     }
     return photons;
 }
+
+std::vector<std::vector<int> > assign_by_plaquette_stabilizer_even_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+    // check whether l1 and l2 are even or not
+    if (l1 % 2 != 0 || l2 % 2 != 0){
+        std::cout << "l1 and l2 must be even for assign_by_plaquette_stabilizer_even_coordinate strategy" << std::flush;
+        return {};
+    }
+    // check whether multiplexing is 4 or not
+    if (multiplexing != 4){
+        std::cout << "multiplexing must be 4 for assign_by_plaquette_stabilizer_even_coordinate strategy" << std::flush;
+        return {};
+    }
+    
+    // make plaquette stabilizers
+    std::vector<int> plaquette_stabilizers;
+    int plaquette_index = 0;
+    for (int i = 0; i < l1; i++){
+        for (int j = 0; j < l2; j++){
+            int plaquette_stabilizer;
+            plaquette_stabilizer = plaquette_index;
+            plaquette_index = plaquette_index + 1;
+            plaquette_stabilizers.push_back(plaquette_stabilizer);
+        }
+    }
+    std::cout << "\nplaquette stabilizers      :";
+    print_vec(plaquette_stabilizers);
+    // assign qubits by stabilizer
+    std::vector<std::vector<int> > photons;
+    for (int plaquette_stabilizer: plaquette_stabilizers){
+        // add supports of stabilizer to a photon if the coordinate is even for both x and y
+        std::vector<int> photon;
+        //given a star stabilizer, get the coordinate
+        std::vector<std::vector<int>> coordinates;
+        coordinates = face_to_coordinates(l2, plaquette_stabilizer);
+        std::vector<int> coordinate_lower_left;
+        coordinate_lower_left = coordinates[0];
+
+        if ((coordinate_lower_left[0] + coordinate_lower_left[1]) % 2 == 0){
+            std::vector<int> supports;
+            supports = face_to_edges(l1, l2, plaquette_stabilizer);
+            // add supports of the stabilizer to the photon
+            for (int support: supports){
+                photon.push_back(support);
+            }
+            photons.push_back(photon);
+        }
+    }
+    return photons;
+}
+
+std::vector<std::vector<int> > assign_by_plaquette_stabilizer_odd_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+    // check whether l1 and l2 are even or not
+    if (l1 % 2 != 0 || l2 % 2 != 0){
+        std::cout << "l1 and l2 must be even for assign_by_plaquette_stabilizer_odd_coordinate strategy" << std::flush;
+        return {};
+    }
+    // check whether multiplexing is 4 or not
+    if (multiplexing != 4){
+        std::cout << "multiplexing must be 4 for assign_by_plaquette_stabilizer_odd_coordinate strategy" << std::flush;
+        return {};
+    }
+    
+    // make plaquette stabilizers
+    std::vector<int> plaquette_stabilizers;
+    int plaquette_index = 0;
+    for (int i = 0; i < l1; i++){
+        for (int j = 0; j < l2; j++){
+            int plaquette_stabilizer;
+            plaquette_stabilizer = plaquette_index;
+            plaquette_index = plaquette_index + 1;
+            plaquette_stabilizers.push_back(plaquette_stabilizer);
+        }
+    }
+
+    // assign qubits by stabilizer
+    std::vector<std::vector<int> > photons;
+    for (int plaquette_stabilizer: plaquette_stabilizers){
+        // add supports of stabilizer to a photon if the coordinate is even for both x and y
+        std::vector<int> photon;
+        //given a star stabilizer, get the coordinate
+        std::vector<std::vector<int>> coordinates;
+        coordinates = face_to_coordinates(l2, plaquette_stabilizer);
+        std::vector<int> coordinate_lower_left;
+        coordinate_lower_left = coordinates[0];
+
+        if ((coordinate_lower_left[0] + coordinate_lower_left[1]) % 2 == 1){
+            //  std::cout << "\ncoordinate is satisfying: " << coordinate[0] + coordinate[1]  << std::flush;
+            std::vector<int> supports;
+            supports = face_to_edges(l1, l2, plaquette_stabilizer);
+            // add supports of the stabilizer to the photon
+            for (int support: supports){
+                photon.push_back(support);
+            }
+            photons.push_back(photon);
+        }
+    }
+    return photons;
+}

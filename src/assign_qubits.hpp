@@ -9,3 +9,5 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement_for_eac
 std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1, int l2, int multiplexing, int num_photons, int num_qubits, int force, std::mt19937& engine, std::uniform_real_distribution<double>& dist);
 std::vector<std::vector<int> > assign_by_star_stabilizer_even_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits);
 std::vector<std::vector<int> > assign_by_star_stabilizer_odd_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits);
+std::vector<std::vector<int> > assign_by_plaquette_stabilizer_even_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits);
+std::vector<std::vector<int> > assign_by_plaquette_stabilizer_odd_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits);

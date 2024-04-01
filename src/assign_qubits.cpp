@@ -380,3 +380,109 @@ std::vector<std::vector<int> > assign_random_with_occupation_enhancement(int l1,
     }
     return photons;
 }
+
+std::vector<std::vector<int> > assign_by_star_stabilizer_even_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+    // check whether l1 and l2 are even or not
+    if (l1 % 2 != 0 || l2 % 2 != 0){
+        std::cout << "l1 and l2 must be even for assign_by_star_stabilizer strategy" << std::flush;
+        return {};
+    }
+    // check whether multiplexing is 4 or not
+    if (multiplexing != 4){
+        std::cout << "multiplexing must be 4 for assign_by_star_stabilizer strategy" << std::flush;
+        return {};
+    }
+    // assign qubits by stabilizer
+    std::vector<std::vector<int> > photons;
+    std::vector<int> left_qubits;
+    for (int q = 0; q < num_qubits; q++){
+        left_qubits.push_back(q);
+    }
+    // make a list of star stabilizers 
+    std::vector<int> star_stabilizers;
+    int star_index = 0;
+    for (int i = 0; i < l1; i++){
+        for (int j = 0; j < l2; j++){
+            int star_stabilizer;
+            star_stabilizer = star_index;
+            star_index = star_index + 1;
+            star_stabilizers.push_back(star_stabilizer);
+        }
+    }
+    std::cout << "\nstar stabilizers: "<< std::flush;
+    print_vec(star_stabilizers);
+    for (int star_stabilizer: star_stabilizers){
+        // add supports of stabilizer to a photon if the coordinate is even for both x and y
+        std::vector<int> photon;
+        //given a star stabilizer, get the coordinate
+        std::vector<int> coordinate;
+        coordinate = vertex_to_coordinate(l2, star_stabilizer);
+        // std::cout << "\ncoordinate: " << coordinate[0] << "," << coordinate[1] << std::flush;
+
+        // if (coordinate[0] % 2 == 0 && coordinate[1] % 2 == 0){ 
+        if ((coordinate[0] + coordinate[1]) % 2 == 0){
+            //  std::cout << "\ncoordinate is satisfying: " << coordinate[0] + coordinate[1]  << std::flush;
+            std::vector<int> supports;
+            supports = vertex_to_edges(l1, l2, star_stabilizer);
+            // add supports of the stabilizer to the photon
+            for (int support: supports){
+                photon.push_back(support);
+            }
+            photons.push_back(photon);
+        }
+    }
+    return photons;
+}
+
+std::vector<std::vector<int> > assign_by_star_stabilizer_odd_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+    // check whether l1 and l2 are even or not
+    if (l1 % 2 != 0 || l2 % 2 != 0){
+        std::cout << "l1 and l2 must be even for assign_by_star_stabilizer strategy" << std::flush;
+        return {};
+    }
+    // check whether multiplexing is 4 or not
+    if (multiplexing != 4){
+        std::cout << "multiplexing must be 4 for assign_by_star_stabilizer strategy" << std::flush;
+        return {};
+    }
+    // assign qubits by stabilizer
+    std::vector<std::vector<int> > photons;
+    std::vector<int> left_qubits;
+    for (int q = 0; q < num_qubits; q++){
+        left_qubits.push_back(q);
+    }
+    // make a list of star stabilizers 
+    std::vector<int> star_stabilizers;
+    int star_index = 0;
+    for (int i = 0; i < l1; i++){
+        for (int j = 0; j < l2; j++){
+            int star_stabilizer;
+            star_stabilizer = star_index;
+            star_index = star_index + 1;
+            star_stabilizers.push_back(star_stabilizer);
+        }
+    }
+    std::cout << "\nstar stabilizers: "<< std::flush;
+    print_vec(star_stabilizers);
+    for (int star_stabilizer: star_stabilizers){
+        // add supports of stabilizer to a photon if the coordinate is even for both x and y
+        std::vector<int> photon;
+        //given a star stabilizer, get the coordinate
+        std::vector<int> coordinate;
+        coordinate = vertex_to_coordinate(l2, star_stabilizer);
+        // std::cout << "\ncoordinate: " << coordinate[0] << "," << coordinate[1] << std::flush;
+
+        // if (coordinate[0] % 2 == 0 && coordinate[1] % 2 == 0){ 
+        if ((coordinate[0] + coordinate[1]) % 2 == 1){
+            //  std::cout << "\ncoordinate is satisfying: " << coordinate[0] + coordinate[1]  << std::flush;
+            std::vector<int> supports;
+            supports = vertex_to_edges(l1, l2, star_stabilizer);
+            // add supports of the stabilizer to the photon
+            for (int support: supports){
+                photon.push_back(support);
+            }
+            photons.push_back(photon);
+        }
+    }
+    return photons;
+}

@@ -9,8 +9,8 @@
 #include <sstream>
 #include <iomanip>
 #include <chrono>
-#include <nlohmann/json.hpp>
-
+// #include <nlohmann/json.hpp>
+#include "json.hpp"
 #include "print.hpp"
 #include "lattice.hpp"
 #include "prob.hpp"

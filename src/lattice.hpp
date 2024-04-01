@@ -8,6 +8,7 @@ std::vector<int> edge_to_vertices(int l1, int l2, int e);
 int coordinates_to_edge(int l2, int x1, int y1, int x2, int y2);
 // face
 std::vector<std::vector<int> > face_to_coordinates(int l2,int v);
+std::vector<int> face_to_edges(int l1, int l2, int face);
 int coordinates_to_face(int l2, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
 
 // distance between two coordinates

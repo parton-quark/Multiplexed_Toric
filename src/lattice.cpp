@@ -128,6 +128,27 @@ std::vector<std::vector<int>> face_to_coordinates(int l2,int v){
     return coordinates;
 }
 
+std::vector<int> face_to_edges(int l1, int l2, int face){
+    // X stabilizer to support qubits
+    int left, right, lower, upper;
+    left = 2 * face;
+    lower = 2 * face + 1;
+    // right
+    if (face % l2 == l2 - 1){ // most right column
+        right = 2 * (face - l2 + 1);
+    } else {
+        right = 2 * (face + 1);
+    }
+    // upper 
+    if (face > (l2 * (l1 - 1)) - 1){ // top row
+        upper = ((face % l2) * 2) + 1;
+    } else { // other rows
+        upper = 2 * l2 + lower;
+    }
+    std::vector<int> edges{left,right,lower,upper};
+    return edges;
+}
+
 int coordinates_to_face(int l2, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3){
     // x0,y0 left, lower
     // x1,y1 right, lower

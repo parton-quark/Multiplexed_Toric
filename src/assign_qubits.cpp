@@ -111,7 +111,7 @@ std::pair<std::vector<std::vector<int> >, int> assign_random_distance(int l1, in
 
 // assign_deterministic
 std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
-    // multiplexing = 2
+     // deterministic min dist
     std::vector<int> photon_of_qubits;
 
     std::vector<int> left_qubits;
@@ -197,6 +197,7 @@ std::vector<std::vector<int> > assign_deterministic(int l1, int l2, int multiple
 }
 
 std::vector<std::vector<int> > assign_deterministic_shrink(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+    // deterministic max dist
     std::vector<std::vector<int> > photons;
     std::vector<int> left_qubits;
     for (int q = 0; q < num_qubits; q++){

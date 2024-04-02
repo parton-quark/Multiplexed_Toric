@@ -559,18 +559,15 @@ int main(int argc, char** argv){
     auto now_c = std::chrono::system_clock::to_time_t(now);
     std::stringstream ss;
     ss << std::put_time(localtime(&now_c), "%Y%m%d_%H%M%S");
-    // int multiplexing;
-    if (strategy == 3){
+    // strategies for fixed m 
+    if (strategy == 0){
+        multiplexing = 1;
+    } else if (strategy == 3){
         // deterministic min dist
         multiplexing = 2;
     } else if (strategy == 4){
         // deterministic max dist
-        multiplexing = 16;
-    } else if (strategy == 5){
-        // deterministic max dist
-        multiplexing = 4;
-    } else if (strategy == 6){
-        multiplexing  = 1;
+        multiplexing = 2;
     } else if (strategy == 7){
         multiplexing = 4;
     } else if (strategy == 8){

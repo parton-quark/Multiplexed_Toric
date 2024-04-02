@@ -7,4 +7,4 @@
 #SBATCH --ntasks=1                   # Run a single task\
 #SBATCH --output=multiplexing_output_test.txt  # Standard output and error log\
 
-g++ -O2 -std=c++20 *.cpp -o main && "/flash/NemotoU/shin/multiplexed_toric/src/"main
+g++ -O2 -std=c++20 *.cpp -o main && "/flash/NemotoU/shin/multiplexed_toric/src/"main 10 7 4 100

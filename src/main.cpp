@@ -25,8 +25,8 @@
 // int main()
 // {   // lattice size: l1 times l2
 //     int l1,l2, multiplexing;
-//     l1 = 4;
-//     l2 = 4;
+//     l1 = 8;
+//     l2 = 8;
 //     // number of qubits per one photon
 //     multiplexing = 4;
 //     std::cout << "\nmultiplexing              :" << multiplexing;
@@ -46,7 +46,7 @@
 //     std::vector<std::vector<int> > photons;
 
 //     int strategy;
-//     strategy =  8;
+//     strategy = 11;
 //     std::cout  << "\nstrategy                  :" << strategy;
 //     if (strategy == 0){
 //         // strategy 0: no multiplexing 
@@ -88,6 +88,9 @@
 //     } else if (strategy == 10){
 //         multiplexing = 4;
 //         photons = assign_by_plaquette_stabilizer_odd_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
+//     } else if (strategy == 11){
+//         multiplexing = 4;
+//         photons = assign_by_mixed_stabilizer(l1,l2, multiplexing, num_photons, num_qubits);
 //     }
 
 //     std::cout << "\nphotons                   :";
@@ -281,7 +284,6 @@
 // }
 
 // for plotting data
-
 // int main(){
 //     std::random_device rd;
 //     std::mt19937 engine(rd());
@@ -333,7 +335,9 @@
 //                 multiplexing = 4;
 //             } else if (strategy == 10){
 //                 multiplexing = 4;
-//             }    
+//             } else if (strategy == 11){
+//                 multiplexing = 4;
+//             }  
 
 //             int num_photons;
 //             num_photons = num_qubits / multiplexing;
@@ -371,6 +375,8 @@
 //                 photons = assign_by_plaquette_stabilizer_even_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
 //             } else if (strategy == 10){
 //                 photons = assign_by_plaquette_stabilizer_odd_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
+//             } else if (strategy == 11){
+//                 photons = assign_by_mixed_stabilizer(l1, l2, multiplexing, num_photons, num_qubits);
 //             }
 
 //             std::vector<std::pair<int,int>> success_rate;
@@ -537,7 +543,7 @@
 // for using command line argument
 int main(int argc, char** argv){
     int lattice_size, strategy, multiplexing, num_shots;
-    std::cout << "\nargv: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << "\n";
+    std::cout << "\nargv: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << argv[4] << "\n";
     
     lattice_size= atoi(argv[1]);
     strategy = atoi(argv[2]);
@@ -576,7 +582,9 @@ int main(int argc, char** argv){
         multiplexing = 4;
     } else if (strategy == 10){
         multiplexing = 4;
-    }    
+    } else if (strategy == 11){
+        multiplexing = 4;
+    }   
 
     int num_photons;
     num_photons = num_qubits / multiplexing;
@@ -614,6 +622,8 @@ int main(int argc, char** argv){
         photons = assign_by_plaquette_stabilizer_even_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
     } else if (strategy == 10){
         photons = assign_by_plaquette_stabilizer_odd_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
+    } else if (strategy == 11){
+        photons = assign_by_mixed_stabilizer(l1, l2, multiplexing, num_photons, num_qubits);
     }
 
     std::vector<std::pair<int,int>> success_rate;

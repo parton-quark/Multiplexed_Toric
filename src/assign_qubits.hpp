@@ -11,3 +11,4 @@ std::vector<std::vector<int> > assign_by_star_stabilizer_even_coordinate(int l1,
 std::vector<std::vector<int> > assign_by_star_stabilizer_odd_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits);
 std::vector<std::vector<int> > assign_by_plaquette_stabilizer_even_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits);
 std::vector<std::vector<int> > assign_by_plaquette_stabilizer_odd_coordinate(int l1, int l2, int multiplexing, int num_photons, int num_qubits);
+std::vector<std::vector<int> > assign_by_mixed_stabilizer(int l1, int l2, int multiplexing, int num_photons, int num_qubits);

@@ -585,3 +585,62 @@ std::vector<std::vector<int> > assign_by_plaquette_stabilizer_odd_coordinate(int
     }
     return photons;
 }
+
+std::vector<std::vector<int> > assign_by_mixed_stabilizer(int l1, int l2, int multiplexing, int num_photons, int num_qubits){
+    // this strategy only works for 4n x 4n lattice
+    if (l1 % 4 != 0 || l2 % 4 != 0){
+        std::cout << "l1 and l2 must be multiples of 4 for assign_by_star_and_plaquette_stabilizer strategy" << std::flush;
+        return {};
+    }
+    // this strategy only works for l1 = l2
+    if (l1 != l2){
+        std::cout << "l1 and l2 must be equal for assign_by_star_and_plaquette_stabilizer strategy" << std::flush;
+        return {};
+    }
+    // this strategy only works for multiplexing = 4
+    if (multiplexing != 4){
+        std::cout << "multiplexing must be 4 for assign_by_star_and_plaquette_stabilizer strategy" << std::flush;
+        return {};
+    }
+    // make diagonal bands
+    std::vector<int> bands;
+    for (int i = 0; i < l2/2; i++){
+        bands.push_back(i);
+    }
+    // make photons
+    std::vector<std::vector<int> > photons;
+
+    for (int band: bands){
+        if (band % 2 == 0){
+            // plaquette stabilizer based assignment 
+            for (int plaquette = 0; plaquette <= l1 - 1; plaquette++){
+                int x0 = ((band * 2) + plaquette) % l2;
+                int y0 = 0 + plaquette;
+                int x1 = x0 + 1;
+                int y1 = y0;
+                int x2 = x0;
+                int y2 = y0 + 1;
+                int x3 = x0 + 1;
+                int y3 = y0 + 1;
+                int face;
+                face = coordinates_to_face(l2, x0, y0, x1, y1, x2, y2, x3, y3);
+                std::vector<int> edges;
+                edges = face_to_edges(l1, l2, face);
+                photons.push_back(edges);
+            }
+        } else if (band % 2 == 1){ 
+            // star stabilizer based assignment
+            for (int star = 0; star <= l1 - 1; star++){
+                int x = (2 * band + star) % l2;
+                int y = 0 + star;
+                int vertex;
+                vertex = coordinate_to_vertex(l2, x, y);
+                std::vector<int> edges;
+                edges = vertex_to_edges(l1, l2, vertex);
+                photons.push_back(edges);
+            }
+        }
+    }    
+    return photons;
+}
+

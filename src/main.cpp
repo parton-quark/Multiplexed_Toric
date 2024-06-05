@@ -22,8 +22,8 @@
 #include "parity_check_matrix.hpp"
 #include "check.hpp"
 
-// for using command line argument
-int main_with_argv(int argc, char** argv){
+// for using command line argument _with_argv
+int main(int argc, char** argv){
     int lattice_size, strategy, multiplexing, num_shots;
     std::cout << "\nargv: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << argv[4] << argv[5] << argv[6] << argv[7] << "\n";
     

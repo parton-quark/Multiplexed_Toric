@@ -85,13 +85,13 @@ int main(int argc, char** argv){
         photons = assign_random(l1, l2, multiplexing, num_photons, num_qubits);
     } else if (strategy == 2){
         std::pair<std::vector<std::vector<int> >, int> photon_and_threshold;
-        photon_and_threshold = assign_random_distance(l1, l2, multiplexing, num_photons, num_qubits, engine);
+        photon_and_threshold = assign_random_plus_threshold(l1, l2, multiplexing, num_photons, num_qubits, engine);
         photons = photon_and_threshold.first;
         threthold = photon_and_threshold.second;
     } else if (strategy == 3){
-        photons = assign_deterministic(l1, l2, multiplexing, num_photons, num_qubits);
+        photons = assign_min_pair(l1, l2, multiplexing, num_photons, num_qubits);
     } else if (strategy == 4){
-        photons = assign_deterministic_shrink(l1, l2, multiplexing, num_photons, num_qubits);
+        photons = assign_max_pair(l1, l2, multiplexing, num_photons, num_qubits);
     } else if (strategy == 5){
         photons = assign_random_with_occupation_enhancement_for_each_photon(l1, l2, multiplexing, num_photons, num_qubits, force, engine, dist);
     } else if (strategy == 6){
@@ -114,7 +114,7 @@ int main(int argc, char** argv){
     std::vector<float> prob_e_vec;
     std::vector<double> vec_loss_rate_average, vec_z_error_rate_average;
 
-    for (int prob_e_int = 0; prob_e_int < 31; prob_e_int = prob_e_int + 1){
+    for (int prob_e_int = 0; prob_e_int < 101; prob_e_int = prob_e_int + 1){
         float prob_e;
         prob_e = prob_e_int / 100;
         prob_e_vec.push_back(prob_e);

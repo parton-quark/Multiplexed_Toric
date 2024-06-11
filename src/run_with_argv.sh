@@ -19,7 +19,7 @@ force = "`sed -n ${taskno}p $paramfile | awk '{print $5}'`"
 error_type = "`sed -n ${taskno}p $paramfile | awk '{print $6}'`"
 p_burst = "`sed -n ${taskno}p $paramfile | awk '{print $7}'`"
 
-g++ -O2 -lm -std=c++20 *.cpp -o main && "/flash/NemotoU/shin/multiplexed_toric/src/"main_with_argv "$lattice_size" "$strategy" "$multiplexing" "$num_shots" "$force" "$error_type" "$burst"
+g++ -O2 -lm -std=c++20 *.cpp -o main && "/flash/NemotoU/shin/multiplexed_toric/src/"main "$lattice_size" "$strategy" "$multiplexing" "$num_shots" "$force" "$error_type" "$burst"
 
 << COMMENTOUT
 lattice_size, strategy, multiplexing, num_shots, force, error_type, p_burst

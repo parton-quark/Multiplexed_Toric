@@ -25,7 +25,7 @@
 // for using command line argument _with_argv
 int main(int argc, char** argv){
     int lattice_size, strategy, multiplexing, num_shots;
-    std::cout << "\nargv: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << argv[4] << argv[5] << argv[6] << argv[7] << "\n";
+    std::cout << "\nargv: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << " " << argv[4] << " " << argv[5] << " " << argv[6] << " " << argv[7] << "\n";
     
     lattice_size= atoi(argv[1]);
     strategy = atoi(argv[2]);
@@ -116,7 +116,9 @@ int main(int argc, char** argv){
 
     for (int prob_e_int = 0; prob_e_int < 101; prob_e_int = prob_e_int + 1){
         float prob_e;
-        prob_e = prob_e_int / 100;
+        std::cout << "\nprob_e_int: " << prob_e_int;
+        prob_e = prob_e_int / 100.0;
+        std::cout << "\nprob_e: " << prob_e;
         prob_e_vec.push_back(prob_e);
         int num_success;
         int num_fail;

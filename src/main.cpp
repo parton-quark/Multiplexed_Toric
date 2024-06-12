@@ -116,9 +116,9 @@ int main(int argc, char** argv){
 
     for (int prob_e_int = 0; prob_e_int < 101; prob_e_int = prob_e_int + 1){
         float prob_e;
-        std::cout << "\nprob_e_int: " << prob_e_int;
+        // std::cout << "\nprob_e_int: " << prob_e_int;
         prob_e = prob_e_int / 100.0;
-        std::cout << "\nprob_e: " << prob_e;
+        // std::cout << "\nprob_e: " << prob_e;
         prob_e_vec.push_back(prob_e);
         int num_success;
         int num_fail;
@@ -236,9 +236,9 @@ int main(int argc, char** argv){
         num_success_fail.second = num_fail;
         success_rate.push_back(num_success_fail);
         std::ofstream writing_file;
-        std::string filename = "result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + ".json";
+        std::string filename = "results/0612/result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + ".json";
         if (strategy == 5 || strategy == 6){
-            filename = "result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + "_f" +std::to_string(force) + ".json";
+            filename = "results/0612/result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + "_f" +std::to_string(force) + ".json";
         }
         auto now = std::chrono::system_clock::now();
         auto now_c = std::chrono::system_clock::to_time_t(now);

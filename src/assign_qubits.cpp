@@ -410,8 +410,8 @@ std::vector<std::vector<int> > assign_by_star_stabilizer_even_coordinate(int l1,
             star_stabilizers.push_back(star_stabilizer);
         }
     }
-    std::cout << "\nstar stabilizers: "<< std::flush;
-    print_vec(star_stabilizers);
+    // std::cout << "\nstar stabilizers: "<< std::flush;
+    // print_vec(star_stabilizers);
     for (int star_stabilizer: star_stabilizers){
         // add supports of stabilizer to a photon if the coordinate is even for both x and y
         std::vector<int> photon;
@@ -463,8 +463,8 @@ std::vector<std::vector<int> > assign_by_star_stabilizer_odd_coordinate(int l1, 
             star_stabilizers.push_back(star_stabilizer);
         }
     }
-    std::cout << "\nstar stabilizers: "<< std::flush;
-    print_vec(star_stabilizers);
+    // std::cout << "\nstar stabilizers: "<< std::flush;
+    // print_vec(star_stabilizers);
     for (int star_stabilizer: star_stabilizers){
         // add supports of stabilizer to a photon if the coordinate is even for both x and y
         std::vector<int> photon;

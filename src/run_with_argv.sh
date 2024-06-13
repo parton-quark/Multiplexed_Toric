@@ -1,12 +1,12 @@
 #!/bin/bash
    
 #SBATCH -p compute
-#SBATCH --job-name=QM_T${SLURM_ARRAY_TASK_ID}
+#SBATCH --job-name=QM_T%j
 #SBATCH -t 10:00:00
 #SBATCH --mem-per-cpu=10G
 #SBATCH --ntasks=1
 #SBATCH --array=1-20
-#SBATCH --output=output_QM_Toric.txt  # Standard output and error log\
+#SBATCH --output=output_%j.txt  # Standard output and error log\
 
 taskno=${SLURM_ARRAY_TASK_ID}
 paramfile=/flash/NemotoU/shin/0611/Multiplexed_Toric/src/params.txt
@@ -23,4 +23,6 @@ g++ -O2 -lm -std=c++20 *.cpp -o main && "/flash/NemotoU/shin/0611/Multiplexed_To
 
 << COMMENTOUT
 lattice_size, strategy, multiplexing, num_shots, force, error_type, p_burst
+#SBATCH --job-name=QM_T${SLURM_ARRAY_TASK_ID}
+#SBATCH --output=output_QM_Toric.txt  # Standard output and error log\
 COMMENTOUT

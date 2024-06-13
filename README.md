@@ -11,7 +11,7 @@ Simulation flows are:
 - X stabilizer measurement
 - Run peeling decoder
 - Determines if any Z logical errors remain after decoding.
-
+![flow](sim_flow.png)
 
 You can visualize the result of the simulation as .png file with python `python draw_toric.py LATTICE_SIZE_V LATTICE_SIZE_H "result.json";`
 

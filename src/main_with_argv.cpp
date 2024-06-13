@@ -21,10 +21,11 @@
 // #include "parity_check_matrix.hpp"
 // #include "check.hpp"
 
-// // for using command line argument
-// int main_with_argv(int argc, char** argv){
+// for using command line argument _with_argv
+
+// int main(int argc, char** argv){
 //     int lattice_size, strategy, multiplexing, num_shots;
-//     std::cout << "\nargv: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << argv[4] << argv[5] << argv[6] << argv[7] << "\n";
+//     std::cout << "\nargv: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << " " << argv[4] << " " << argv[5] << " " << argv[6] << " " << argv[7] << "\n";
     
 //     lattice_size= atoi(argv[1]);
 //     strategy = atoi(argv[2]);
@@ -84,13 +85,13 @@
 //         photons = assign_random(l1, l2, multiplexing, num_photons, num_qubits);
 //     } else if (strategy == 2){
 //         std::pair<std::vector<std::vector<int> >, int> photon_and_threshold;
-//         photon_and_threshold = assign_random_distance(l1, l2, multiplexing, num_photons, num_qubits, engine);
+//         photon_and_threshold = assign_random_plus_threshold(l1, l2, multiplexing, num_photons, num_qubits, engine);
 //         photons = photon_and_threshold.first;
 //         threthold = photon_and_threshold.second;
 //     } else if (strategy == 3){
-//         photons = assign_deterministic(l1, l2, multiplexing, num_photons, num_qubits);
+//         photons = assign_min_pair(l1, l2, multiplexing, num_photons, num_qubits);
 //     } else if (strategy == 4){
-//         photons = assign_deterministic_shrink(l1, l2, multiplexing, num_photons, num_qubits);
+//         photons = assign_max_pair(l1, l2, multiplexing, num_photons, num_qubits);
 //     } else if (strategy == 5){
 //         photons = assign_random_with_occupation_enhancement_for_each_photon(l1, l2, multiplexing, num_photons, num_qubits, force, engine, dist);
 //     } else if (strategy == 6){
@@ -113,9 +114,11 @@
 //     std::vector<float> prob_e_vec;
 //     std::vector<double> vec_loss_rate_average, vec_z_error_rate_average;
 
-//     for (int prob_e_int = 0; prob_e_int < 31; prob_e_int = prob_e_int + 1){
+//     for (int prob_e_int = 0; prob_e_int < 101; prob_e_int = prob_e_int + 1){
 //         float prob_e;
-//         prob_e = prob_e_int / 100;
+//         // std::cout << "\nprob_e_int: " << prob_e_int;
+//         prob_e = prob_e_int / 100.0;
+//         // std::cout << "\nprob_e: " << prob_e;
 //         prob_e_vec.push_back(prob_e);
 //         int num_success;
 //         int num_fail;
@@ -233,9 +236,9 @@
 //         num_success_fail.second = num_fail;
 //         success_rate.push_back(num_success_fail);
 //         std::ofstream writing_file;
-//         std::string filename = "result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + ".json";
+//         std::string filename = "results/0612/result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + ".json";
 //         if (strategy == 5 || strategy == 6){
-//             filename = "result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + "_f" +std::to_string(force) + ".json";
+//             filename = "results/0612/result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + "_f" +std::to_string(force) + ".json";
 //         }
 //         auto now = std::chrono::system_clock::now();
 //         auto now_c = std::chrono::system_clock::to_time_t(now);

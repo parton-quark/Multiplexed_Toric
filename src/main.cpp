@@ -255,7 +255,7 @@
 //     // std::string filename = ss.str() + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(multiplexing) + "_" + std::to_string(prob_e) + "_" + ".json";
 //     std::string filename = "result.json";
 //     nlohmann::json result_json;
-//     std::vector<int> lattice_size(l1, l2);
+//     std::pair<int,int> lattice_size(l1,l2);
 //     result_json["time"] = ss.str();
 //     result_json["lattice_size"] = lattice_size;
 //     result_json["num_qubits"] = num_qubits;
@@ -287,7 +287,7 @@ int main(int argc, char** argv){
     int lattice_size, strategy, multiplexing, num_shots;
     std::cout << "\nargv: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << " " << argv[4] << " " << argv[5] << " " << argv[6] << " " << argv[7] << "\n";
     
-    lattice_size= atoi(argv[1]);
+    lattice_size = atoi(argv[1]);
     strategy = atoi(argv[2]);
     multiplexing = atoi(argv[3]);
     num_shots = atoi(argv[4]);
@@ -376,15 +376,11 @@ int main(int argc, char** argv){
 
     for (int prob_e_int = 0; prob_e_int < 101; prob_e_int = prob_e_int + 1){
         float prob_e;
-        // std::cout << "\nprob_e_int: " << prob_e_int;
         prob_e = prob_e_int / 100.0;
-        // std::cout << "\nprob_e: " << prob_e;
         prob_e_vec.push_back(prob_e);
-        int num_success;
-        int num_fail;
+        int num_success, num_fail, num_error_happens;
         num_success = 0;
         num_fail = 0;
-        int num_error_happens;
         num_error_happens = 0;
         std::vector<float> vec_loss_rate, vec_zerror_rate;
         for (int i = 0; i < num_shots; i++){
@@ -496,16 +492,16 @@ int main(int argc, char** argv){
         num_success_fail.second = num_fail;
         success_rate.push_back(num_success_fail);
         std::ofstream writing_file;
-        std::string filename = "results/0618/result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + ".json";
+        std::string filename = "results/0626/result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + ".json";
         if (strategy == 5 || strategy == 6){
-            filename = "results/0612/result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + "_f" +std::to_string(force) + ".json";
+            filename = "results/0626/result_" + std::to_string(l1) + "_" + std::to_string(l2) + "_" + std::to_string(strategy) + "_" + std::to_string(multiplexing) + "_" + std::to_string(num_shots) + "_f" +std::to_string(force) + ".json";
         }
         auto now = std::chrono::system_clock::now();
         auto now_c = std::chrono::system_clock::to_time_t(now);
         std::stringstream sf;
         sf << std::put_time(localtime(&now_c), "%Y%m%d_%H%M%S");
         nlohmann::json result_json;
-        std::vector<int> lattice_size(l1, l2);
+        std::pair<int,int> lattice_size(l1,l2);
         result_json["time_start"] = ss.str();
         result_json["time_fin"] = sf.str();
         result_json["lattice_size"] = lattice_size;

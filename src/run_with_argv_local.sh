@@ -1,6 +1,6 @@
 #!/bin/bash
 paramfile=/Users/parton/OIST/Multiplexed_Toric/src/params_local.txt
-for i in {1..19}
+for i in {1..2}
 do
   echo "${i}"
   lattice_size="`sed -n ${i}p $paramfile | awk '{print $1}'`"

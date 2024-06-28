@@ -14,5 +14,5 @@ num_shots="`sed -n ${taskno}p $paramfile | awk '{print $4}'`"
 force="`sed -n ${taskno}p $paramfile | awk '{print $5}'`"
 error_type="`sed -n ${taskno}p $paramfile | awk '{print $6}'`"
 p_burst="`sed -n ${taskno}p $paramfile | awk '{print $7}'`"
-g++ -O2 -lm -std=c++20 *.cpp -o main && "/flash/NemotoU/shin/0611/Multiplexed_Toric/src/"main "$lattice_size" "$strategy" "$multiplexing" "$num_shots" "$force" "$error_type" "$burst"
+g++ -O2 -lm -std=c++20 *.cpp -o main && "/flash/NemotoU/shin/0628/Multiplexed_Toric/src/"main "$lattice_size" "$strategy" "$multiplexing" "$num_shots" "$force" "$error_type" "$burst"
 sleep 20

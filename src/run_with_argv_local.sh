@@ -10,6 +10,6 @@ do
   force="`sed -n ${i}p $paramfile | awk '{print $5}'`"
   error_type="`sed -n ${i}p $paramfile | awk '{print $6}'`"
   p_burst="`sed -n ${i}p $paramfile | awk '{print $7}'`"
-  g++ -O2 -std=c++20 *.cpp -o main && "/Users/parton/OIST/Multiplexed_Toric/src/"main "$lattice_size" "$strategy" "$multiplexing" "$num_shots" "$force" "$error_type" "$burst"
+  g++ -O2 -std=c++20 *.cpp -o main && "/Users/parton/OIST/Multiplexed_Toric/src/"main "$lattice_size" "$strategy" "$multiplexing" "$num_shots" "$force" "$error_type" "$p_burst"
 done
 

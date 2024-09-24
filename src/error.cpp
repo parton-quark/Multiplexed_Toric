@@ -72,6 +72,7 @@ std::vector<bool> convert_photon_loss_to_qubit_loss(int num_photons, int num_qub
 }
 
 std::vector<bool> make_xerrors(std::vector<bool> qubit_loss, int num_qubits, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    // convert qubit loss to x errors
     std::vector<bool> xerrors(num_qubits);
     int qubit_index_x = 0; 
     for (bool qubit : qubit_loss){
@@ -89,6 +90,7 @@ std::vector<bool> make_xerrors(std::vector<bool> qubit_loss, int num_qubits, std
 }
 
 std::vector<bool> make_zerrors(std::vector<bool> qubit_loss, int num_qubits, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    // convert qubit loss to x errors
     std::vector<bool> zerrors(num_qubits);
     int qubit_index_z = 0; 
     for (bool qubit : qubit_loss){
@@ -103,4 +105,40 @@ std::vector<bool> make_zerrors(std::vector<bool> qubit_loss, int num_qubits, std
         qubit_index_z = qubit_index_z + 1;
     }
     return zerrors;
+}
+
+
+std::vector<bool> random_x_error(int num_qubits, float prob_e, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    // make erasure vector for photons
+    std::vector<bool> x_errors;
+    for (int physical_qubit = 0; physical_qubit < num_qubits; physical_qubit++){
+        bool has_error = false;
+        has_error = probabilistic(prob_e, engine, dist);
+        x_errors.push_back(has_error);
+    }
+    return x_errors;
+}
+
+std::vector<bool> random_z_error(int num_qubits, float prob_e, std::mt19937& engine, std::uniform_real_distribution<double>& dist){
+    // make erasure vector for photons
+    std::vector<bool> z_errors;
+    for (int physical_qubit = 0; physical_qubit < num_qubits; physical_qubit++){
+        bool has_error = false;
+        has_error = probabilistic(prob_e, engine, dist);
+        z_errors.push_back(has_error);
+    }
+    return z_errors;
+}
+
+std::vector<bool> combine_errors(std::vector<bool> errorvec1, std::vector<bool> errorvec2){
+    std::vector<bool> combined_errors;
+    if (errorvec1.size() != errorvec2.size()){
+        std::cout << "Error: the size of two error vectors are different!";
+    }
+    for (int i = 0; i < errorvec1.size(); i++){
+        bool combined_error;
+        combined_error = errorvec1[i] ^ errorvec2[i];
+        combined_errors.push_back(combined_error);
+    }
+    return combined_errors;
 }

@@ -644,3 +644,53 @@ std::vector<std::vector<int> > assign_by_mixed_stabilizer(int l1, int l2, int mu
     return photons;
 }
 
+std::vector<std::vector<int> > assign_with_strategy(int l1, int l2, int multiplexing, int num_photons, int num_qubits, int strategy, std::mt19937 engine, std::uniform_real_distribution<double> dist){
+    std::vector<std::vector<int> > photons;
+    if (strategy == 0){
+        // strategy 0: no multiplexing 
+        multiplexing = 1;
+        photons = assign_without_multiplexing(l1, l2, num_photons, num_qubits);
+    } else if (strategy == 1){
+        // strategy 1: randomly assign qubits to the photons
+        photons = assign_random(l1, l2, multiplexing, num_photons, num_qubits);
+    } else if (strategy == 2){
+        // strategy 2: randomly assign qubits and accept if qubits have enough distance -> update threshold if it stuck
+        std::pair<std::vector<std::vector<int> >, int>  photons_and_threshold;
+        int threshold;
+        photons_and_threshold = assign_random_plus_threshold(l1, l2, multiplexing, num_photons, num_qubits, engine);
+        photons = photons_and_threshold.first;
+        threshold = photons_and_threshold.second;
+        std::cout << "\nthreshold                 :" << threshold;
+    } else if (strategy == 3){
+        multiplexing = 2;
+        photons = assign_min_pair(l1, l2, multiplexing, num_photons, num_qubits);
+    } else if (strategy == 4){
+        photons = assign_max_pair(l1, l2, multiplexing, num_photons, num_qubits);
+    } else if (strategy == 5){
+        int force;
+        force = 15;
+        photons = assign_random_with_occupation_enhancement_for_each_photon(l1, l2, multiplexing, num_photons, num_qubits, force, engine, dist);
+    } else if (strategy == 6){
+        int force;
+        force = 15;
+        photons = assign_random_with_occupation_enhancement(l1, l2, multiplexing, num_photons, num_qubits, force, engine, dist);
+    } else if (strategy == 7){
+        multiplexing = 4;
+        photons = assign_by_star_stabilizer_even_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
+    } else if (strategy == 8){
+        multiplexing = 4;
+        photons = assign_by_star_stabilizer_odd_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
+    } else if (strategy == 9){
+        multiplexing = 4;
+        photons = assign_by_plaquette_stabilizer_even_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
+    } else if (strategy == 10){
+        multiplexing = 4;
+        photons = assign_by_plaquette_stabilizer_odd_coordinate(l1, l2, multiplexing, num_photons, num_qubits);
+    } else if (strategy == 11){
+        multiplexing = 4;
+        photons = assign_by_mixed_stabilizer(l1,l2, multiplexing, num_photons, num_qubits);
+    } else {
+        std::cout << "strategy not found" << std::flush;
+    }
+    return photons;
+}

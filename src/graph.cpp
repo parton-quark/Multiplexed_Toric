@@ -17,26 +17,26 @@ int graph::num_edges(){
 }
 
 void graph::print_graph(){    
-    // std::cout << "\n    V: ";
+    std::cout << "\n    V: ";
     bool is_first_vertex;
     is_first_vertex = true;
     for(int vertex: vertices){
         if (is_first_vertex){
-            // std::cout << vertex << std::flush;
+            std::cout << vertex << std::flush;
             is_first_vertex = false;
         } else {
-            // std::cout << "," << vertex  << std::flush;  
+            std::cout << "," << vertex  << std::flush;  
         }
     }
-    // std::cout << "\n    E: ";
+    std::cout << "\n    E: ";
     bool is_first_edge;
     is_first_edge = true;
     for(int edge: edges){
         if (is_first_edge){
-            // std::cout << edge  << std::flush;
+            std::cout << edge  << std::flush;
             is_first_edge = false;
         } else {
-            // std::cout << "," << edge << std::flush;  
+            std::cout << "," << edge << std::flush;  
         }
     }
 }

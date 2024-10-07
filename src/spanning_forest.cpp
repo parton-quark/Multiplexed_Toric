@@ -9,8 +9,19 @@
 #include "graph.hpp"
 #include "print.hpp"
 
+bool v_is_in_g(int v, graph G){
+    bool result;
+    if (std::find(G.vertices.begin(), G.vertices.end(), v) != G.vertices.end()){
+        result = true;
+    } else {
+        result = false;
+    }
+    return result;
+}
+
 graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
-    // std::cout << "\nprim start " << std::flush;
+    std::cout << "\nprim start! G: " << std::flush;
+    G.print_graph();
     std::vector<int> left_vertices, left_edges;
     left_vertices = G.vertices;
     left_edges = G.edges;
@@ -24,9 +35,8 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
 
     std::vector<int> candidates, candidates_edge_weights;
     int left_edge_index = 0;
-    bool find_leaf;
-    find_leaf = false;
-    while (left_graph.num_vertices() != 0){
+    bool find_leaf=false;
+    while (left_graph.num_vertices() > 0){
         std::vector<int> candidates;
         for (int  left_edge: left_graph.edges){
             std::vector<int> left_edge_vertices;
@@ -38,7 +48,6 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             // std::cout << "\nleft_edge_v0: " << left_edge_v0 << std::flush;
             // std::cout << "\nleft_edge_v1: " << left_edge_v1 << std::flush;
             int num_v0_in_tree, num_v1_in_tree;
-            // std::cout << "\nmm_st: ";
             // mm_st.print_graph();
             std::vector<int> mm_st_vertices;
             mm_st_vertices = mm_st.vertices;
@@ -50,17 +59,29 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
                 candidates_edge_weights.push_back(edge_weights[left_edge_index]);
                 candidates.push_back(left_edge);
                 find_leaf = true;
+                // std::cout << "\nfind leaf!" << std::flush;
+                // std::cout << left_edge << std::flush;
             }
-            if (num_v0_in_tree == 0 && num_v1_in_tree == 1){/* v0 is not in tree, v1 is in tree */
+            else if (num_v0_in_tree == 0 && num_v1_in_tree == 1){/* v0 is not in tree, v1 is in tree */
                 candidates_edge_weights.push_back(edge_weights[left_edge_index]);
                 candidates.push_back(left_edge);
                 find_leaf = true;
+                // std::cout << "\nfind leaf!" << std::flush;
+                // std::cout << left_edge << std::flush;
+            }
+            else if (num_v0_in_tree != 0 && num_v1_in_tree != 0){/* v0 and v1 are in tree */
+                // std::cout << "\nv0 and v1 are in tree. weird!" << std::flush;
+            }
+            else if (num_v0_in_tree == 0 && num_v1_in_tree == 0){/* v0 and v1 are not in tree */
+                // std::cout << "\nv0 and v1 are not in tree." << std::flush;
             }
             left_edge_index = left_edge_index + 1;
         }
-
-        if (find_leaf){
-            // std::cout << "\nfind leaf " << std::flush;
+        // std::cout << "\n(65)find_leaf? " << find_leaf << std::flush;
+        // std::cout << "\n(66)Candidates? " << std::flush;
+        print_vec(candidates);
+        if (find_leaf && candidates.size() != 0){
+            // std::cout << "\nfind leaf: true " << std::flush;
             // find minimum weight in candidates
             int min_w_in_candidates;
             bool is_first_candidate;
@@ -80,17 +101,34 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             }
             std::vector<int> candidates_with_min_w;
             cand_index = 0;
+            // print candidates
+            // std::cout << "\ncandidates: ";
+            // for (int candidate: candidates){
+            //     std::cout << candidate << " ";
+            // }
+            std::cout << std::flush;
             for (int candidate: candidates){
                 if (min_w_in_candidates == candidates_edge_weights[cand_index]){
                     candidates_with_min_w.push_back(candidate);
                 }
                 cand_index = cand_index + 1;
             }
+            //print candidates_with_min_w
+            // std::cout << "\ncandidates_with_min_w: ";   
+            // for (int candidate: candidates_with_min_w){
+            //     std::cout << candidate << " ";
+            // }
+            // std::cout << std::flush;
             int winner;
             int random_index;
             random_index = rand()%candidates_with_min_w.size();
-            // std::cout << "\nrandom_index: " << random_index << std::flush;
+            // candidates_with_min_w.size()が0になっており、おかしい
             // std::cout << "\ncandidates_with_min_w.size(): " << candidates_with_min_w.size() << std::flush;
+            // std::cout << "\nrandom_index: " << random_index << std::flush;
+            if (candidates_with_min_w.size() == 0){
+                std::cout << "\nError! candidates_with_min_w is empty." << std::flush;
+            }
+
             winner = candidates_with_min_w[random_index];
             std::vector<int> winner_vertices;
             int winner_v0, winner_v1;
@@ -136,11 +174,11 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             // edge_weights.shrink_to_fit();
         } else {
             std::cout << "\ncoudnt find..." << std::flush;
+            break;
         }
     }
-    // std::cout << "\nmm_st" << std::flush;
-    // mm_st.print_graph();
-    // std::cout << "\nprim finish" << std::flush;
+    std::cout << "\nprim finish" << std::flush;
+    mm_st.print_graph();
     return mm_st;
 }
 
@@ -160,7 +198,9 @@ graph maximal_spanning_tree(graph G, int l1, int l2){
     }
     // Finding the minimum spanning tree of weight-replaced graphs
     graph mxst;
+    // std::cout << "\nprim start" << std::flush;
     mxst = prim(G, l1, l2, edge_weights);
+    std::cout << "\nprim finish" << std::flush;
     // mxst = kruskal(G, l1, l2, edge_weights); /* maximal spanning tree */
     // The weights of each edge should be returned to w 
     // Here all edge weights are 1, so no such transformation is necessary

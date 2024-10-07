@@ -36,7 +36,15 @@ std::vector<int> vertex_to_edges(int l1, int l2, int v){
         e0 = 2 * v + 2 * l2 * (l1 - 1);
     }
 
-    std::vector<int>  edges{e0, e1, e2, e3};
+    std::vector<int>  edges;
+    edges = {e0, e1, e2, e3};
+    for (int edgea: edges){
+        if (edgea > 2 * l2 * l1 - 1){
+            std::cout <<"\nedge has an Error: vertex_to_edges";
+            std::cout << "\nvertex: " << v;
+            std::cout << "\noutput edge: " << edgea;
+        }
+    }
     return edges;
 }
 

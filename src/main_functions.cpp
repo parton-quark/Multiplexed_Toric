@@ -672,14 +672,14 @@ int main_with_combined_error()
     combined_errors = combine_errors(zerror_before_communication_plus_loss, random_z_errors_after);
     std::cout << "\ncombined Z errors         :";
     print_ind_of_bool_vec(combined_errors);
-
     // std::vector<int> zeposition{7,10,37,45,49};
-    // for (int i; i < combined_errors.size() - 1; i++){
-    //     combined_errors[i] = false;
-    // }
-    // for (int zepos: zeposition){
-    //     combined_errors[zepos] = true;
-    // }
+    std::vector<int> zeposition{9,11};
+    for (int i; i < combined_errors.size() - 1; i++){
+        combined_errors[i] = false;
+    }
+    for (int zepos: zeposition){
+        combined_errors[zepos] = true;
+    }
 
     std::cout << "\nfixed combined Z errors   :";
     print_ind_of_bool_vec(combined_errors);

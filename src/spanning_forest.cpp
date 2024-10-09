@@ -177,7 +177,7 @@ graph prim(graph G, int  l1, int l2, std::vector<int> edge_weights){
             break;
         }
     }
-    std::cout << "\nprim finish!" << std::flush;
+    // std::cout << "\nprim finish!" << std::flush;
     // mm_st.print_graph();
     return mm_st;
 }

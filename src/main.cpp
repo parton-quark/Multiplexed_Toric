@@ -1,4 +1,10 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <stdio.h>
+#include <time.h>
 #include "main_functions.hpp"
+#include "main_functions_for_plots.hpp"
 
 int main(){
     int res;
@@ -6,9 +12,31 @@ int main(){
     // loss error model, multiple shots for plotting
 
     // combined error model (random pauli -> erasure -> random pauli)
-    res = main_with_combined_error();
+    // res = main_with_combined_error();
     // combined error model (random pauli -> erasure -> random pauli) multiple shots for plotting
-    // res = main_with_combined_error_multiple_shots();
+
+    clock_t start = clock();
+    std::cout << "\nstart time: " << start;
+    res = main_with_combined_error_multiple_shots(0.06);
+    clock_t c00 = clock();
+    std::cout << "\nfinish time 0.06: " << c00;
+    res = main_with_combined_error_multiple_shots(0.07);
+    clock_t c01 = clock();
+    std::cout << "\nfinish time 0.07: " << c01;
+    res = main_with_combined_error_multiple_shots(0.08);
+    clock_t c02 = clock();
+    std::cout << "\nfinish time 0.08: " << c02;
+    res = main_with_combined_error_multiple_shots(0.09);
+    clock_t c03 = clock();
+    std::cout << "\nfinish time 0.09: " << c03;
+    res = main_with_combined_error_multiple_shots(0.10);
+    clock_t c04 = clock();
+    std::cout << "\nfinish time 0.10: " << c04;
+    res = main_with_combined_error_multiple_shots(0.11);
+    clock_t c05 = clock();
+    std::cout << "\nfinish time 0.11: " << c05;
+    clock_t cend = clock();
+    std::cout << "\nfinish time: " << cend;
     return res;
 }
 

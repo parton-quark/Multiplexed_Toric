@@ -1,0 +1,1 @@
+int main_with_combined_error_multiple_shots(float prob_z);

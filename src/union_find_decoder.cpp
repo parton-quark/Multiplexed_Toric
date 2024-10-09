@@ -20,9 +20,9 @@ bool is_even_cluster(graph cluster, std::vector<bool> syndrome){
             num_syndrome_in_cluster+=1;
         }
     }
-    std::cout << "\nchecking if the cluster is even or not...";
-    cluster.print_graph();
-    std::cout << "\nnum_syndrome_in_cluster: " << num_syndrome_in_cluster;
+    // std::cout << "\nchecking if the cluster is even or not...";
+    // cluster.print_graph();
+    // std::cout << "\nnum_syndrome_in_cluster: " << num_syndrome_in_cluster;
     if (num_syndrome_in_cluster % 2 == 0){
         result = true;
     } else {
@@ -68,7 +68,7 @@ graph grow_cluster(graph original, int l1, int l2){
         }
     }
     if (original.vertices == grown_cluster.vertices){
-    std::cout << "\ncluster is not grown! cluster may reach all region or an error." << std::flush;
+    // std::cout << "\ncluster is not grown! cluster may reach all region or an error." << std::flush;
     }
     return grown_cluster;
 }
@@ -214,14 +214,14 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
     // x stabilizer syndrome (z error syndrome, std::vector<bool> x_syndrome)
     // outputs:
     // Z correction (std::vector<bool> uf_z)
-    std::cout << "\nStart union find decoder for Z errors..." << std::flush;
+    // std::cout << "\nStart union find decoder for Z errors..." << std::flush;
     // convert erasure qubits into edges
     std::vector<graph> non_empty_divided_epsilon;
     non_empty_divided_epsilon = erasure_to_non_empty_divided_epsilon(l1, l2, num_qubits, qubit_loss);
-    std::cout << "\ndivied epsilon            :";
-    for (graph cluster: non_empty_divided_epsilon){
-        cluster.print_graph();
-    }
+    // std::cout << "\ndivied epsilon            :";
+    // for (graph cluster: non_empty_divided_epsilon){
+        // cluster.print_graph();
+    // }
 
     // classify cluster (even or odd)
     std::vector<graph> even_clusters, odd_clusters;
@@ -242,8 +242,8 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
         }
         index_for_a_syndrome++;
     }
-    std::cout << "\nleft syndromes: ";
-    print_vec(left_syndromes);
+    // std::cout << "\nleft syndromes: ";
+    // print_vec(left_syndromes);
     // Construct a single node cluster from left -1 syndrome and add to odd clusters
     for (int left_syndrome: left_syndromes){
         graph new_cluster;
@@ -264,15 +264,15 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
     bool is_odd_clusters_empty;
     if (odd_clusters.size() == 0){
         is_odd_clusters_empty = true;
-        std::cout << "\nodd clusters is empty." << std::flush;
+        // std::cout << "\nodd clusters is empty." << std::flush;
     } else {
         is_odd_clusters_empty = false;
-        std::cout << "\nodd clusters is not empty." << std::flush;
+        // std::cout << "\nodd clusters is not empty." << std::flush;
     }
     for (graph oc: odd_clusters){
         oc.print_graph();
         if (oc.num_vertices() == 0){
-            std::cout << "\nThis cluster is empty!" << std::flush;
+            // std::cout << "\nThis cluster is empty!" << std::flush;
         }
     }
 
@@ -311,12 +311,12 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
                     }
                 }
             }
-            if (is_first_time){
-                std::cout << "\nodd cluster index: ";
-                std::cout << odd_i << std::flush;
-                std::cout << "\ncollided odd clusters indices: ";
-                print_vec(collided_odd_cluster_indices);
-            }
+            // if (is_first_time){
+                // std::cout << "\nodd cluster index: ";
+                // std::cout << odd_i << std::flush;
+                // std::cout << "\ncollided odd clusters indices: ";
+                // print_vec(collided_odd_cluster_indices);
+            // }
             std::vector<graph> collided_even_clusters;
             std::vector<int> collided_even_cluster_indices;
             // check if the grown cluster collides with other even clusters
@@ -333,21 +333,21 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
             }
             // fuse grown cluster and collided clusters
             for (graph collided_odd_cluster: collided_odd_clusters){
-                std::cout << "\ncluster has been collided with an odd cluster!" << std::flush;
+                // std::cout << "\ncluster has been collided with an odd cluster!" << std::flush;
                 grown_cluster = fuse_cluster(grown_cluster, collided_odd_cluster);
             }
             for (graph collided_even_cluster: collided_even_clusters){
-                std::cout << "\ncluster has been collided with an even cluster!" << std::flush;
+                // std::cout << "\ncluster has been collided with an even cluster!" << std::flush;
                 grown_cluster = fuse_cluster(grown_cluster, collided_even_cluster);
             }
             if (is_first_time){
-                std::cout << "\ngrown cluster: ";
-                grown_cluster.print_graph();
-                std::cout << std::flush;
+                // std::cout << "\ngrown cluster: ";
+                // grown_cluster.print_graph();
+                // std::cout << std::flush;
             }
             is_first_time = false;
             bool is_grown_even = is_even_cluster(grown_cluster, x_syndrome);
-            std::cout << "\nnumber of odd/even before: " << odd_clusters.size() << "/" << even_clusters.size() << std::flush;
+            // std::cout << "\nnumber of odd/even before: " << odd_clusters.size() << "/" << even_clusters.size() << std::flush;
             if (is_grown_even){ // remove original and add grown to even_clusters
                 // remove colided odds and the original odd from odd_clusters
                 std::vector<int> erased_odd_cluster_indices;
@@ -407,14 +407,14 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
                     odd_clusters[0].print_graph();
                 }
             }
-            std::cout << "\nnumber of odd/even after: " << odd_clusters.size() << "/" << even_clusters.size() << std::flush;
+            // std::cout << "\nnumber of odd/even after: " << odd_clusters.size() << "/" << even_clusters.size() << std::flush;
             if (odd_clusters.size() == 0){
                 is_odd_clusters_empty = true;
                 break;
             }
         }
         if (odd_clusters.size() == 0){
-            std::cout << "\nodd clusters is empty." << std::flush;
+            // std::cout << "\nodd clusters is empty." << std::flush;
             is_odd_clusters_empty = true;
         } else {
             // std::cout << "\nodd cluster has " << odd_clusters.size() << " clusters." << std::flush;
@@ -423,18 +423,18 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
     }
 
     // print the cluster before the peeling decoder
-    std::cout << "\nclustering finished!" << std::flush;
-    std::cout << "\nodd clusters : ";
-    for (graph cluster: odd_clusters){
-        cluster.print_graph();
-    }
-    std::cout << "\neven clusters : ";
-    for (graph cluster: even_clusters){
-        cluster.print_graph();
-    }
+    // std::cout << "\nclustering finished!" << std::flush;
+    // std::cout << "\nodd clusters : ";
+    // for (graph cluster: odd_clusters){
+    //     cluster.print_graph();
+    // }
+    // std::cout << "\neven clusters : ";
+    // for (graph cluster: even_clusters){
+    //     cluster.print_graph();
+    // }
 
     // Apply peeling decoder to even clusters and get the correction
-    std::cout << "\napplying peeling decoder..." << std::flush;
+    // std::cout << "\napplying peeling decoder..." << std::flush;
     std::vector<bool> p_z(num_qubits);
     std::vector<graph> spanning_forest;
     for (graph cluster: even_clusters){
@@ -481,7 +481,7 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
         }
     } else {
         // No correction
-        std::cout << "\n No correction!";
+        // std::cout << "\n No correction!";
     }
     return uf_z;
 }

@@ -270,9 +270,9 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
         // std::cout << "\nodd clusters is not empty." << std::flush;
     }
     for (graph oc: odd_clusters){
-        oc.print_graph();
+        // oc.print_graph();
         if (oc.num_vertices() == 0){
-            // std::cout << "\nThis cluster is empty!" << std::flush;
+            std::cout << "\nThis cluster is empty!" << std::flush;
         }
     }
 
@@ -324,7 +324,7 @@ std::vector<bool> union_find_decoder_for_z_errors(int l1, int l2, int num_qubits
                 // std::cout << "\nno even cluster!" << std::flush;
             } else {
                 for (int even_i = 0; even_i <= even_clusters.size()-1; even_i++){
-                    even_clusters[even_i].print_graph();
+                    // even_clusters[even_i].print_graph();
                     if (detect_collision(grown_cluster, even_clusters[even_i])){
                     collided_even_clusters.push_back(even_clusters[even_i]);
                     collided_even_cluster_indices.push_back(even_i);

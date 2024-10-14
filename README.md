@@ -15,7 +15,7 @@ Simulation flows are:
 
 The default error model is erasure with `main_with_loss_error();`. Combined error model (random Z + Erasure + random Z) is also available in `main_with_combined_error()`.
 
-You can visualize the result of the simulation as .png file with python `python draw_toric.py LATTICE_SIZE_V LATTICE_SIZE_H "result.json";` with lattice sized (`python draw_toric.py 10 10 "result.json";` works for the default case).
+You can visualize the result of the simulation as .png file with python `python draw_toric.py LATTICE_SIZE_V LATTICE_SIZE_H "result.json";` with lattice sizes (`python draw_toric.py 10 10 "result.json";` works for the default case).
 
 You will get something like this:
 ![vis_toric](ten_ten_toric.png)

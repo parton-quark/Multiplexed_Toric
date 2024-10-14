@@ -5,6 +5,7 @@
 #include <time.h>
 #include "main_functions.hpp"
 #include "main_functions_for_plots.hpp"
+#include "main_with_argv.hpp"
 
 int main(){
     auto now = std::chrono::system_clock::now();
@@ -20,10 +21,10 @@ int main(){
     // res = main_with_loss_error_for_plot();
 
     // combined error model (random pauli -> erasure -> random pauli)
-    res = main_with_combined_error();
+    // res = main_with_combined_error();
 
     // combined error model (random pauli -> erasure -> random pauli) multiple shots for plotting
-    std::vector<float> prob_z_vec;
+    // std::vector<float> prob_z_vec;
     // prob_z_vec = {0.000, 0.001, 0.002, 0.004};
     // for (float prob_z: prob_z_vec){
     //     res = main_with_combined_error_for_plot(prob_z);
@@ -31,5 +32,13 @@ int main(){
     //     std::time_t end_time1 = std::chrono::system_clock::to_time_t(now1);
     //     std::cout << "\nCurrent Time and Date: " << std::ctime(&end_time1) << std::endl;
     // }
+
     return 0;
 }
+
+// for using command line argument with argv as inputs
+// int main(int argc, char** argv){
+//     // loss error model with sh argvs
+//     int res;
+//     res = main_with_loss_sh_argvs(argc, argv);
+// }

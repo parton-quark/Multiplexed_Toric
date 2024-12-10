@@ -49,7 +49,7 @@ def plot_multiple_data(list_of_res, phys_err, save=False, x_lim = False, y_lim =
     
     for i in list_of_res:
         ax.errorbar(phys_err, i[1], i[2], linewidth= 1, label = i[3])
-    ax.set_yscale('log')
+    # ax.set_yscale('log')
     ax.grid(which="major", alpha=0.6)
     ax.grid(which="minor", alpha=0.3)
     if x_lim != False:

@@ -296,9 +296,9 @@ int main_with_combined_error_for_plot(float prob_z){
         l1 = lattice_size;
         l2 = lattice_size;
         int num_qubits = (l1*l2) * 2;
-        int num_shots = 100000;
+        int num_shots = 1000000;
         std::vector<int> strategies;
-        strategies = {0,1,2,3,4};
+        strategies = {0,2};
         for (int strategy: strategies){
             std::cout << "\nstrategy: " << strategy;
             auto now = std::chrono::system_clock::now();
@@ -384,7 +384,7 @@ int main_with_combined_error_for_plot(float prob_z){
             std::vector<float> prob_e_vec;
             std::vector<double> vec_loss_rate_average, vec_z_error_rate_average;
             
-            for (float prob_e = 0.0000; prob_e < 0.4000; prob_e = prob_e + 0.0100){
+            for (float prob_e = 0.0000; prob_e < 0.5600; prob_e = prob_e + 0.0100){
                 prob_e_vec.push_back(prob_e);
                 int num_success;
                 int num_fail;

@@ -43,19 +43,12 @@ def json_to_data(json_file_name):
     label = 'm=' + str(data['multiplexing']) + ' , strategy=' + str(data['strategy'])
     return res,rates,errors,label
 
-def plot_multiple_data(list_of_res, phys_err, save=False, x_lim = False, y_lim = False):
+def plot_multiple_data(list_of_res, phys_err, save=False):
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
     
     for i in list_of_res:
         ax.errorbar(phys_err, i[1], i[2], linewidth= 1, label = i[3])
-    ax.set_yscale('log')
-    ax.grid(which="major", alpha=0.6)
-    ax.grid(which="minor", alpha=0.3)
-    if x_lim != False:
-        ax.set_xlim(x_lim[0], x_lim[1])
-    if y_lim != False:
-        ax.set_ylim(y_lim[0], y_lim[1])
     ax.set_xlabel("photon loss probability", fontsize = 15)
     ax.set_ylabel(r"logical $Z$ error probability", fontsize = 15)
     plt.style.use('tableau-colorblind10')
